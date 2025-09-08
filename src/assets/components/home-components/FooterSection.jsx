@@ -8,7 +8,7 @@ export default function FooterSection() {
         {/* Logo / About */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-4">
-            Hostel<span className="text-blue-500">Manager</span>
+            Hostel<span className="text-blue-500">Portal</span>
           </h2>
           <p className="text-gray-400">
             A modern hostel management system for students and admins. Manage

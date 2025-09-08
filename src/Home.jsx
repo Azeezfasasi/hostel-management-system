@@ -13,8 +13,8 @@ function Home() {
     <HeroSection />
     <HeaderSection />
     <DashStats />
-    <Faq />
     <FeatureSection />
+    <Faq />
     <CallToAction />
     <FooterSection />
     </>

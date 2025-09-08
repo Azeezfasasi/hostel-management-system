@@ -14,8 +14,8 @@ export default function DashStats() {
     },
     {
       icon: <Users className="w-10 h-10 text-purple-600" />,
-      title: "Total Students",
-      value: "356",
+      title: "Vacant Rooms",
+      value: "76",
     },
   ];
 

@@ -14,6 +14,7 @@ import GearIcon from '@rsuite/icons/Gear';
 import { Sidenav, Nav } from 'rsuite';
 // import marshalllogo from '../../images/marshalllogo.png'
 import ProjectIcon from '@rsuite/icons/Project';
+import profile from '../../images/profile.png';
 
 function DashboardHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -59,9 +60,9 @@ function DashboardHeader() {
         <div className="flex flex-row items-center gap-2 ml-4 relative profile-dropdown">
           <div className="relative">
             <img
-              src="logo.svg"
+              src={profile}
               alt="profile"
-              className="w-8 h-8 rounded-full border cursor-pointer"
+              className="w-8 h-8 rounded-full border border-solid border-gray-200 cursor-pointer"
               onClick={() => setProfileMenuOpen((open) => !open)}
             />
             {/* Dropdown Menu */}
@@ -104,9 +105,9 @@ function DashboardHeader() {
         <div className="flex flex-row items-center gap-2 ml-4 relative profile-dropdown">
           <div className="relative">
             <img
-              src="logo.svg"
+              src={profile}
               alt="profile"
-              className="w-8 h-8 rounded-full border cursor-pointer"
+              className="w-8 h-8 rounded-full border border-solid border-gray-200 cursor-pointer"
               onClick={() => setProfileMenuOpen((open) => !open)}
             />
             {/* Dropdown Menu */}
