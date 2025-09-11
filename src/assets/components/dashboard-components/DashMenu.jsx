@@ -19,7 +19,16 @@ function DashMenu() {
   // Map route paths to eventKeys
   const menuKeyByPath = {
     '/app/dashboard': '1',
-    '/app/quote': '2-1',
+    '': '2-1',
+    '/account/hostellist': '2-2',
+    '/account/roomlist': '2-3',
+    '/account/roomallocation': '2-4',
+    '/account/assignrooms': '2-5',
+    '/account/currentroomallocation': '2-6',
+    '/account/allfurnitures': '3-2',
+    '/account/addfurnitures': '3-3',
+    '/account/addfurniturecategory': '3-4',
+    '/account/damagereportform': '3-5',
   };
   const activeKey = menuKeyByPath[location.pathname];
 
@@ -30,29 +39,29 @@ function DashMenu() {
             <Sidenav.Body>
                 <Nav activeKey={activeKey}>
                     {(isSuperAdmin || isAdmin || isStudent || isStaff) && (
-                    <Nav.Item eventKey="1" icon={<DashboardIcon />} as={Link} to="">
+                    <Nav.Item eventKey="1" icon={<DashboardIcon />} as={Link} to="/account/dashboard">
                         Dashboard
                     </Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Menu eventKey="2" title="Rooms" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="2" title="Hostel" icon={<GridIcon />}>
                         {(isStudent) && (
                         <Nav.Item eventKey="2-1" as={Link} to="">My Room Details</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-1" as={Link} to="">All Rooms</Nav.Item>
+                        <Nav.Item eventKey="2-2" as={Link} to="/account/hostellist">Hostel List</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-2" as={Link} to="">Occupancy</Nav.Item>
+                        <Nav.Item eventKey="2-3" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-3" as={Link} to="">Assign Rooms</Nav.Item>
+                        <Nav.Item eventKey="2-4" as={Link} to="/account/roomallocation">Room Allocation</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-4" as={Link} to="">Create Rooms</Nav.Item>
+                        <Nav.Item eventKey="2-5" as={Link} to="/account/assignrooms">Assign Rooms</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin) && (
-                        <Nav.Item eventKey="2-5" as={Link} to="">Hostel</Nav.Item>
+                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        <Nav.Item eventKey="2-6" as={Link} to="/account/currentroomallocation">Occupancy</Nav.Item>
                         )}
                     </Nav.Menu>
                     )}
@@ -61,16 +70,19 @@ function DashMenu() {
                         <Nav.Item eventKey="3-1" as={Link} to="">My Furnitures</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="3-1" as={Link} to="">All Furnitures</Nav.Item>
+                        <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Furnitures</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin) && (
-                        <Nav.Item eventKey="3-2" as={Link} to="">Add Furniture</Nav.Item>
+                        <Nav.Item eventKey="3-3" as={Link} to="/account/addfurnitures">Add Furniture</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin) && (
-                        <Nav.Item eventKey="3-3" as={Link} to="">Add Category</Nav.Item>
+                        <Nav.Item eventKey="3-4" as={Link} to="/account/addfurniturecategory">Add Category</Nav.Item>
                         )}
                         {(isStudent || isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                        <Nav.Item eventKey="3-4" as={Link} to="">Report Damage</Nav.Item>
+                        <Nav.Item eventKey="3-5" as={Link} to="/account/damagereportform">Report Damage</Nav.Item>
+                        )}
+                        {(isStudent || isSuperAdmin || isAdmin || isStaff || isStudent) && (
+                        <Nav.Item eventKey="3-6" as={Link} to="">All Damage Reports</Nav.Item>
                         )}
                     </Nav.Menu>
                     {(isSuperAdmin || isAdmin || isStaff) && (

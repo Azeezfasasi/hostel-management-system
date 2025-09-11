@@ -2,16 +2,13 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import DashboardHeader from '@/assets/components/dashboard-components/DashboardHeader'
 import DashMenu from '@/assets/components/dashboard-components/DashMenu'
-import DashStats from '@/assets/components/dashboard-components/DashStats'
-import DashWelcome from '@/assets/components/dashboard-components/DashWelcome'
-import RoomManager from '@/assets/components/hostel-components/RoomManagement'
-import HostelManager from '@/assets/components/hostel-components/HostelManager'
+import FurnitureForm from '@/assets/components/hostel-components/FurnitureForm'
 
-function Dashboard() {
+function AddFurnitures() {
   return (
     <>
       <Helmet>
-        <title>Dashboard - Hostel Management</title>
+        <title>Add Furnitures - Hostel Management</title>
       </Helmet>
       <DashboardHeader />
       <div className='flex flex-row justify-start gap-4'>
@@ -19,14 +16,11 @@ function Dashboard() {
           <DashMenu />
         </div>
         <div className='w-full lg:w-[80%]'>
-          <DashWelcome />
-          <DashStats />
-          <HostelManager />
-          <RoomManager />
+          <FurnitureForm />
         </div>
       </div>
     </>
   )
 }
 
-export default Dashboard
+export default AddFurnitures
