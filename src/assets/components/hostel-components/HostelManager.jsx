@@ -50,39 +50,71 @@ const HostelManager = () => {
       <h2 className="text-2xl font-bold mb-6">🏨 Hostel Management</h2>
 
       {/* Hostel Form */}
-      <form
-        onSubmit={handleHostelSubmit}
-        className="flex gap-4 flex-wrap bg-gray-50 p-4 rounded-lg shadow mb-6"
-      >
-        <input
-          type="text"
-          placeholder="Hostel Name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="border rounded p-2 flex-1"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Location"
-          value={formData.location}
-          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-          className="border rounded p-2 flex-1"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="border rounded p-2 flex-1"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          {editingHostel ? "Update Hostel" : "Add Hostel"}
-        </button>
+      <form nSubmit={handleHostelSubmit} className="flex flex-col gap-4 flex-wrap bg-gray-50 p-4 rounded-lg shadow mb-6">
+        <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+          <div className="flex flex-col">
+            <label>Name</label>
+            <input
+              type="text"
+              placeholder="Hostel Name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="border rounded p-2 flex-1"
+              required
+            />
+          </div>
+          <div className="flex flex-col">
+            <label>Block</label>
+              <select name="block" value={formData.block} onChange={(e) => setFormData({ ...formData, block: e.target.value })} className="border rounded p-2 flex-1" required>
+                <option value="">Choose Block</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+              </select>
+          </div>
+          <div className="flex flex-col">
+            <label>Floor</label>
+            <select name="floor" value={formData.floor} onChange={(e) => setFormData({ ...formData, floor: e.target.value })} className="border rounded p-2 flex-1" required>
+              <option value="">Choose Floor</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label>Location</label>
+            <input
+              type="text"
+              placeholder="Location"
+              value={formData.location}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              className="border rounded p-2 flex-1"
+              required
+            />
+          </div>
+          <div className="flex flex-col">
+            <label>Description</label>
+            <input
+              type="text"
+              placeholder="Description"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="border rounded p-2 flex-1"
+            />
+          </div>
+        </div>
+        {/* button */}
+        <div className="">
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+            {editingHostel ? "Update Hostel" : "Add Hostel"}
+          </button>
+        </div>
       </form>
 
       {/* Hostel Table */}
