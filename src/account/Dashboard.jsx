@@ -4,10 +4,28 @@ import DashboardHeader from '@/assets/components/dashboard-components/DashboardH
 import DashMenu from '@/assets/components/dashboard-components/DashMenu'
 import DashStats from '@/assets/components/dashboard-components/DashStats'
 import DashWelcome from '@/assets/components/dashboard-components/DashWelcome'
-import RoomManager from '@/assets/components/hostel-components/RoomManagement'
-import HostelManager from '@/assets/components/hostel-components/HostelManager'
+import { useUser } from '@/assets/context-api/user-context/UseUser';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
+  const { user, loading } = useUser();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (!loading && user && !user.onboardingCompleted) {
+      navigate('/onboarding/onboarding');
+    }
+  }, [user, loading, navigate]);
+
+  if (loading || !user) {
+    return (
+      <div className="pt-8 w-full max-w-lg">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-2 animate-pulse">Loading...</h1>
+        <p className="text-lg text-gray-600">Please wait while we load your dashboard.</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <Helmet>

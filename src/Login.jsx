@@ -14,7 +14,11 @@ export default function Login() {
 
   useEffect(() => {
     if (user && token) {
-      navigate("/account/dashboard");
+      if (user.onboardingCompleted) {
+        navigate("/account/dashboard");
+      } else {
+        navigate("/onboarding/onboarding");
+      }
     }
   }, [user, token, navigate]);
 

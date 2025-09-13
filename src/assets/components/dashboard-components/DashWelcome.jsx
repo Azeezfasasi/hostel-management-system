@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from '@/assets/context-api/user-context/UseUser';
+import { Link } from 'react-router-dom';
+
 
 const DashWelcome = () => {
   const [greeting, setGreeting] = useState('');
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   useEffect(() => {
     const getGreeting = () => {
@@ -16,17 +18,42 @@ const DashWelcome = () => {
         return 'Good evening,';
       }
     };
-
     setGreeting(getGreeting());
   }, []);
 
+  // Update greeting if user changes (e.g. after login fetch)
+  useEffect(() => {
+    if (user) {
+      const getGreeting = () => {
+        const currentHour = new Date().getHours();
+        if (currentHour < 12) {
+          return 'Good morning,';
+        } else if (currentHour < 18) {
+          return 'Good afternoon,';
+        } else {
+          return 'Good evening,';
+        }
+      };
+      setGreeting(getGreeting());
+    }
+  }, [user]);
+
+  if (loading || !user) {
+    return (
+      <div className="pt-8 w-full max-w-lg">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-2 animate-pulse">Loading...</h1>
+        <p className="text-lg text-gray-600">Please wait while we load your dashboard.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="pt-8 w-full max-w-lg">
+    <div className="pt-8 w-full max-w-[80%]">
       <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
-        {greeting} {user?.firstName}
+        {greeting} {user.firstName}
       </h1>
       <p className="text-lg text-gray-600">
-        Welcome to your Hostel Management System Portal!
+        Welcome to your Hostel Management System Portal! For all students who have not yet finalized their enrollment, please complete your registration details using this <Link to="" className='text-blue-600 font-semibold underline'>link</Link>.
       </p>
     </div>
   );

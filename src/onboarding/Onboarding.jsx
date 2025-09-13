@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '@/config/api';
@@ -23,6 +23,26 @@ export default function Onboarding({ onComplete }) {
     }
   })();
   const [formData, setFormData] = useState(prefill);
+  const [profileLoaded, setProfileLoaded] = useState(false);
+  // Fetch user profile on mount and merge with local prefill
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        const res = await axios.get(`${API_BASE_URL}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        // Merge backend profile with local prefill, preferring local prefill for in-progress fields
+        setFormData(prev => ({ ...res.data, ...prev }));
+      } catch {
+        // ignore error, fallback to local prefill
+      } finally {
+        setProfileLoaded(true);
+      }
+    };
+    fetchProfile();
+  }, []);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -56,6 +76,15 @@ export default function Onboarding({ onComplete }) {
       setError("Failed to complete onboarding. Please try again.");
     }
   };
+
+  if (!profileLoaded) {
+    return (
+      <div className="pt-8 w-full max-w-lg mx-auto">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-2 animate-pulse">Loading...</h1>
+        <p className="text-lg text-gray-600">Loading your onboarding data...</p>
+      </div>
+    );
+  }
 
   return (
     <>

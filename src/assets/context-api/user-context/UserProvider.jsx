@@ -60,9 +60,12 @@ export const UserProvider = ({ children }) => {
     setLoading(true); setError(''); setSuccess('');
     try {
       const res = await axios.post(`${API_BASE_URL}/users/login`, form);
-      setUser(res.data.user);
       setToken(res.data.token);
       localStorage.setItem('token', res.data.token);
+      // Fetch fresh user profile after login
+      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+      const profileRes = await axios.get(`${API_BASE_URL}/users/me`);
+      setUser(profileRes.data);
       setSuccess('Login successful!');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed.');
