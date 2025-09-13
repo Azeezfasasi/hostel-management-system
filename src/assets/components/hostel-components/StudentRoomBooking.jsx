@@ -84,12 +84,12 @@ const StudentRoomBooking = ({ onBook }) => {
       };
       const payload = {
         roomId: selectedRoom,
-        bedIndex: Number(selectedBed)
+        bed: Number(selectedBed)
       };
-      // You may need to adjust the endpoint for student booking
-      const res = await axios.post(`${API_BASE_URL}/room/book`, payload, config);
+      // Submit a room request for admin approval
+      const res = await axios.post(`${API_BASE_URL}/room/requests`, payload, config);
       if (res.data && res.data.success) {
-        setMessage("Room booked successfully!");
+        setMessage("Room request submitted! Awaiting admin approval.");
         setSelectedHostel("");
         setSelectedBlock("");
         setSelectedFloor("");
@@ -97,7 +97,7 @@ const StudentRoomBooking = ({ onBook }) => {
         setSelectedBed("");
         if (onBook) onBook();
       } else {
-        setMessage(res.data.message || "Failed to book room.");
+        setMessage(res.data.message || "Failed to submit room request.");
       }
     } catch (err) {
       setMessage(err.response?.data?.message || "Network error booking room.");

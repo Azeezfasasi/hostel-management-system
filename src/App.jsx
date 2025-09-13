@@ -22,6 +22,7 @@ import AddFurnitureCategory from "./account/AddFurnitureCategory";
 import DamageReportForm from "./account/DamageReportForm";
 import RoomRequest from "./account/RoomRequests";
 import AdminRoomRequests from "./account/AdminRoomRequest";
+import ManageStutents from "./account/ManageStutents";
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
           <Route path="/account/damagereportform" element={<DamageReportForm />} />
           <Route path="/account/roomrequest" element={<RoomRequest />} />
           <Route path="/account/adminroomrequests" element={<AdminRoomRequests />} />
+          <Route path="/account/managestudents" element={<ManageStutents />} />
         </Route>
       </Routes>
      </UserProvider>

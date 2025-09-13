@@ -59,7 +59,7 @@ const AdminRoomRequestMain = () => {
         <div className="text-center text-gray-500">No pending room requests</div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 shadow">
+          <table className="w-full border-collapse border border-gray-600 shadow">
             <thead className="bg-gray-100">
               <tr>
                 <th className="border p-3">Student</th>
@@ -76,13 +76,13 @@ const AdminRoomRequestMain = () => {
               {requests.map((req, idx) => (
                 <tr key={req._id || idx} className="hover:bg-gray-50">
                   <td className="border p-3">{req.student?.firstName} {req.student?.lastName}</td>
-                  <td className="border p-3">{req.hostel?.name}</td>
-                  <td className="border p-3">{req.block}</td>
-                  <td className="border p-3">{req.floor}</td>
-                  <td className="border p-3">{req.room}</td>
+                  <td className="border p-3">{req.room?.hostelId?.name || ''}</td>
+                  <td className="border p-3">{req.room?.roomBlock || ''}</td>
+                  <td className="border p-3">{req.room?.roomFloor || ''}</td>
+                  <td className="border p-3">{req.room?.roomNumber || ''}</td>
                   <td className="border p-3">Bed {Number(req.bed) + 1}</td>
-                  <td className="border p-3">{req.status}</td>
-                  <td className="border p-3 flex gap-2 justify-center">
+                  <td className={`border p-3 capitalize ${req.status === 'approved' ? 'text-green-700 font-semibold' : req.status === 'declined' ? 'text-red-700 font-semibold' : req.status === 'pending' ? 'text-blue-700 font-semibold' : ''}`}>{req.status}</td>
+                  <td className="p-3 flex gap-2 justify-center">
                     {req.status === 'pending' && (
                       <>
                         <button

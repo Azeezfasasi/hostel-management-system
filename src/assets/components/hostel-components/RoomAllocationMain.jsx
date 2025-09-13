@@ -123,7 +123,7 @@ const RoomAllocationMain = () => {
       ) : (
         filteredData.map((block, i) => (
           <div key={i} className="mb-8">
-            <h2 className="text-xl text-blue-600 font-bold mb-2 underline">Block {block.block}</h2>
+            <h2 className="text-xl text-blue-600 font-bold mb-2 underline">{block.hostel} -Block {block.block}</h2>
             {block.floors
               .filter(f => selectedFloor === "All" || f.floor === selectedFloor)
               .map((floor, j) => {
