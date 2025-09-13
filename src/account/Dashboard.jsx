@@ -21,8 +21,6 @@ function Dashboard() {
         <div className='w-full lg:w-[80%]'>
           <DashWelcome />
           <DashStats />
-          <HostelManager />
-          <RoomManager />
         </div>
       </div>
     </>
