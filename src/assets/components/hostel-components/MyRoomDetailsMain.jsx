@@ -17,15 +17,14 @@ function MyRoomDetailsMain() {
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
   // Fetch all room requests for the user (student endpoint)
   const res = await axios.get(`${API_BASE_URL}/room/my-requests`, config);
-      // Find the latest request for the logged-in student
+      // Get the latest request for the logged-in student
       const requests = res.data.data || [];
       // Sort by createdAt descending
       requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      const latestRequest = requests.find(r => r.student && r.student._id === getUserId());
+      const latestRequest = requests[0];
       if (latestRequest) {
         setRoomDetails(latestRequest.room || null);
         setRequestStatus(latestRequest.status || 'pending');
-        // Optionally, store the whole request for more details
         setFullRequest(latestRequest);
       } else {
         setRoomDetails(null);
@@ -45,20 +44,6 @@ function MyRoomDetailsMain() {
   useEffect(() => {
     fetchRoomDetails();
   }, [fetchRoomDetails]);
-
-  // (Removed duplicate fetchRoomDetails, only useCallback version remains above)
-
-  // Helper to get user id from token (JWT)
-  function getUserId() {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return null;
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.id;
-    } catch {
-      return null;
-    }
-  }
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
