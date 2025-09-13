@@ -5,11 +5,15 @@ import { API_BASE_URL } from "@/config/api";
 const RoomAssignmentForm = ({ onAssign }) => {
   const [students, setStudents] = useState([]);
   const [hostels, setHostels] = useState([]);
+  const [block, setBlock] = useState([]);
+  const [floor, setFloor] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState("");
   const [selectedHostel, setSelectedHostel] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("");
   const [selectedBed, setSelectedBed] = useState("");
+  const [selectedBlock, setSelectedBlock] = useState("");
+  const [selectedFloor, setSelectedFloor] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -138,6 +142,8 @@ const RoomAssignmentForm = ({ onAssign }) => {
               value={selectedHostel}
               onChange={e => {
                 setSelectedHostel(e.target.value);
+                setSelectedBlock("");
+                setSelectedFloor("");
                 setSelectedRoom("");
                 setSelectedBed("");
               }}
@@ -147,6 +153,49 @@ const RoomAssignmentForm = ({ onAssign }) => {
               <option value="">Select Hostel</option>
               {hostels.map(h => (
                 <option key={h._id} value={h._id}>{h.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Block Selection */}
+          <div className="flex flex-col">
+            <label htmlFor="block" className="mb-2 text-sm font-medium text-gray-700">Block</label>
+            <select
+              id="block"
+              value={selectedBlock}
+              onChange={e => {
+                setSelectedBlock(e.target.value);
+                setSelectedFloor("");
+                setSelectedRoom("");
+                setSelectedBed("");
+              }}
+              className="w-full border border-gray-300 rounded-lg p-2"
+              required
+            >
+              <option value="">Select Block</option>
+              {hostels.map(b => (
+                <option key={b._id} value={b._id}>{b.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Floor Selection */}
+          <div className="flex flex-col">
+            <label htmlFor="floor" className="mb-2 text-sm font-medium text-gray-700">Floor</label>
+            <select
+              id="floor"
+              value={selectedFloor}
+              onChange={e => {
+                setSelectedFloor(e.target.value);
+                setSelectedRoom("");
+                setSelectedBed("");
+              }}
+              className="w-full border border-gray-300 rounded-lg p-2"
+              required
+            >
+              <option value="">Select Floor</option>
+              {hostels.map(f => (
+                <option key={f._id} value={f._id}>{f.name}</option>
               ))}
             </select>
           </div>
