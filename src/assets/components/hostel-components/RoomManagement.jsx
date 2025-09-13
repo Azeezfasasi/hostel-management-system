@@ -246,6 +246,8 @@ const RoomManager = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="border p-3">Hostel</th>
+              <th className="border p-3">Block</th>
+              <th className="border p-3">Floor</th>
               <th className="border p-3">Room Number</th>
               <th className="border p-3">Capacity</th>
               <th className="border p-3">Price</th>
@@ -256,6 +258,8 @@ const RoomManager = () => {
             {rooms.map((r) => (
               <tr key={r._id} className="hover:bg-gray-50">
                 <td className="border p-3">{r.hostelId?.name || "N/A"}</td>
+                <td className="border p-3">{r.roomBlock}</td>
+                <td className="border p-3">{r.roomFloor}</td>
                 <td className="border p-3">{r.roomNumber}</td>
                 <td className="border p-3">{r.capacity}</td>
                 <td className="border p-3">{r.price}</td>

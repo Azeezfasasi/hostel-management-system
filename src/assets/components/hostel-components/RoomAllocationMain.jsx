@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const sampleData = [
   {
+    hostel: "Hostel One",
     block: "Block A",
     floors: [
       {
@@ -33,6 +34,7 @@ const sampleData = [
     ],
   },
   {
+    hostel: "Hostel Two",
     block: "Block B",
     floors: [
       {
@@ -62,6 +64,7 @@ const getBedColor = (status) => {
 };
 
 const RoomAllocationMain = () => {
+  const [selectedHostel, setSelectedHostel] = useState("All");
   const [selectedBlock, setSelectedBlock] = useState("All");
   const [selectedFloor, setSelectedFloor] = useState("All");
 
@@ -69,6 +72,19 @@ const RoomAllocationMain = () => {
     <div className="p-6">
       {/* Filters */}
       <div className="flex gap-4 mb-6 flex-wrap">
+        <select
+          value={selectedHostel}
+          onChange={(e) => setSelectedHostel(e.target.value)}
+          className="border rounded p-2"
+        >
+          <option value="All">Hostel</option>
+          {sampleData.map((h, i) => (
+            <option key={i} value={h.hostel}>
+              {h.hostel}
+            </option>
+          ))}
+        </select>
+
         <select
           value={selectedBlock}
           onChange={(e) => setSelectedBlock(e.target.value)}
