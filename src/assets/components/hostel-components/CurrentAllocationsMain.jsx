@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
 
-
 const CurrentAllocationsMain = () => {
   const [allocations, setAllocations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,6 +11,8 @@ const CurrentAllocationsMain = () => {
   const [blockFilter, setBlockFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const allocationsPerPage = 10;
+  const [showModal, setShowModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
   const fetchAllocations = async () => {
     setLoading(true);
@@ -35,6 +36,18 @@ const CurrentAllocationsMain = () => {
   useEffect(() => {
     fetchAllocations();
   }, []);
+
+
+  // Show student details modal
+  function handleViewDetails(student) {
+    setSelectedStudent(student);
+    setShowModal(true);
+  }
+
+  function handleCloseModal() {
+    setShowModal(false);
+    setSelectedStudent(null);
+  }
 
   const handleUnassign = async (roomId, studentId) => {
     setMessage("");
@@ -144,7 +157,13 @@ const CurrentAllocationsMain = () => {
                   <td className="border p-3">{a.floor}</td>
                   <td className="border p-3">{a.room}</td>
                   <td className="border p-3">Bed {a.bed + 1}</td>
-                  <td className="border p-3">
+                  <td className="border p-3 flex gap-2">
+                    <button
+                      onClick={() => handleViewDetails(a.student)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                    >
+                      View Details
+                    </button>
                     <button
                       onClick={() => handleUnassign(a.roomId, a.student?._id)}
                       className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
@@ -152,37 +171,91 @@ const CurrentAllocationsMain = () => {
                       Unassign
                     </button>
                   </td>
+                  {/* Student Details Modal */}
+                  {showModal && selectedStudent && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full relative">
+                        <button
+                          onClick={handleCloseModal}
+                          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+                          aria-label="Close"
+                        >
+                          &times;
+                        </button>
+                        <div className="flex flex-col items-center gap-4">
+                          {/* Profile Image */}
+                          {selectedStudent.profileImage ? (
+                            <img src={selectedStudent.profileImage} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-blue-400" />
+                          ) : (
+                            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl text-gray-500 border-2 border-gray-300">
+                              <span>{selectedStudent.firstName?.[0] || ''}{selectedStudent.lastName?.[0] || ''}</span>
+                            </div>
+                          )}
+                          <div className="text-center">
+                            <h3 className="text-xl font-bold mb-1">{selectedStudent.firstName} {selectedStudent.lastName} {selectedStudent.otherName && <span>{selectedStudent.otherName}</span>}</h3>
+
+                            <p className="text-blue-600 mb-1">Matric No: <span className="font-semibold text-gray-500">{selectedStudent.matricNumber}</span></p>
+
+                            <p className="text-blue-600 mb-1">Gender: <span className="font-semibold text-gray-500">{selectedStudent?.gender}</span></p>
+
+                            <p className="text-blue-600 mb-1">Email: <span className="font-semibold text-gray-500">{selectedStudent.email}</span></p>
+
+                            <p className="text-blue-600 mb-1">Phone: <span className="font-semibold text-gray-600">{selectedStudent.phone}</span></p>
+
+                            <p className="text-blue-600 mb-1">Emergency Contact: <span className="font-semibold text-gray-600">{selectedStudent.emergencyContact}</span></p>
+
+                            <p className="text-blue-600 mb-1">Address: <span className="font-semibold text-gray-600">{selectedStudent.Address}</span></p>
+
+                            <p className="text-blue-600 mb-1">NIN: <span className="font-semibold text-gray-600">{selectedStudent.nin}</span></p>
+
+                            <p className="text-blue-600 mb-1">State: <span className="font-semibold text-gray-600">{selectedStudent.state}</span></p>
+
+                            <p className="text-blue-600 mb-1">City: <span className="font-semibold text-gray-600">{selectedStudent.city}</span></p>
+
+                            <p className="text-blue-600 mb-1">Department: <span className="font-semibold text-gray-600">{selectedStudent.department}</span></p>
+
+                            <p className="text-blue-600 mb-1">Course: <span className="font-semibold text-gray-600">{selectedStudent.course}</span></p>
+                            
+                            <p className="text-blue-600 mb-1">Level: <span className="font-semibold text-gray-600">{selectedStudent.level}</span></p>
+
+                            {selectedStudent.department && <p className="text-gray-600 mb-1">Department: <span className="font-semibold">{selectedStudent.department}</span></p>}
+                            {/* Add more fields as needed */}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </tr>
               ))
             )}
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-6 gap-2">
-          <button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 rounded border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Prev
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded border ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
-      )}
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-6 gap-2">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 rounded border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+                >
+                  Prev
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-1 rounded border ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 rounded border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </tbody>
         </table>
       </div>
