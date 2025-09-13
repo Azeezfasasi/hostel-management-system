@@ -23,6 +23,7 @@ import DamageReportForm from "./account/DamageReportForm";
 import RoomRequest from "./account/RoomRequests";
 import AdminRoomRequests from "./account/AdminRoomRequest";
 import ManageStutents from "./account/ManageStutents";
+import MyRoomDetails from "./account/MyRoomDetails";
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="/account/roomrequest" element={<RoomRequest />} />
           <Route path="/account/adminroomrequests" element={<AdminRoomRequests />} />
           <Route path="/account/managestudents" element={<ManageStutents />} />
+          <Route path="/account/myroomdetails" element={<MyRoomDetails />} />
         </Route>
       </Routes>
      </UserProvider>

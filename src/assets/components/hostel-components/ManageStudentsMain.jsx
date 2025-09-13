@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '@/config/api';
 
+
 function ManageStudentsMain() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 10;
 
   useEffect(() => {
     fetchStudents();
@@ -79,9 +83,54 @@ function ManageStudentsMain() {
     }
   };
 
+  const handleEnable = async (id) => {
+    if (!window.confirm('Enable this student?')) return;
+    setMessage('');
+    try {
+      const token = localStorage.getItem('token');
+      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+      await axios.patch(`${API_BASE_URL}/users/${id}/enable`, {}, config);
+      setMessage('Student enabled successfully');
+      fetchStudents();
+    } catch (err) {
+      setMessage(err.response?.data?.error || 'Failed to enable student');
+    }
+  };
+
+  // Filter students by search
+  const filteredStudents = students.filter((student) => {
+    const searchLower = search.toLowerCase();
+    return (
+      student.firstName?.toLowerCase().includes(searchLower) ||
+      student.lastName?.toLowerCase().includes(searchLower) ||
+      student.email?.toLowerCase().includes(searchLower) ||
+      student.matricNumber?.toLowerCase().includes(searchLower)
+    );
+  });
+
+  // Pagination logic
+  const indexOfLast = currentPage * studentsPerPage;
+  const indexOfFirst = indexOfLast - studentsPerPage;
+  const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-center">Manage Students</h2>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
+        <input
+          type="text"
+          placeholder="Search by name, email, or matric number..."
+          value={search}
+          onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
+          className="border rounded px-3 py-2 w-full md:w-1/3"
+        />
+        <span className="text-gray-500 text-sm mt-1 md:mt-0">{filteredStudents.length} students found</span>
+      </div>
       {message && (
         <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg mb-4 text-center">
           <span>{message}</span>
@@ -89,7 +138,7 @@ function ManageStudentsMain() {
       )}
       {loading ? (
         <div className="text-center text-gray-500">Loading...</div>
-      ) : students.length === 0 ? (
+      ) : filteredStudents.length === 0 ? (
         <div className="text-center text-gray-500">No students found</div>
       ) : (
         <div className="overflow-x-auto">
@@ -106,7 +155,7 @@ function ManageStudentsMain() {
               </tr>
             </thead>
             <tbody>
-              {students.map((student) => (
+              {currentStudents.map((student) => (
                 <tr key={student._id} className="hover:bg-gray-50">
                   {editId === student._id ? (
                     <>
@@ -132,7 +181,11 @@ function ManageStudentsMain() {
                       <td className="border p-3 flex gap-2 justify-center">
                         <button onClick={() => handleEdit(student)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Edit</button>
                         <button onClick={() => handleDelete(student._id)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
-                        <button onClick={() => handleDisable(student._id)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Disable</button>
+                        {student.isActive ? (
+                          <button onClick={() => handleDisable(student._id)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Disable</button>
+                        ) : (
+                          <button onClick={() => handleEnable(student._id)} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Enable</button>
+                        )}
                       </td>
                     </>
                   )}
@@ -140,6 +193,34 @@ function ManageStudentsMain() {
               ))}
             </tbody>
           </table>
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 rounded border bg-gray-200 text-gray-700 disabled:opacity-50"
+              >
+                Prev
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1 rounded border ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'}`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 rounded border bg-gray-200 text-gray-700 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
