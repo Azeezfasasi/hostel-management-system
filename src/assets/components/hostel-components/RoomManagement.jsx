@@ -24,9 +24,9 @@ const RoomManager = () => {
   const [hostels, setHostels] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [roomData, setRoomData] = useState({
-    hostel: "",
-    floor: "",
-    block: "",
+    hostelId: "",
+    roomFloor: "",
+    roomBlock: "",
     roomNumber: "",
     capacity: "",
     price: "",
@@ -34,19 +34,21 @@ const RoomManager = () => {
   const [editingRoom, setEditingRoom] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal
 
+  // Fetch hostels from backend (public route)
   const fetchHostels = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/hostels`);
-      setHostels(res.data);
+      const res = await axios.get(`${API_BASE_URL}/hostel`);
+      setHostels(res.data.data || []);
     } catch (error) {
       console.error("Error fetching hostels:", error.message);
     }
   };
 
+  // Fetch rooms from backend (public route)
   const fetchRooms = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/rooms`);
-      setRooms(res.data);
+      const res = await axios.get(`${API_BASE_URL}/room`);
+      setRooms(res.data.data || []);
     } catch (error) {
       console.error("Error fetching rooms:", error.message);
     }
@@ -57,34 +59,51 @@ const RoomManager = () => {
     fetchRooms();
   }, []);
 
+  // Handle create/update room (protected route)
   const handleRoomSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        withCredentials: true
+      };
       if (editingRoom) {
-        await axios.put(`${API_BASE_URL}/rooms/${editingRoom._id}`, roomData);
+        await axios.put(`${API_BASE_URL}/room/${editingRoom._id}`, roomData, config);
       } else {
-        await axios.post(`${API_BASE_URL}/rooms`, roomData);
+        await axios.post(`${API_BASE_URL}/room`, roomData, config);
       }
       setRoomData({
-        hostel: "",
-        floor: "",
-        block: "",
+        hostelId: "",
+        roomFloor: "",
+        roomBlock: "",
         roomNumber: "",
         capacity: "",
         price: "",
       });
       setEditingRoom(null);
       fetchRooms();
-      setIsModalOpen(false); // Close modal on successful submit
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Error saving room:", error.message);
     }
   };
 
+  // Handle delete room (protected route)
   const deleteRoom = async (id) => {
     if (!window.confirm("Are you sure you want to delete this room?")) return;
     try {
-      await axios.delete(`${API_BASE_URL}/rooms/${id}`);
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        withCredentials: true
+      };
+      await axios.delete(`${API_BASE_URL}/room/${id}`, config);
       fetchRooms();
     } catch (error) {
       console.error("Error deleting room:", error.message);
@@ -93,19 +112,19 @@ const RoomManager = () => {
 
   const openAddRoomModal = () => {
     setEditingRoom(null); // Clear any previous editing state
-    setRoomData({ hostel: "", floor: "", block: "", roomNumber: "", capacity: "", price: "" }); // Reset form
+    setRoomData({ hostelId: "", roomFloor: "", roomBlock: "", roomNumber: "", capacity: "", price: "" }); // Reset form
     setIsModalOpen(true);
   };
 
   const openEditRoomModal = (room) => {
     setEditingRoom(room);
     setRoomData({
-      hostel: room.hostel?._id || "",
+      hostelId: room.hostelId?._id || "",
       roomNumber: room.roomNumber,
       capacity: room.capacity,
       price: room.price,
-      floor: room.floor,
-      block: room.block,
+      roomFloor: room.roomFloor,
+      roomBlock: room.roomBlock,
     });
     setIsModalOpen(true);
   };
@@ -128,65 +147,90 @@ const RoomManager = () => {
         </h3>
         {/* Room Form */}
         <form onSubmit={handleRoomSubmit} className="flex flex-col gap-4">
-          <select
-            value={roomData.hostel}
-            onChange={(e) =>
-              setRoomData({ ...roomData, hostel: e.target.value })
-            }
-            className="border rounded p-2"
-            required
-          >
-            <option value="">Select Hostel</option>
-            {hostels.map((h) => (
-              <option key={h._id} value={h._id}>
-                {h.name}
-              </option>
-            ))}
-          </select>
-          <select value={roomData.block} onChange={(e) => setRoomData({ ...roomData, block: e.target.value })} className="border rounded p-2" required>
-            <option value="">Choose Block</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-          </select>
-          <select value={roomData.floor} onChange={(e) => setRoomData({ ...roomData, floor: e.target.value })} className="border rounded p-2" required>
-            <option value="">Choose Floor</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Room Number"
-            value={roomData.roomNumber}
-            onChange={(e) =>
-              setRoomData({ ...roomData, roomNumber: e.target.value })
-            }
-            className="border rounded p-2"
-            required
-          />
-          <select value={roomData.capacity} onChange={(e) => setRoomData({ ...roomData, capacity: e.target.value })} className="border rounded p-2" required>
-            <option value="">Select Capacity</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Price"
-            value={roomData.price}
-            onChange={(e) =>
-              setRoomData({ ...roomData, price: e.target.value })
-            }
-            className="border rounded p-2"
-            required
-          />
+
+          <div  className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">Choose Hostel</label>
+            <select
+              value={roomData.hostelId}
+              onChange={(e) =>
+                setRoomData({ ...roomData, hostelId: e.target.value })
+              }
+              className="border rounded p-2"
+              required
+            >
+              <option value="">Select Hostel</option>
+              {hostels.map((h) => (
+                <option key={h._id} value={h._id}>
+                  {h.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">Block</label>
+            <select value={roomData.roomBlock} onChange={(e) => setRoomData({ ...roomData, roomBlock: e.target.value })} className="border rounded p-2" required>
+              <option value="">Choose Block</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">Floor</label>
+            <select value={roomData.roomFloor} onChange={(e) => setRoomData({ ...roomData, roomFloor: e.target.value })} className="border rounded p-2" required>
+              <option value="">Choose Floor</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">Room Number</label>
+            <input
+              type="text"
+              placeholder="Room Number"
+              value={roomData.roomNumber}
+              onChange={(e) =>
+                setRoomData({ ...roomData, roomNumber: e.target.value })
+              }
+              className="border rounded p-2"
+              required
+            />
+          </div>
+
+          <div  className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">Room Capacity</label>
+            <select value={roomData.capacity} onChange={(e) => setRoomData({ ...roomData, capacity: e.target.value })} className="border rounded p-2" required>
+              <option value="">Select Capacity</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">Price</label>
+            <input
+              type="number"
+              placeholder="Price"
+              value={roomData.price}
+              onChange={(e) =>
+                setRoomData({ ...roomData, price: e.target.value })
+              }
+              className="border rounded p-2"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
@@ -211,7 +255,7 @@ const RoomManager = () => {
           <tbody>
             {rooms.map((r) => (
               <tr key={r._id} className="hover:bg-gray-50">
-                <td className="border p-3">{r.hostel?.name || "N/A"}</td>
+                <td className="border p-3">{r.hostelId?.name || "N/A"}</td>
                 <td className="border p-3">{r.roomNumber}</td>
                 <td className="border p-3">{r.capacity}</td>
                 <td className="border p-3">{r.price}</td>
