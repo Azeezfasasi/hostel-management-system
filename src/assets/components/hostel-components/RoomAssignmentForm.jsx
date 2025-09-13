@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
 
-const RoomAssignmentForm = ({ students = [], onAssign }) => {
+const RoomAssignmentForm = ({ onAssign }) => {
+  const [students, setStudents] = useState([]);
   const [hostels, setHostels] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState("");
@@ -16,15 +17,20 @@ const RoomAssignmentForm = ({ students = [], onAssign }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [hostelRes, roomRes] = await Promise.all([
+        const token = localStorage.getItem("token");
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+        const [hostelRes, roomRes, userRes] = await Promise.all([
           axios.get(`${API_BASE_URL}/hostel`),
-          axios.get(`${API_BASE_URL}/room`)
+          axios.get(`${API_BASE_URL}/room`),
+          axios.get(`${API_BASE_URL}/users`, config)
         ]);
         setHostels(hostelRes.data.data || []);
         setRooms(roomRes.data.data || []);
+  // Filter only users with role 'student'
+  setStudents((userRes.data || []).filter(u => u.role === 'student'));
       } catch (err) {
         console.log(err);
-        setMessage("Failed to fetch hostels or rooms");
+        setMessage("Failed to fetch hostels, rooms, or students");
       }
     };
     fetchData();
@@ -80,6 +86,10 @@ const RoomAssignmentForm = ({ students = [], onAssign }) => {
       const res = await axios.post(`${API_BASE_URL}/room/assign`, payload, config);
       if (res.data && res.data.success) {
         setMessage("Room assigned successfully!");
+        setSelectedStudent("");
+        setSelectedHostel("");
+        setSelectedRoom("");
+        setSelectedBed("");
         if (onAssign) onAssign();
       } else {
         setMessage(res.data.message || "Failed to assign room.");
@@ -97,7 +107,7 @@ const RoomAssignmentForm = ({ students = [], onAssign }) => {
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Assign a Room 🔑</h2>
 
         {message && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4 text-center">
+          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg relative mb-4 text-center">
             <span className="block">{message}</span>
           </div>
         )}
