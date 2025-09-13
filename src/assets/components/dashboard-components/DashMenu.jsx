@@ -54,7 +54,7 @@ function DashMenu() {
                         {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="2-2" as={Link} to="/account/hostellist">Hostel List</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        {(isSuperAdmin) && (
                         <Nav.Item eventKey="2-3" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
