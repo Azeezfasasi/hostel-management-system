@@ -51,19 +51,19 @@ function DashMenu() {
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                         <Nav.Item eventKey="2-1" as={Link} to="/account/myroomdetails">My Room Details</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="2-2" as={Link} to="/account/hostellist">Hostel List</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="2-3" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                         <Nav.Item eventKey="2-4" as={Link} to="/account/roomrequest">Request a Room</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="2-5" as={Link} to="/account/adminroomrequests">All Room Request</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                         <Nav.Item eventKey="2-6" as={Link} to="/account/roomallocation">Room Allocations</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
@@ -87,10 +87,10 @@ function DashMenu() {
                         {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="3-4" as={Link} to="/account/addfurniturecategory">Add Category</Nav.Item>
                         )}
-                        {(isStudent || isSuperAdmin || isAdmin || isStaff || isStudent) && (
+                        {(isStudent || isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="3-5" as={Link} to="/account/damagereportform">Report Damage</Nav.Item>
                         )}
-                        {(isStudent || isSuperAdmin || isAdmin || isStaff || isStudent) && (
+                        {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="3-6" as={Link} to="">All Damage Reports</Nav.Item>
                         )}
                     </Nav.Menu>
