@@ -24,6 +24,7 @@ import RoomRequest from "./account/RoomRequests";
 import AdminRoomRequests from "./account/AdminRoomRequest";
 import ManageStutents from "./account/ManageStutents";
 import MyRoomDetails from "./account/MyRoomDetails";
+import Onboarding from "./onboarding/Onboarding";
 
 function App() {
 
@@ -40,7 +41,8 @@ function App() {
 
         {/* Protected Routes */}
         <Route element={<PrivateRoutes />}>
-          <Route path="/account/dashboard" element={<Dashboard />} /> 
+          <Route path="/onboarding/onboarding" element={<Onboarding />} />
+          <Route path="/account/dashboard" element={<Dashboard />} />
           <Route path="/account/hostellist" element={<HostelList />} />
           <Route path="/account/roomlist" element={<RoomList />} />
           <Route path="/account/roomallocation" element={<RoomAllocation />} />

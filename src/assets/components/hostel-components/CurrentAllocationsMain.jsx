@@ -39,8 +39,8 @@ const CurrentAllocationsMain = () => {
 
 
   // Show student details modal
-  function handleViewDetails(student) {
-    setSelectedStudent(student);
+  function handleViewDetails(allocation) {
+    setSelectedStudent(allocation);
     setShowModal(true);
   }
 
@@ -159,7 +159,7 @@ const CurrentAllocationsMain = () => {
                   <td className="border p-3">Bed {a.bed + 1}</td>
                   <td className="border p-3 flex gap-2">
                     <button
-                      onClick={() => handleViewDetails(a.student)}
+                      onClick={() => handleViewDetails(a)}
                       className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
                     >
                       View Details
@@ -184,42 +184,51 @@ const CurrentAllocationsMain = () => {
                         </button>
                         <div className="flex flex-col items-center gap-4">
                           {/* Profile Image */}
-                          {selectedStudent.profileImage ? (
-                            <img src={selectedStudent.profileImage} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-blue-400" />
+                          {selectedStudent.student?.profileImage ? (
+                            <img src={selectedStudent.student.profileImage} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-blue-400" />
                           ) : (
                             <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl text-gray-500 border-2 border-gray-300">
-                              <span>{selectedStudent.firstName?.[0] || ''}{selectedStudent.lastName?.[0] || ''}</span>
+                              <span>{selectedStudent.student?.firstName?.[0] || ''}{selectedStudent.student?.lastName?.[0] || ''}</span>
                             </div>
                           )}
-                          <div className="text-center">
-                            <h3 className="text-xl font-bold mb-1">{selectedStudent.firstName} {selectedStudent.lastName} {selectedStudent.otherName && <span>{selectedStudent.otherName}</span>}</h3>
+                          <div className="text-left">
+                            <h3 className="text-xl font-bold mb-1">{selectedStudent.student?.firstName} {selectedStudent.student?.lastName} {selectedStudent.student?.otherName && <span>{selectedStudent.student.otherName}</span>}</h3>
 
-                            <p className="text-blue-600 mb-1">Matric No: <span className="font-semibold text-gray-500">{selectedStudent.matricNumber}</span></p>
+                            <p className="text-blue-600 mb-1">Matric No: <span className="font-semibold text-gray-500">{selectedStudent.student?.matricNumber}</span></p>
 
-                            <p className="text-blue-600 mb-1">Gender: <span className="font-semibold text-gray-500">{selectedStudent?.gender}</span></p>
+                            <p className="text-blue-600 mb-1">Gender: <span className="font-semibold text-gray-500">{selectedStudent.student?.gender}</span></p>
 
-                            <p className="text-blue-600 mb-1">Email: <span className="font-semibold text-gray-500">{selectedStudent.email}</span></p>
+                            <p className="text-blue-600 mb-1">Email: <span className="font-semibold text-gray-500">{selectedStudent.student?.email}</span></p>
 
-                            <p className="text-blue-600 mb-1">Phone: <span className="font-semibold text-gray-600">{selectedStudent.phone}</span></p>
+                            {selectedStudent.student?.phone && <p className="text-blue-600 mb-1">Phone: <span className="font-semibold text-gray-600">{selectedStudent.student.phone}</span></p>}
 
-                            <p className="text-blue-600 mb-1">Emergency Contact: <span className="font-semibold text-gray-600">{selectedStudent.emergencyContact}</span></p>
+                            {selectedStudent.student?.emergencyContact && <p className="text-blue-600 mb-1">Emergency Contact: <span className="font-semibold text-gray-600">{selectedStudent.student.emergencyContact}</span></p>}
 
-                            <p className="text-blue-600 mb-1">Address: <span className="font-semibold text-gray-600">{selectedStudent.Address}</span></p>
+                            {selectedStudent.student?.address && <p className="text-blue-600 mb-1">Address: <span className="font-semibold text-gray-600">{selectedStudent.student.address}</span></p>}
 
-                            <p className="text-blue-600 mb-1">NIN: <span className="font-semibold text-gray-600">{selectedStudent.nin}</span></p>
+                            {selectedStudent.student?.nin && <p className="text-blue-600 mb-1">NIN: <span className="font-semibold text-gray-600">{selectedStudent.student.nin}</span></p>}
 
-                            <p className="text-blue-600 mb-1">State: <span className="font-semibold text-gray-600">{selectedStudent.state}</span></p>
+                            {selectedStudent.student?.state && <p className="text-blue-600 mb-1">State: <span className="font-semibold text-gray-600">{selectedStudent.student.state}</span></p>}
 
-                            <p className="text-blue-600 mb-1">City: <span className="font-semibold text-gray-600">{selectedStudent.city}</span></p>
+                            {selectedStudent.student?.city && <p className="text-blue-600 mb-1">City: <span className="font-semibold text-gray-600">{selectedStudent.student.city}</span></p>}
 
-                            <p className="text-blue-600 mb-1">Department: <span className="font-semibold text-gray-600">{selectedStudent.department}</span></p>
+                            {selectedStudent.student?.department && <p className="text-blue-600 mb-1">Department: <span className="font-semibold text-gray-600">{selectedStudent.student.department}</span></p>}
 
-                            <p className="text-blue-600 mb-1">Course: <span className="font-semibold text-gray-600">{selectedStudent.course}</span></p>
-                            
-                            <p className="text-blue-600 mb-1">Level: <span className="font-semibold text-gray-600">{selectedStudent.level}</span></p>
+                            {selectedStudent.student?.course && <p className="text-blue-600 mb-1">Course: <span className="font-semibold text-gray-600">{selectedStudent.student.course}</span></p>}
 
-                            {selectedStudent.department && <p className="text-gray-600 mb-1">Department: <span className="font-semibold">{selectedStudent.department}</span></p>}
-                            {/* Add more fields as needed */}
+                            {selectedStudent.student?.level && <p className="text-blue-600 mb-1">Level: <span className="font-semibold text-gray-600">{selectedStudent.student.level}</span></p>}
+
+                            <div className="text-[24px] font-bold mt-4 mb-2">Student Hostel Details</div>
+                            <p className="text-blue-600 mb-1">Hostel Name: <span className="font-semibold text-gray-600">{selectedStudent.hostel?.name}</span></p>
+
+                            <p className="text-blue-600 mb-1">Block: <span className="font-semibold text-gray-600">{selectedStudent.block}</span></p>
+
+                            <p className="text-blue-600 mb-1">Floor: <span className="font-semibold text-gray-600">{selectedStudent.floor}</span></p>
+
+                            <p className="text-blue-600 mb-1">Room Number: <span className="font-semibold text-gray-600">{selectedStudent.room}</span></p>
+
+                            <p className="text-blue-600 mb-1">Bed: <span className="font-semibold text-gray-600">{(selectedStudent.bed + 1) || ''}</span></p>
+                            {/* If you want to show price/facilities, you need to fetch room details separately */}
                           </div>
                         </div>
                       </div>

@@ -22,8 +22,10 @@ export default function Register() {
 
   useEffect(() => {
     if (success && !error) {
+      // Save registration data to localStorage for onboarding prefill
+      localStorage.setItem('onboardingPrefill', JSON.stringify(form));
       const timer = setTimeout(() => {
-        navigate("/account/dashboard");
+        navigate("/onboarding/onboarding");
       }, 1000);
       return () => clearTimeout(timer);
     }
