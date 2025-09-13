@@ -15,8 +15,8 @@ function MyRoomDetailsMain() {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      // Fetch all room requests for the user
-      const res = await axios.get(`${API_BASE_URL}/room/requests`, config);
+  // Fetch all room requests for the user (student endpoint)
+  const res = await axios.get(`${API_BASE_URL}/room/my-requests`, config);
       // Find the latest request for the logged-in student
       const requests = res.data.data || [];
       // Sort by createdAt descending
