@@ -31,7 +31,9 @@ function DashMenu() {
     '/account/addfurnitures': '3-3',
     '/account/addfurniturecategory': '3-4',
     '/account/damagereportform': '3-5',
-    '/account/managestudents': '4-1'
+    '/account/managestudents': '4-1',
+    '/account/manageusers': '7-1',
+    '/account/adduser': '7-2',
   };
   const activeKey = menuKeyByPath[location.pathname];
 
@@ -118,8 +120,8 @@ function DashMenu() {
                     </Nav.Menu>
                     {(isSuperAdmin || isAdmin || isStaff) && (
                     <Nav.Menu eventKey="7" title="Users" icon={<GridIcon />}>
-                        <Nav.Item eventKey="7-1" as={Link} to="">Manage Users</Nav.Item>
-                        <Nav.Item eventKey="7-2" as={Link} to="">Create a User</Nav.Item>
+                        <Nav.Item eventKey="7-1" as={Link} to="/account/manageusers">Manage Users</Nav.Item>
+                        <Nav.Item eventKey="7-2" as={Link} to="/account/adduser">Create a User</Nav.Item>
                     </Nav.Menu>
                     )}
                     <Nav.Menu eventKey="8" title="Complaints" icon={<GridIcon />}>

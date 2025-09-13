@@ -12,7 +12,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!loading && user && !user.onboardingCompleted) {
+    if (!loading && user && user.role === 'student' && !user.onboardingCompleted) {
       navigate('/onboarding/onboarding');
     }
   }, [user, loading, navigate]);

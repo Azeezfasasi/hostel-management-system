@@ -8,6 +8,8 @@ import StepThree from './StepThree';
 import StepFour from './StepFour';
 import HeaderSection from '@/assets/components/home-components/HeaderSection';
 import FooterSection from '@/assets/components/home-components/FooterSection';
+import { Helmet } from 'react-helmet';
+import DashboardHeader from '@/assets/components/dashboard-components/DashboardHeader';
 
 const steps = [StepOne, StepTwo, StepThree, StepFour];
 
@@ -88,7 +90,10 @@ export default function Onboarding({ onComplete }) {
 
   return (
     <>
-      <HeaderSection />
+      <Helmet>
+        <title>Welcome - Hostel Management</title>
+      </Helmet>
+      <DashboardHeader />
       <div className="md:max-w-xl mx-auto p-6 mt-[70px] mb-[40px] md:mt-[100px] md:mb-[40px] bg-gray-100 rounded shadow">
         <div className="mb-4 text-center font-bold text-lg">Onboarding ({currentStep + 1} / 4)</div>
         {error && <div className="text-red-600 text-center mb-4">{error}</div>}

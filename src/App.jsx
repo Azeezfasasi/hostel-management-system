@@ -25,6 +25,8 @@ import AdminRoomRequests from "./account/AdminRoomRequest";
 import ManageStutents from "./account/ManageStutents";
 import MyRoomDetails from "./account/MyRoomDetails";
 import Onboarding from "./onboarding/Onboarding";
+import ManageUsers from "./account/ManageUsers";
+import AddNewUser from "./account/AddNewUser";
 
 function App() {
 
@@ -56,6 +58,8 @@ function App() {
           <Route path="/account/adminroomrequests" element={<AdminRoomRequests />} />
           <Route path="/account/managestudents" element={<ManageStutents />} />
           <Route path="/account/myroomdetails" element={<MyRoomDetails />} />
+          <Route path="/account/manageusers" element={<ManageUsers />} />
+          <Route path="/account/adduser" element={<AddNewUser />} />
         </Route>
       </Routes>
      </UserProvider>

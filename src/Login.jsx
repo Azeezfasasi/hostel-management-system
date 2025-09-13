@@ -14,10 +14,10 @@ export default function Login() {
 
   useEffect(() => {
     if (user && token) {
-      if (user.onboardingCompleted) {
-        navigate("/account/dashboard");
-      } else {
+      if (user.role === 'student' && !user.onboardingCompleted) {
         navigate("/onboarding/onboarding");
+      } else {
+        navigate("/account/dashboard");
       }
     }
   }, [user, token, navigate]);
