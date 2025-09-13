@@ -22,6 +22,7 @@ function DashMenu() {
     '': '2-1',
     '/account/hostellist': '2-2',
     '/account/roomrequest': '2-3',
+    '/account/adminroomrequests': '2-3-1',
     '/account/roomlist': '2-4',
     '/account/roomallocation': '2-5',
     '/account/assignrooms': '2-6',
@@ -53,13 +54,16 @@ function DashMenu() {
                         <Nav.Item eventKey="2-2" as={Link} to="/account/hostellist">Hostel List</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-3" as={Link} to="/account/roomrequest">Room Request</Nav.Item>
+                        <Nav.Item eventKey="2-3" as={Link} to="/account/roomrequest">Request a Room</Nav.Item>
+                        )}
+                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        <Nav.Item eventKey="2-3-1" as={Link} to="/account/adminroomrequests">All Room Request</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="2-4" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-5" as={Link} to="/account/roomallocation">Room Allocation</Nav.Item>
+                        <Nav.Item eventKey="2-5" as={Link} to="/account/roomallocation">Room Allocations</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="2-6" as={Link} to="/account/assignrooms">Assign Rooms</Nav.Item>

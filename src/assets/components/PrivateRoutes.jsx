@@ -9,7 +9,7 @@ const PrivateRoutes = () => {
   if (loading) {
     return (
       <div className='flex justify-center items-center h-screen gap-2'>
-        <BounceLoader /> <spa className="font-bold">Loading...</spa>
+        <BounceLoader /> <span className="font-bold">Loading...</span>
       </div>
     );
   }
