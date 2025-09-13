@@ -21,10 +21,11 @@ function DashMenu() {
     '/app/dashboard': '1',
     '': '2-1',
     '/account/hostellist': '2-2',
-    '/account/roomlist': '2-3',
-    '/account/roomallocation': '2-4',
-    '/account/assignrooms': '2-5',
-    '/account/currentroomallocation': '2-6',
+    '/account/roomrequest': '2-3',
+    '/account/roomlist': '2-4',
+    '/account/roomallocation': '2-5',
+    '/account/assignrooms': '2-6',
+    '/account/currentroomallocation': '2-7',
     '/account/allfurnitures': '3-2',
     '/account/addfurnitures': '3-3',
     '/account/addfurniturecategory': '3-4',
@@ -52,16 +53,19 @@ function DashMenu() {
                         <Nav.Item eventKey="2-2" as={Link} to="/account/hostellist">Hostel List</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-3" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
+                        <Nav.Item eventKey="2-3" as={Link} to="/account/roomrequest">Room Request</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-4" as={Link} to="/account/roomallocation">Room Allocation</Nav.Item>
+                        <Nav.Item eventKey="2-4" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-5" as={Link} to="/account/assignrooms">Assign Rooms</Nav.Item>
+                        <Nav.Item eventKey="2-5" as={Link} to="/account/roomallocation">Room Allocation</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="2-6" as={Link} to="/account/currentroomallocation">Occupancy</Nav.Item>
+                        <Nav.Item eventKey="2-6" as={Link} to="/account/assignrooms">Assign Rooms</Nav.Item>
+                        )}
+                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        <Nav.Item eventKey="2-7" as={Link} to="/account/currentroomallocation">Occupancy</Nav.Item>
                         )}
                     </Nav.Menu>
                     )}

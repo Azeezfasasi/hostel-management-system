@@ -20,6 +20,7 @@ import AllFurnitures from "./account/AllFurnitures";
 import AddFurnitures from "./account/AddFurniture";
 import AddFurnitureCategory from "./account/AddFurnitureCategory";
 import DamageReportForm from "./account/DamageReportForm";
+import RoomRequest from "./account/RoomRequests";
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
           <Route path="/account/addfurnitures" element={<AddFurnitures />} />
           <Route path="/account/addfurniturecategory" element={<AddFurnitureCategory />} />
           <Route path="/account/damagereportform" element={<DamageReportForm />} />
+          <Route path="/account/roomrequest" element={<RoomRequest />} />
         </Route>
       </Routes>
      </UserProvider>
