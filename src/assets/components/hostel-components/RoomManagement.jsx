@@ -232,9 +232,9 @@ const RoomManager = () => {
           </div>
           {/* ...existing code... */}
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">Room Number</label>
+            <label className="text-sm font-medium text-gray-700 mb-1">Room Number <span className="text-blue-500 text-[12px]">(Enter a number between 1 and 100)</span></label>
             <input
-              type="text"
+              type="number"
               placeholder="Room Number"
               value={roomData.roomNumber}
               onChange={(e) =>
@@ -254,6 +254,11 @@ const RoomManager = () => {
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
             </select>
           </div>
           {/* ...existing code... */}
@@ -298,9 +303,9 @@ const RoomManager = () => {
             {currentRooms.map((r) => (
               <tr key={r._id} className="hover:bg-gray-50">
                 <td className="border p-3">{r.hostelId?.name || "N/A"}</td>
-                <td className="border p-3">{r.roomBlock}</td>
-                <td className="border p-3">{r.roomFloor}</td>
-                <td className="border p-3">{r.roomNumber}</td>
+                <td className="border p-3">Block {r.roomBlock}</td>
+                <td className="border p-3">Floor {r.roomFloor}</td>
+                <td className="border p-3">Room {r.roomNumber}</td>
                 <td className="border p-3">{r.capacity}</td>
                 <td className="border p-3">{r.price}</td>
                 <td className="border p-3 flex gap-2">
