@@ -307,7 +307,7 @@ const RoomManager = () => {
                 <td className="border p-3">Floor {r.roomFloor}</td>
                 <td className="border p-3">Room {r.roomNumber}</td>
                 <td className="border p-3">{r.capacity}</td>
-                <td className="border p-3">{r.price}</td>
+                <td className="border p-3">₦{r.price}</td>
                 <td className="border p-3 flex gap-2">
                   <button
                     onClick={() => openEditRoomModal(r)}
