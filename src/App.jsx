@@ -28,6 +28,10 @@ import Onboarding from "./onboarding/Onboarding";
 import ManageUsers from "./account/ManageUsers";
 import AddNewUser from "./account/AddNewUser";
 import ChangeUserPassword from "./account/ChangeUserPassword";
+import SendNewsletter from "./account/SendNewsletter";
+import NewsletterSubscribers from "./account/NewsletterSubscribers";
+import AllNewsletter from "./account/AllNewsletter";
+import Profile from "./account/Profile";
 
 function App() {
 
@@ -62,6 +66,10 @@ function App() {
           <Route path="/account/manageusers" element={<ManageUsers />} />
           <Route path="/account/adduser" element={<AddNewUser />} />
           <Route path="/account/changeuserpassword" element={<ChangeUserPassword />} />
+          <Route path="/account/sendnewsletter" element={<SendNewsletter />} />
+          <Route path="/account/allnewsletter" element={<AllNewsletter />} />
+          <Route path="/account/newslettersubscribers" element={<NewsletterSubscribers />} />
+          <Route path="/account/profile" element={<Profile />} />
         </Route>
       </Routes>
      </UserProvider>

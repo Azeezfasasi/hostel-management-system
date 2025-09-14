@@ -35,6 +35,11 @@ function DashMenu() {
     '/account/manageusers': '7-1',
     '/account/adduser': '7-2',
     '/account/changeuserpassword': '7-3',
+    '/account/sendnewsletter': '8-1',
+    '/account/allnewsletter': '8-2',
+    '/account/newslettersubscribers': '8-3',
+    '/account/profile': '12',
+    // Add more mappings as needed
   };
   const activeKey = menuKeyByPath[location.pathname];
 
@@ -128,33 +133,40 @@ function DashMenu() {
                         <Nav.Item eventKey="7-3" as={Link} to="/account/changeuserpassword">Change User Password</Nav.Item>
                     </Nav.Menu>
                     )}
-                    <Nav.Menu eventKey="8" title="Complaints" icon={<GridIcon />}>
+                    {(isSuperAdmin || isAdmin) && (
+                    <Nav.Menu eventKey="8" title="Newsletter" icon={<GridIcon />}>
+                        <Nav.Item eventKey="8-1" as={Link} to="/account/sendnewsletter">Send Newsletters</Nav.Item>
+                        <Nav.Item eventKey="8-2" as={Link} to="/account/allnewsletter">All Newsletter</Nav.Item>
+                        <Nav.Item eventKey="8-3" as={Link} to="/account/newslettersubscribers">Subscribers</Nav.Item>
+                    </Nav.Menu>
+                    )}
+                    <Nav.Menu eventKey="9" title="Complaints" icon={<GridIcon />}>
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="8-1" as={Link} to="">Manage Complaints</Nav.Item>
+                        <Nav.Item eventKey="9-1" as={Link} to="">Manage Complaints</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                        <Nav.Item eventKey="8-2" as={Link} to="">Send a Complaint</Nav.Item>
+                        <Nav.Item eventKey="9-2" as={Link} to="">Send a Complaint</Nav.Item>
                         )}
                     </Nav.Menu>
                     
-                    <Nav.Menu eventKey="9" title="Accounts" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="10" title="Accounts" icon={<GridIcon />}>
                         {(isAdmin || isSuperAdmin || isStaff) && (
-                        <Nav.Item eventKey="9-1" as={Link} to="">All Transaction History</Nav.Item>
+                        <Nav.Item eventKey="10-1" as={Link} to="">All Transaction History</Nav.Item>
                         )}
                         {(isStudent) && (
-                        <Nav.Item eventKey="9-1" as={Link} to="">My Transaction History</Nav.Item>
+                        <Nav.Item eventKey="10-2" as={Link} to="">My Transaction History</Nav.Item>
                         )}
                         {(isStudent) && (
-                        <Nav.Item eventKey="9-2" as={Link} to="">Overdue</Nav.Item>
+                        <Nav.Item eventKey="10-3" as={Link} to="">Overdue</Nav.Item>
                         )}
                     </Nav.Menu>
                     {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Item eventKey="10" icon={<DetailIcon />} as={Link} to="">
+                    <Nav.Item eventKey="11" icon={<DetailIcon />} as={Link} to="">
                         Maintenance
                     </Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Item eventKey="11" icon={<DetailIcon />} as={Link} to="">
+                    <Nav.Item eventKey="12" icon={<DetailIcon />} as={Link} to="/account/profile">
                         Profile
                     </Nav.Item>
                     )}

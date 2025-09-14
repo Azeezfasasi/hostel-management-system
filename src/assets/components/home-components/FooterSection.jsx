@@ -1,4 +1,5 @@
 import { Mail, Phone } from "lucide-react";
+import SubscribeToNewsletter from "./SubscribeToNewsletter";
 
 export default function FooterSection() {
   return (
@@ -56,6 +57,10 @@ export default function FooterSection() {
               <span>+234 800 123 4567</span>
             </li>
           </ul>
+        </div>
+
+        <div>
+          <SubscribeToNewsletter />
         </div>
       </div>
 
