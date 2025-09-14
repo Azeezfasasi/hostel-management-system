@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
 
-const StudentRoomBooking = ({ onBook }) => {
+const StudentRoomBooking = () => {
   const [hostels, setHostels] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [selectedHostel, setSelectedHostel] = useState("");
@@ -12,6 +12,7 @@ const StudentRoomBooking = ({ onBook }) => {
   const [selectedBed, setSelectedBed] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +66,37 @@ const StudentRoomBooking = ({ onBook }) => {
         .filter(idx => !selectedRoomObj.assignedStudents || !selectedRoomObj.assignedStudents[idx])
     : [];
 
+  const handlePayment = async (amount, bookingId) => {
+    setPaymentLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const studentId = localStorage.getItem("studentId");
+      const studentEmail = localStorage.getItem("studentEmail");
+      // Call backend to get Credo authorizationUrl
+      const { data } = await axios.post(
+        `${API_BASE_URL}/payment/init`,
+        {
+          bookingId,
+          student: studentId,
+          amount,
+          method: "Credo",
+          email: studentEmail,
+          callbackUrl: window.location.origin + "/payment/callback"
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data?.status === "success" && data.payment?.invoiceUrl) {
+        window.location.href = data.payment.invoiceUrl;
+      } else {
+        setMessage("Failed to start payment.");
+      }
+    } catch (err) {
+      console.log(err);
+      setMessage("Error starting payment.");
+    }
+    setPaymentLoading(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedHostel || !selectedBlock || !selectedFloor || !selectedRoom || selectedBed === "") {
@@ -73,34 +105,30 @@ const StudentRoomBooking = ({ onBook }) => {
     }
     setMessage("");
     setLoading(true);
+    const token = localStorage.getItem("token");
+    const studentId = localStorage.getItem("studentId");
+    // Get room price from selectedRoomObj or set a fixed price
+    const amount = selectedRoomObj?.price || 50000; // Example price
     try {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {})
+      // Step 1: Create booking
+      const bookingRes = await axios.post(
+        `${API_BASE_URL}/room/requests`,
+        {
+          roomId: selectedRoom,
+          bed: Number(selectedBed),
+          student: studentId
         },
-        withCredentials: true
-      };
-      const payload = {
-        roomId: selectedRoom,
-        bed: Number(selectedBed)
-      };
-      // Submit a room request for admin approval
-      const res = await axios.post(`${API_BASE_URL}/room/requests`, payload, config);
-      if (res.data && res.data.success) {
-        setMessage("Room request submitted! Awaiting admin approval.");
-        setSelectedHostel("");
-        setSelectedBlock("");
-        setSelectedFloor("");
-        setSelectedRoom("");
-        setSelectedBed("");
-        if (onBook) onBook();
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (bookingRes.data && bookingRes.data.booking && bookingRes.data.booking._id) {
+        // Step 2: Initiate payment
+        await handlePayment(amount, bookingRes.data.booking._id);
       } else {
-        setMessage(res.data.message || "Failed to submit room request.");
+        setMessage("Booking failed. Please try again.");
       }
     } catch (err) {
-      setMessage(err.response?.data?.message || "Network error booking room.");
+      console.log(err);
+      setMessage("Booking or payment failed.");
     }
     setLoading(false);
   };
@@ -222,9 +250,9 @@ const StudentRoomBooking = ({ onBook }) => {
         <button
           type="submit"
           className="mt-8 w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md md:col-span-2"
-          disabled={loading}
+          disabled={loading || paymentLoading}
         >
-          {loading ? "Booking..." : "Book Room"}
+          {loading || paymentLoading ? "Processing..." : "Book & Pay"}
         </button>
       </form>
     </div>

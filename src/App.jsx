@@ -27,6 +27,7 @@ import MyRoomDetails from "./account/MyRoomDetails";
 import Onboarding from "./onboarding/Onboarding";
 import ManageUsers from "./account/ManageUsers";
 import AddNewUser from "./account/AddNewUser";
+import ChangeUserPassword from "./account/ChangeUserPassword";
 
 function App() {
 
@@ -60,6 +61,7 @@ function App() {
           <Route path="/account/myroomdetails" element={<MyRoomDetails />} />
           <Route path="/account/manageusers" element={<ManageUsers />} />
           <Route path="/account/adduser" element={<AddNewUser />} />
+          <Route path="/account/changeuserpassword" element={<ChangeUserPassword />} />
         </Route>
       </Routes>
      </UserProvider>

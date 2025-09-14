@@ -34,6 +34,7 @@ function DashMenu() {
     '/account/managestudents': '4-1',
     '/account/manageusers': '7-1',
     '/account/adduser': '7-2',
+    '/account/changeuserpassword': '7-3',
   };
   const activeKey = menuKeyByPath[location.pathname];
 
@@ -53,10 +54,10 @@ function DashMenu() {
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                         <Nav.Item eventKey="2-1" as={Link} to="/account/myroomdetails">My Room Details</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin) && (
+                        {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="2-2" as={Link} to="/account/hostellist">Hostel List</Nav.Item>
                         )}
-                        {(isSuperAdmin) && (
+                        {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="2-3" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
@@ -80,7 +81,7 @@ function DashMenu() {
                         {(isStudent) && (
                         <Nav.Item eventKey="3-1" as={Link} to="">My Furnitures</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                         <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Furnitures</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin) && (
@@ -99,7 +100,9 @@ function DashMenu() {
                     {(isSuperAdmin || isAdmin || isStaff) && (
                     <Nav.Menu eventKey="4" title="Students" icon={<GridIcon />}>
                         <Nav.Item eventKey="4-1" as={Link} to="/account/managestudents">Manage Students</Nav.Item>
+                        {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="4-2" as={Link} to="">Add Students</Nav.Item>
+                        )}
                     </Nav.Menu>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff) && (
@@ -118,10 +121,11 @@ function DashMenu() {
                         <Nav.Item eventKey="6-2" as={Link} to="">Create Facilities</Nav.Item>
                         )}
                     </Nav.Menu>
-                    {(isSuperAdmin || isAdmin || isStaff) && (
+                    {(isSuperAdmin || isAdmin) && (
                     <Nav.Menu eventKey="7" title="Users" icon={<GridIcon />}>
                         <Nav.Item eventKey="7-1" as={Link} to="/account/manageusers">Manage Users</Nav.Item>
                         <Nav.Item eventKey="7-2" as={Link} to="/account/adduser">Create a User</Nav.Item>
+                        <Nav.Item eventKey="7-3" as={Link} to="/account/changeuserpassword">Change User Password</Nav.Item>
                     </Nav.Menu>
                     )}
                     <Nav.Menu eventKey="8" title="Complaints" icon={<GridIcon />}>
