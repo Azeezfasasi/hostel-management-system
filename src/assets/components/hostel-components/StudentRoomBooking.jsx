@@ -72,21 +72,27 @@ const StudentRoomBooking = () => {
       const token = localStorage.getItem("token");
       const studentId = localStorage.getItem("studentId");
       const studentEmail = localStorage.getItem("studentEmail");
+      const studentFirstName = localStorage.getItem("studentFirstName") || "Student";
+      const studentLastName = localStorage.getItem("studentLastName") || "";
+      const studentPhone = localStorage.getItem("studentPhone") || "";
+      const reference = Math.random().toString(36).substring(2, 22);
       // Call backend to get Credo authorizationUrl
       const { data } = await axios.post(
         `${API_BASE_URL}/payment/init`,
         {
-          bookingId,
-          student: studentId,
-          amount,
-          method: "Credo",
+          amount: amount * 100,
           email: studentEmail,
-          callbackUrl: window.location.origin + "/payment/callback"
+          reference,
+          customerFirstName: studentFirstName,
+          customerLastName: studentLastName,
+          customerPhoneNumber: studentPhone,
+          callbackUrl: window.location.origin + "/payment/callback",
+          metadata: { bookingId }
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (data?.status === "success" && data.payment?.invoiceUrl) {
-        window.location.href = data.payment.invoiceUrl;
+      if (data?.status === "success" && data.data?.authorizationUrl) {
+        window.location.href = data.data.authorizationUrl;
       } else {
         setMessage("Failed to start payment.");
       }
@@ -120,9 +126,10 @@ const StudentRoomBooking = () => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (bookingRes.data && bookingRes.data.booking && bookingRes.data.booking._id) {
+      const bookingId = bookingRes.data?.data?._id;
+      if (bookingId) {
         // Step 2: Initiate payment
-        await handlePayment(amount, bookingRes.data.booking._id);
+        await handlePayment(amount, bookingId);
       } else {
         setMessage("Booking failed. Please try again.");
       }
