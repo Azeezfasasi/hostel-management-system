@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '@/config/api';
 import html2canvas from 'html2canvas';
+import roomdetailscard from '../../images/roomdetailscard.png';
 
 function MyRoomDetailsMain() {
   const [roomDetails, setRoomDetails] = useState(null);
@@ -72,7 +73,7 @@ function MyRoomDetailsMain() {
 
   const handleDownload = async () => {
     if (cardRef.current) {
-      const canvas = await html2canvas(cardRef.current);
+      const canvas = await html2canvas(cardRef.current, { useCORS: true });
       const link = document.createElement('a');
       link.download = 'room-details-card.png';
       link.href = canvas.toDataURL();
@@ -92,43 +93,49 @@ function MyRoomDetailsMain() {
       ) : (
         <div>
           {/* ID Card / Photo Card */}
-          <div ref={cardRef} className="mx-auto bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6 w-full max-w-md border border-blue-200">
+          <div
+            ref={cardRef}
+            className="mx-auto rounded-xl shadow-lg p-6 w-full max-w-md"
+            style={{
+              background: 'linear-gradient(to bottom right, #eff6ff, #ffffff)',
+              border: '1px solid #60a5fa', // blue-400
+            }}
+          >
             <div className="flex flex-col items-center mb-4">
               <img
-                src={roomDetails.profileImage || '/default-profile.png'}
+                src={roomDetails.profileImage || roomdetailscard}
                 alt={roomDetails.firstName || 'Profile'}
-                className="w-24 h-24 rounded-full border-4 border-blue-300 object-cover mb-2"
+                style={{ width: '96px', height: '96px', borderRadius: '10%', border: '4px solid #60a5fa', objectFit: 'cover', marginBottom: '8px' }}
               />
-              <div className="text-lg font-bold text-blue-800">{roomDetails.firstName} {roomDetails.lastName}</div>
-              <div className="text-sm text-gray-600">Other Name: {roomDetails.otherName || '-'}</div>
-              <div className="text-sm text-gray-600">Phone: {roomDetails.phone || '-'}</div>
+              <div style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#1e40af' }}>{roomDetails.firstName} {roomDetails.lastName} {roomDetails.otherName || '-'}</div>
+              <div style={{ fontSize: '0.875rem', color: '#4b5563' }}>Phone: {roomDetails.phone || '-'}</div>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-sm mb-2">
-              <div><span className="font-semibold">Matric No:</span> {roomDetails.matricNumber || '-'}</div>
-              <div><span className="font-semibold">Gender:</span> {roomDetails.gender || '-'}</div>
-              <div><span className="font-semibold">Campus:</span> {roomDetails.campusName || '-'}</div>
-              <div><span className="font-semibold">Department:</span> {roomDetails.department || '-'}</div>
-              <div><span className="font-semibold">Course:</span> {roomDetails.course || '-'}</div>
-              <div><span className="font-semibold">Level:</span> {roomDetails.level || '-'}</div>
-              <div><span className="font-semibold">Room No:</span> {roomDetails.roomNumber || '-'}</div>
-              <div><span className="font-semibold">Hostel:</span> {roomDetails.hostelId?.name || '-'}</div>
-              <div><span className="font-semibold">Block:</span> {roomDetails.block || fullRequest?.room?.roomBlock || '-'}</div>
-              <div><span className="font-semibold">Floor:</span> {roomDetails.floor || fullRequest?.room?.roomFloor || '-'}</div>
-              <div><span className="font-semibold">Bed No:</span> {fullRequest?.bed !== undefined ? fullRequest.bed + 1 : '-'}</div>
-              <div><span className="font-semibold">Room Price:</span> ₦{roomDetails.price}</div>
-              <div><span className="font-semibold">Request Date:</span> {fullRequest?.createdAt ? new Date(fullRequest.createdAt).toLocaleString() : '-'}</div>
-              <div><span className="font-semibold">Request ID:</span> {fullRequest?._id || '-'}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '0.875rem', marginBottom: '8px' }}>
+              <div><span style={{ fontWeight: '600' }}>Matric No:</span> {roomDetails.matricNumber || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Gender:</span> {roomDetails.gender || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Campus:</span> {roomDetails.campusName || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Department:</span> {roomDetails.department || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Course:</span> {roomDetails.course || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Level:</span> {roomDetails.level || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Room No:</span> {roomDetails.roomNumber || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Hostel:</span> {roomDetails.hostelId?.name || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Block:</span> {roomDetails.block || fullRequest?.room?.roomBlock || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Floor:</span> {roomDetails.floor || fullRequest?.room?.roomFloor || '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Bed No:</span> {fullRequest?.bed !== undefined ? fullRequest.bed + 1 : '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Room Price:</span> ₦{roomDetails.price}</div>
+              <div><span style={{ fontWeight: '600' }}>Request Date:</span> {fullRequest?.createdAt ? new Date(fullRequest.createdAt).toLocaleString() : '-'}</div>
+              <div><span style={{ fontWeight: '600' }}>Request ID:</span> {fullRequest?._id || '-'}</div>
             </div>
-            <div className="mt-4 text-center">
-              <span className="font-semibold">Status: </span>
+            <div style={{ marginTop: '16px', textAlign: 'center' }}>
+              <span style={{ fontWeight: '600' }}>Status: </span>
               {requestStatus === 'approved' && (
-                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">Approved</span>
+                <span style={{ background: '#bbf7d0', color: '#15803d', padding: '4px 12px', borderRadius: '9999px', fontWeight: '600' }}>Approved</span>
               )}
               {requestStatus === 'declined' && (
-                <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full font-semibold">Rejected</span>
+                <span style={{ background: '#fecaca', color: '#b91c1c', padding: '4px 12px', borderRadius: '9999px', fontWeight: '600' }}>Rejected</span>
               )}
               {requestStatus === 'pending' && (
-                <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-semibold">Pending</span>
+                <span style={{ background: '#fef08a', color: '#a16207', padding: '4px 12px', borderRadius: '9999px', fontWeight: '600' }}>Pending</span>
               )}
             </div>
           </div>
