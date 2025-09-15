@@ -144,6 +144,7 @@ const RoomManager = () => {
     const hostelMatch = !hostelFilter || r.hostelId?.name === hostelFilter;
     const blockMatch = !blockFilter || r.roomBlock === blockFilter;
     const floorMatch = !floorFilter || r.roomFloor === floorFilter;
+    // Optionally filter by hostelCampus if you add a filter
     return hostelMatch && blockMatch && floorMatch;
   });
 
@@ -291,6 +292,7 @@ const RoomManager = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="border p-3">Hostel</th>
+              <th className="border p-3">Campus</th>
               <th className="border p-3">Block</th>
               <th className="border p-3">Floor</th>
               <th className="border p-3">Room Number</th>
@@ -303,6 +305,7 @@ const RoomManager = () => {
             {currentRooms.map((r) => (
               <tr key={r._id} className="hover:bg-gray-50">
                 <td className="border p-3">{r.hostelId?.name || "N/A"}</td>
+                <td className="border p-3">{r.hostelId?.hostelCampus || "N/A"}</td>
                 <td className="border p-3">Block {r.roomBlock}</td>
                 <td className="border p-3">Floor {r.roomFloor}</td>
                 <td className="border p-3">Room {r.roomNumber}</td>
@@ -326,7 +329,7 @@ const RoomManager = () => {
             ))}
             {currentRooms.length === 0 && (
               <tr>
-                <td colSpan="7" className="text-center p-4 text-gray-500">
+                <td colSpan="8" className="text-center p-4 text-gray-500">
                   No rooms found
                 </td>
               </tr>

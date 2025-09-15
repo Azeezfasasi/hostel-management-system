@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import close from '../../images/close.svg';
 import { API_BASE_URL } from "@/config/api";
+import { PencilLine, Trash2, Eye } from 'lucide-react';
 
 const Modal = ({ children, isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -51,13 +52,16 @@ const ConfirmationModal = ({ isOpen, message, onConfirm, onCancel }) => {
 
 export default function HostelManager() {
   const [hostels, setHostels] = useState([]);
-  const [formData, setFormData] = useState({ name: "", block: "", floor: "", location: "", description: "", genderRestriction: "", rulesAndPolicies: "", facilities: "" });
+  const [formData, setFormData] = useState({ hostelCampus: "", name: "", block: "", floor: "", location: "", description: "", genderRestriction: "", rulesAndPolicies: "", facilities: "" });
   const [editingHostel, setEditingHostel] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [hostelToDelete, setHostelToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // View details modal state
+  const [viewHostel, setViewHostel] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   // Fetch all hostels from backend
   const fetchHostels = async () => {
@@ -120,7 +124,7 @@ export default function HostelManager() {
       data = await res.json();
       if (data.success) {
         fetchHostels();
-        setFormData({ name: "", block: "", floor: "", location: "", description: "", genderRestriction: "", rulesAndPolicies: "", facilities: "" });
+        setFormData({ hostelCampus: "", name: "", block: "", floor: "", location: "", description: "", genderRestriction: "", rulesAndPolicies: "", facilities: "" });
         setEditingHostel(null);
         setIsModalOpen(false);
       } else {
@@ -166,7 +170,7 @@ export default function HostelManager() {
 
   const openAddHostelModal = () => {
     setEditingHostel(null);
-    setFormData({ name: "", block: "", floor: "", location: "", description: "", genderRestriction: "", rulesAndPolicies: "", facilities: "" });
+    setFormData({ hostelCampus: "", name: "", block: "", floor: "", location: "", description: "", genderRestriction: "", rulesAndPolicies: "", facilities: "" });
     setIsModalOpen(true);
     setError("");
   };
@@ -184,8 +188,8 @@ export default function HostelManager() {
   return (
     <div className="min-h-screen bg-gray-100 p-6 font-sans">
       <div className="p-6 max-w-6xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">🏨 Hostel Management</h2>
+        <div className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between items-center mb-6">
+          <h2 className="text-[22px] md:text-[30px] font-bold text-gray-800">🏨 Hostel Management</h2>
           <button
             onClick={openAddHostelModal}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -212,11 +216,22 @@ export default function HostelManager() {
           </h3>
           <form onSubmit={handleHostelSubmit} className="flex flex-col gap-5 px-6">
             <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700 mb-1">Campus Name</label>
+              <input
+                type="text"
+                placeholder="Campus Name"
+                value={formData.hostelCampus ?? ""}
+                onChange={(e) => setFormData({ ...formData, hostelCampus: e.target.value })}
+                className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700 mb-1">Hostel Name</label>
               <input
                 type="text"
                 placeholder="Hostel Name"
-                value={formData.name}
+                value={formData.name ?? ""}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
@@ -228,7 +243,7 @@ export default function HostelManager() {
                 <label className="text-sm font-medium text-gray-700 mb-1">Block</label>
                 <select
                   name="block"
-                  value={formData.block}
+                  value={formData.block ?? ""}
                   onChange={(e) => setFormData({ ...formData, block: e.target.value })}
                   className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
@@ -246,7 +261,7 @@ export default function HostelManager() {
                 <label className="text-sm font-medium text-gray-700 mb-1">Floor</label>
                 <select
                   name="floor"
-                  value={formData.floor}
+                  value={formData.floor ?? ""}
                   onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
                   className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
@@ -266,7 +281,7 @@ export default function HostelManager() {
               <label className="text-sm font-medium text-gray-700 mb-1">Gender Restriction</label>
               <select
                 name="genderRestriction"
-                value={formData.genderRestriction}
+                value={formData.genderRestriction ?? ""}
                 onChange={(e) => setFormData({ ...formData, genderRestriction: e.target.value })}
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
@@ -283,7 +298,7 @@ export default function HostelManager() {
               <input
                 type="text"
                 placeholder="Location"
-                value={formData.location}
+                value={formData.location ?? ""}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
@@ -292,17 +307,17 @@ export default function HostelManager() {
 
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea placeholder="Description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="border border-gray-300 rounded-lg p-3 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+              <textarea placeholder="Description" value={formData.description ?? ""} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="border border-gray-300 rounded-lg p-3 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700 mb-1">Rules and Policies</label>
-              <textarea placeholder="Rules and Policies" value={formData.rulesAndPolicies} onChange={(e) => setFormData({ ...formData, rulesAndPolicies: e.target.value })} className="border border-gray-300 rounded-lg p-3 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+              <textarea placeholder="Rules and Policies" value={formData.rulesAndPolicies ?? ""} onChange={(e) => setFormData({ ...formData, rulesAndPolicies: e.target.value })} className="border border-gray-300 rounded-lg p-3 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700 mb-1">Facilities <span className="text-xs text-gray-400">(comma separated)</span></label>
-              <textarea placeholder="Facilities" value={formData.facilities} onChange={(e) => setFormData({ ...formData, facilities: e.target.value })} className="border border-gray-300 rounded-lg p-3 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+              <textarea placeholder="Facilities" value={formData.facilities ?? ""} onChange={(e) => setFormData({ ...formData, facilities: e.target.value })} className="border border-gray-300 rounded-lg p-3 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
             <div className="w-full flex justify-end items-center gap-4">
@@ -329,38 +344,42 @@ export default function HostelManager() {
           <table className="w-full border-collapse">
             <thead className="bg-gray-100">
               <tr>
+                <th className="p-4 text-left text-sm font-semibold text-gray-600">Campus Name</th>
                 <th className="p-4 text-left text-sm font-semibold text-gray-600">Hostel Name</th>
                 <th className="p-4 text-left text-sm font-semibold text-gray-600">Block</th>
                 <th className="p-4 text-left text-sm font-semibold text-gray-600">Floor</th>
                 <th className="p-4 text-left text-sm font-semibold text-gray-600">Gender Restriction</th>
                 <th className="p-4 text-left text-sm font-semibold text-gray-600">Location</th>
-                <th className="p-4 text-left text-sm font-semibold text-gray-600">Description</th>
-                <th className="p-4 text-left text-sm font-semibold text-gray-600">Facilities</th>
                 <th className="p-4 text-left text-sm font-semibold text-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody>
               {hostels.map((h) => (
                 <tr key={h._id} className="bg-white hover:bg-gray-50 border-t border-gray-200">
+                  <td className="p-4">{h.hostelCampus}</td>
                   <td className="p-4">{h.name}</td>
                   <td className="p-4">{h.block}</td>
                   <td className="p-4">{h.floor}</td>
                   <td className="p-4">{h.genderRestriction }</td>
                   <td className="p-4">{h.location}</td>
-                  <td className="p-4">{h.description}</td>
-                  <td className="p-4">{Array.isArray(h.facilities) ? h.facilities.join(", ") : h.facilities}</td>
                   <td className="p-4 flex gap-2">
                     <button
-                      onClick={() => openEditHostelModal(h)}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition"
+                      onClick={() => { setViewHostel(h); setIsViewModalOpen(true); }}
+                      className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
                     >
-                      Edit
+                      <Eye />
+                    </button>
+                    <button
+                      onClick={() => openEditHostelModal(h)}
+                      className="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition cursor-pointer"
+                    >
+                      <PencilLine />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(h._id)}
-                      className="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition"
+                      className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition cursor-pointer"
                     >
-                      Delete
+                      <Trash2 />
                     </button>
                   </td>
                 </tr>
@@ -376,6 +395,25 @@ export default function HostelManager() {
           </table>
         </div>
       </div>
+      {/* View Details Modal */}
+      <Modal isOpen={isViewModalOpen} onClose={() => setIsViewModalOpen(false)}>
+        {viewHostel && (
+          <div>
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">Hostel Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><span className="font-semibold">Campus Name:</span> {viewHostel.hostelCampus}</div>
+              <div><span className="font-semibold">Hostel Name:</span> {viewHostel.name}</div>
+              <div><span className="font-semibold">Block:</span> {viewHostel.block}</div>
+              <div><span className="font-semibold">Floor:</span> {viewHostel.floor}</div>
+              <div><span className="font-semibold">Gender Restriction:</span> {viewHostel.genderRestriction}</div>
+              <div><span className="font-semibold">Location:</span> {viewHostel.location}</div>
+              <div className="md:col-span-2"><span className="font-semibold">Description:</span> {viewHostel.description}</div>
+              <div className="md:col-span-2"><span className="font-semibold">Rules & Policies:</span> {viewHostel.rulesAndPolicies}</div>
+              <div className="md:col-span-2"><span className="font-semibold">Facilities:</span> {Array.isArray(viewHostel.facilities) ? viewHostel.facilities.join(", ") : viewHostel.facilities}</div>
+            </div>
+          </div>
+        )}
+      </Modal>
       <ConfirmationModal
         isOpen={isConfirmModalOpen}
         message="Are you sure you want to delete this hostel?"
