@@ -83,6 +83,7 @@ const RoomAllocationMain = () => {
 
   return (
     <div className="p-6">
+      <div className="text-[24px] md:text-[30px] font-semibold mb-4 text-center">Room Allocation Overview</div>
       {/* Filters */}
       <div className="flex gap-4 mb-6 flex-wrap">
         <select
@@ -132,7 +133,7 @@ const RoomAllocationMain = () => {
                 const availableCount = allBeds.filter(b => b === "available").length;
                 return (
                   <div key={j} className="mb-6">
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex flex-col md:flex-row justify-between items-center mb-2">
                       <h3 className="text-lg font-semibold">
                         Floor {floor.floor} - ({floor.rooms.length} Rooms)
                       </h3>
@@ -162,7 +163,7 @@ const RoomAllocationMain = () => {
                             className="border rounded p-4 bg-white shadow"
                           >
                             <div className="flex justify-between items-center mb-3">
-                              <h4 className="font-medium">{room.name}</h4>
+                              <h4 className="font-medium">Room {room.name}</h4>
                               <span className="text-sm text-gray-600">
                                 {status}
                               </span>

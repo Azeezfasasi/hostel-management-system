@@ -207,13 +207,13 @@ function ManageStudentsMain() {
                       <td className="border p-3">{student.phone}</td>
                       <td className="border p-3">{student.isActive ? <span className="text-green-700 font-semibold">Active</span> : <span className="text-red-700 font-semibold">Disabled</span>}</td>
                       <td className="border p-3 flex gap-2 justify-center">
-                        <button onClick={() => handleViewDetails(student)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer"><Eye /></button>
-                        <button onClick={() => handleEdit(student)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer"><PencilLine /></button>
-                        <button onClick={() => handleDelete(student._id)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 cursor-pointer"><Trash2 /></button>
+                        <button onClick={() => handleViewDetails(student)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer"><Eye className="w-4 4- 4md:w-6 md:h-6" /></button>
+                        <button onClick={() => handleEdit(student)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer"><PencilLine className="w-4 4- 4md:w-6 md:h-6" /></button>
+                        <button onClick={() => handleDelete(student._id)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 cursor-pointer"><Trash2 className="w-4 4- 4md:w-6 md:h-6" /></button>
                         {student.isActive ? (
-                          <button onClick={() => handleDisable(student._id)} className="flex flex-col items-center bg-yellow-500 text-white px-3 text-[11px] py-1 rounded hover:bg-yellow-600 cursor-pointer"><ShieldBan />Disable</button>
+                          <button onClick={() => handleDisable(student._id)} className="flex flex-col items-center bg-yellow-500 text-white px-3 text-[11px] py-1 rounded hover:bg-yellow-600 cursor-pointer"><ShieldBan className="w-4 4- 4md:w-6 md:h-6" />Disable</button>
                         ) : (
-                          <button onClick={() => handleEnable(student._id)} className="bg-green-600 text-white px-3 text-[11px] py-1 rounded hover:bg-green-700 cursor-pointer"><ShieldCheck />Enable</button>
+                          <button onClick={() => handleEnable(student._id)} className="bg-green-600 text-white px-3 text-[11px] py-1 rounded hover:bg-green-700 cursor-pointer"><ShieldCheck className="w-4 4- 4md:w-6 md:h-6" />Enable</button>
                         )}
                       </td>
                     </>

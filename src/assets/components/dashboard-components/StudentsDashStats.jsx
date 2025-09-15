@@ -6,10 +6,10 @@ import { API_BASE_URL } from '@/config/api';
 
 export default function StudentsDashStats() {
   const [stats, setStats] = useState({
+    campuses: 0,
     hostels: 0,
     availableBeds: 0,
     occupiedBeds: 0,
-    campuses: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -41,6 +41,11 @@ export default function StudentsDashStats() {
 
   const statList = [
     {
+      icon: <School className="w-10 h-10 text-purple-600" />,
+      title: "Campuses",
+      value: stats.campuses,
+    },
+    {
       icon: <House className="w-10 h-10 text-amber-700" />,
       title: "Hostels",
       value: stats.hostels,
@@ -54,11 +59,6 @@ export default function StudentsDashStats() {
       icon: <DoorOpen className="w-10 h-10 text-green-600" />,
       title: "Occupied Beds",
       value: stats.occupiedBeds,
-    },
-    {
-      icon: <School className="w-10 h-10 text-purple-600" />,
-      title: "Campuses",
-      value: stats.campuses,
     },
   ];
 

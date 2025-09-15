@@ -48,8 +48,8 @@ const DashWelcome = () => {
   }
 
   return (
-    <div className="pt-8 w-full max-w-[80%]">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
+    <div className="pt-8 px-4 md:px-0 w-full md:max-w-[80%]">
+      <h1 className="text-[24px] md:text-3xl font-extrabold text-gray-900 mb-2">
         👋 {greeting} {user.firstName}
       </h1>
       {isStudent && !user.onboardingCompleted && (

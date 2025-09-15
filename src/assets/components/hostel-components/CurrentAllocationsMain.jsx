@@ -160,18 +160,18 @@ const CurrentAllocationsMain = () => {
                   <td className="border p-3">{a.floor}</td>
                   <td className="border p-3">{a.room}</td>
                   <td className="border p-3">Bed {a.bed + 1}</td>
-                  <td className="border p-3 flex gap-2">
+                  <td className="border border-solid border-gray-600 p-3 flex gap-2">
                     <button
                       onClick={() => handleViewDetails(a)}
-                      className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 cursor-pointer"
+                      className="bg-blue-600 text-white px-3 py-3 rounded hover:bg-blue-700 cursor-pointer"
                     >
-                      <Eye />
+                      <Eye className="w-4 4- 4md:w-6 md:h-6" />
                     </button>
                     <button
                       onClick={() => handleUnassign(a.roomId, a.student?._id)}
-                      className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 flex items-center gap-1 cursor-pointer"
+                      className="bg-red-600 text-white px-3 py-3 rounded hover:bg-red-700 flex items-center gap-1 cursor-pointer"
                     >
-                      <UserRoundX  /> Unassign
+                      <UserRoundX className="w-4 4- 4md:w-6 md:h-6" /> Unassign
                     </button>
                   </td>
                 </tr>
@@ -270,6 +270,13 @@ const CurrentAllocationsMain = () => {
 
                   <p className="text-blue-600 mb-1">Bed: <span className="font-semibold text-gray-600">{(selectedStudent.bed + 1) || ''}</span></p>
                   {/* If you want to show price/facilities, you need to fetch room details separately */}
+                </div>
+                <div className="flex justify-end md:justify-center w-full mb-2">
+                  <button onClick={handleCloseModal}
+                    className="bg-red-600 text-white hover:bg-red-700 py-2 px-4 text-[18px] font-semibold rounded-[7px] cursor-pointer"
+                    aria-label="Close">
+                    Close
+                  </button>
                 </div>
               </div>
             </div>

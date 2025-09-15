@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
 import { PencilLine, Trash2, Eye, Bed, CircleX } from 'lucide-react';
+import { useUser } from "@/assets/context-api/user-context/UseUser";
 
 
 const Modal = ({ children, isOpen, onClose }) => {
@@ -43,6 +44,7 @@ const RoomManager = () => {
   // View details modal state
   const [viewRoom, setViewRoom] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const { isSuperAdmin } = useUser();
 
   // Fetch hostels from backend (public route)
   const fetchHostels = async () => {
@@ -169,12 +171,14 @@ const RoomManager = () => {
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">🛏 Room Management</h2>
-        <button
-          onClick={openAddRoomModal}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          Add Room
-        </button>
+        {isSuperAdmin && (
+          <button
+            onClick={openAddRoomModal}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          >
+            Add Room
+          </button>
+        )}
       </div>
 
       {/* Filters */}
@@ -323,25 +327,29 @@ const RoomManager = () => {
                   <td className="border p-3">Room {r.roomNumber}</td>
                   <td className="border p-3">{r.capacity}</td>
                   <td className="border p-3">₦{formatPrice(r.price)}</td>
-                  <td className="border p-3 flex gap-2">
+                  <td className="border border-solid border-gray-500 p-3 flex gap-2">
                     <button
                       onClick={() => { setViewRoom(r); setIsViewModalOpen(true); }}
-                      className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 cursor-pointer"
+                      className="bg-blue-500 text-white px-3 py-3 rounded hover:bg-blue-600 cursor-pointer border-none"
                     >
-                      <Eye />
+                      <Eye className="w-4 4- 4md:w-6 md:h-6" />
                     </button>
+                    {isSuperAdmin && (
                     <button
                       onClick={() => openEditRoomModal(r)}
-                      className="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 cursor-pointer"
+                      className="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 cursor-pointer border-none"
                     >
-                      <PencilLine />
+                      <PencilLine className="w-4 4- 4md:w-6 md:h-6" />
                     </button>
+                    )}
+                    {isSuperAdmin && (
                     <button
                       onClick={() => deleteRoom(r._id)}
-                      className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 cursor-pointer"
+                      className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 cursor-pointer border-none"
                     >
-                      <Trash2 />
+                      <Trash2 className="w-4 4- 4md:w-6 md:h-6" />
                     </button>
+                    )}
                   </td>
                 </tr>
               </React.Fragment>

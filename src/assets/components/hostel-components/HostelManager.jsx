@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import close from '../../images/close.svg';
 import { API_BASE_URL } from "@/config/api";
 import { PencilLine, Trash2, Eye } from 'lucide-react';
+import { useUser } from "@/assets/context-api/user-context/UseUser";
 
 const Modal = ({ children, isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -62,6 +63,7 @@ export default function HostelManager() {
   // View details modal state
   const [viewHostel, setViewHostel] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const { isSuperAdmin } = useUser();
 
   // Fetch all hostels from backend
   const fetchHostels = async () => {
@@ -186,16 +188,18 @@ export default function HostelManager() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 font-sans">
-      <div className="p-6 max-w-6xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6 font-sans">
+      <div className="md:p-6 max-w-6xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
         <div className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between items-center mb-6">
           <h2 className="text-[22px] md:text-[30px] font-bold text-gray-800">🏨 Hostel Management</h2>
-          <button
-            onClick={openAddHostelModal}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Add Hostel
-          </button>
+          {isSuperAdmin && (
+            <button
+              onClick={openAddHostelModal}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Add Hostel
+            </button>
+          )}
         </div>
 
         {error && (
@@ -367,20 +371,24 @@ export default function HostelManager() {
                       onClick={() => { setViewHostel(h); setIsViewModalOpen(true); }}
                       className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
                     >
-                      <Eye />
+                      <Eye className="w-4 4- 4md:w-6 md:h-6" />
                     </button>
-                    <button
-                      onClick={() => openEditHostelModal(h)}
-                      className="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition cursor-pointer"
-                    >
-                      <PencilLine />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(h._id)}
-                      className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition cursor-pointer"
-                    >
-                      <Trash2 />
-                    </button>
+                    {isSuperAdmin && (
+                    <>
+                      <button
+                        onClick={() => openEditHostelModal(h)}
+                        className="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition cursor-pointer"
+                      >
+                        <PencilLine className="w-4 4- 4md:w-6 md:h-6" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(h._id)}
+                        className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition cursor-pointer"
+                      >
+                        <Trash2 className="w-4 4- 4md:w-6 md:h-6"/>
+                      </button>
+                    </>
+                    )}
                   </td>
                 </tr>
               ))}

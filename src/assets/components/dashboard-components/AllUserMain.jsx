@@ -184,7 +184,7 @@ function AllUserMain() {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">User Management</h2>
         <div className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
           Total Users: {totalUsers}

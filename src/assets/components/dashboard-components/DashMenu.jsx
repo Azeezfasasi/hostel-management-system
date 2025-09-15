@@ -68,7 +68,7 @@ function DashMenu() {
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                         <Nav.Item eventKey="2-4" as={Link} to="/account/roomrequest">Request a Room</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="2-5" as={Link} to="/account/adminroomrequests">All Room Request</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
@@ -77,7 +77,7 @@ function DashMenu() {
                         {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="2-7" as={Link} to="/account/assignrooms">Assign Rooms</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
+                        {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="2-8" as={Link} to="/account/currentroomallocation">Occupancy</Nav.Item>
                         )}
                     </Nav.Menu>
@@ -102,12 +102,10 @@ function DashMenu() {
                         <Nav.Item eventKey="3-6" as={Link} to="">All Damage Reports</Nav.Item>
                         )}
                     </Nav.Menu>
-                    {(isSuperAdmin || isAdmin || isStaff) && (
+                    {(isSuperAdmin || isAdmin) && (
                     <Nav.Menu eventKey="4" title="Students" icon={<GridIcon />}>
                         <Nav.Item eventKey="4-1" as={Link} to="/account/managestudents">Manage Students</Nav.Item>
-                        {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="4-2" as={Link} to="/account/adduser">Add Students</Nav.Item>
-                        )}
                     </Nav.Menu>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff) && (

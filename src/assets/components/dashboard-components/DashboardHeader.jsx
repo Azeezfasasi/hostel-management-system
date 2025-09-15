@@ -41,6 +41,11 @@ function DashboardHeader() {
     '/account/managestudents': '4-1',
     '/account/manageusers': '7-1',
     '/account/adduser': '7-2',
+    '/account/changeuserpassword': '7-3',
+    '/account/sendnewsletter': '8-1',
+    '/account/allnewsletter': '8-2',
+    '/account/newslettersubscribers': '8-3',
+    '/account/profile': '12',
   };
   const activeKey = menuKeyByPath[location.pathname];
 
@@ -168,16 +173,16 @@ function DashboardHeader() {
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                     <Nav.Item eventKey="2-1" as={Link} to="/account/myroomdetails">My Room Details</Nav.Item>
                     )}
-                    {(isSuperAdmin || isAdmin) && (
+                    {(isSuperAdmin || isAdmin || isStaff) && (
                     <Nav.Item eventKey="2-2" as={Link} to="/account/hostellist">Hostel List</Nav.Item>
                     )}
-                    {(isSuperAdmin) && (
+                    {(isSuperAdmin || isAdmin || isStaff) && (
                     <Nav.Item eventKey="2-3" as={Link} to="/account/roomlist">Manage Rooms</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                     <Nav.Item eventKey="2-4" as={Link} to="/account/roomrequest">Request a Room</Nav.Item>
                     )}
-                    {(isSuperAdmin || isAdmin || isStaff) && (
+                    {(isSuperAdmin || isAdmin) && (
                     <Nav.Item eventKey="2-5" as={Link} to="/account/adminroomrequests">All Room Request</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
@@ -186,7 +191,7 @@ function DashboardHeader() {
                     {(isSuperAdmin || isAdmin || isStaff) && (
                     <Nav.Item eventKey="2-7" as={Link} to="/account/assignrooms">Assign Rooms</Nav.Item>
                     )}
-                    {(isSuperAdmin || isAdmin || isStaff) && (
+                    {(isSuperAdmin || isAdmin) && (
                     <Nav.Item eventKey="2-8" as={Link} to="/account/currentroomallocation">Occupancy</Nav.Item>
                     )}
                 </Nav.Menu>
@@ -195,7 +200,7 @@ function DashboardHeader() {
                     {(isStudent) && (
                     <Nav.Item eventKey="3-1" as={Link} to="">My Furnitures</Nav.Item>
                     )}
-                    {(isSuperAdmin || isAdmin || isStaff) && (
+                    {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                     <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Furnitures</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin) && (
@@ -214,7 +219,9 @@ function DashboardHeader() {
                 {(isSuperAdmin || isAdmin || isStaff) && (
                 <Nav.Menu eventKey="4" title="Students" icon={<GridIcon />}>
                     <Nav.Item eventKey="4-1" as={Link} to="/account/managestudents">Manage Students</Nav.Item>
-                    <Nav.Item eventKey="4-2" as={Link} to="">Add Students</Nav.Item>
+                    {(isSuperAdmin || isAdmin) && (
+                    <Nav.Item eventKey="4-2" as={Link} to="/account/adduser">Add Students</Nav.Item>
+                    )}
                 </Nav.Menu>
                 )}
                 {(isSuperAdmin || isAdmin || isStaff) && (
@@ -233,39 +240,47 @@ function DashboardHeader() {
                     <Nav.Item eventKey="6-2" as={Link} to="">Create Facilities</Nav.Item>
                     )}
                 </Nav.Menu>
-                {(isSuperAdmin || isAdmin || isStaff) && (
+                {(isSuperAdmin || isAdmin) && (
                 <Nav.Menu eventKey="7" title="Users" icon={<GridIcon />}>
                     <Nav.Item eventKey="7-1" as={Link} to="/account/manageusers">Manage Users</Nav.Item>
                     <Nav.Item eventKey="7-2" as={Link} to="/account/adduser">Create a User</Nav.Item>
+                    <Nav.Item eventKey="7-3" as={Link} to="/account/changeuserpassword">Change User Password</Nav.Item>
                 </Nav.Menu>
                 )}
-                <Nav.Menu eventKey="8" title="Complaints" icon={<GridIcon />}>
+                {(isSuperAdmin || isAdmin) && (
+                <Nav.Menu eventKey="8" title="Newsletter" icon={<GridIcon />}>
+                    <Nav.Item eventKey="8-1" as={Link} to="/account/sendnewsletter">Send Newsletters</Nav.Item>
+                    <Nav.Item eventKey="8-2" as={Link} to="/account/allnewsletter">All Newsletter</Nav.Item>
+                    <Nav.Item eventKey="8-3" as={Link} to="/account/newslettersubscribers">Subscribers</Nav.Item>
+                </Nav.Menu>
+                )}
+                <Nav.Menu eventKey="9" title="Complaints" icon={<GridIcon />}>
                     {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Item eventKey="8-1" as={Link} to="">Manage Complaints</Nav.Item>
+                    <Nav.Item eventKey="9-1" as={Link} to="">Manage Complaints</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Item eventKey="8-2" as={Link} to="">Send a Complaint</Nav.Item>
+                    <Nav.Item eventKey="9-2" as={Link} to="">Send a Complaint</Nav.Item>
                     )}
                 </Nav.Menu>
                 
-                <Nav.Menu eventKey="9" title="Accounts" icon={<GridIcon />}>
+                <Nav.Menu eventKey="10" title="Accounts" icon={<GridIcon />}>
                     {(isAdmin || isSuperAdmin || isStaff) && (
-                    <Nav.Item eventKey="9-1" as={Link} to="">All Transaction History</Nav.Item>
+                    <Nav.Item eventKey="10-1" as={Link} to="">All Transaction History</Nav.Item>
                     )}
                     {(isStudent) && (
-                    <Nav.Item eventKey="9-1" as={Link} to="">My Transaction History</Nav.Item>
+                    <Nav.Item eventKey="10-2" as={Link} to="">My Transaction History</Nav.Item>
                     )}
                     {(isStudent) && (
-                    <Nav.Item eventKey="9-2" as={Link} to="">Overdue</Nav.Item>
+                    <Nav.Item eventKey="10-3" as={Link} to="">Overdue</Nav.Item>
                     )}
                 </Nav.Menu>
                 {(isSuperAdmin || isAdmin || isStaff) && (
-                <Nav.Item eventKey="10" icon={<DetailIcon />} as={Link} to="">
+                <Nav.Item eventKey="11" icon={<DetailIcon />} as={Link} to="">
                     Maintenance
                 </Nav.Item>
                 )}
                 {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                <Nav.Item eventKey="11" icon={<DetailIcon />} as={Link} to="">
+                <Nav.Item eventKey="12" icon={<DetailIcon />} as={Link} to="/account/profile">
                     Profile
                 </Nav.Item>
                 )}

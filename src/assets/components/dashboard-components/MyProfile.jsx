@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import axios from 'axios';
 import { UserContext } from '../../context-api/user-context/UserContext';
+import roomdetailscard from '../../images/roomdetailscard.png';
+import { API_BASE_URL } from '@/config/api';
 
 function MyProfile() {
-  const { user, loading, error, success, updateProfile } = useContext(UserContext);
+  const { user, loading, error, success, updateProfile, token } = useContext(UserContext);
   const [formData, setFormData] = useState({
     matricNumber: '',
     firstName: '',
@@ -29,6 +32,38 @@ function MyProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [localSuccess, setLocalSuccess] = useState('');
   const [localError, setLocalError] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
+  // Handle profile image selection and upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingImage(true);
+    setLocalError('');
+    setLocalSuccess('');
+    try {
+      const formDataImg = new FormData();
+      formDataImg.append('profileImage', file);
+      const res = await axios.post(`${API_BASE_URL}/users/upload-profile-image`, formDataImg, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (res.data.url) {
+        setFormData(prev => ({ ...prev, profileImage: res.data.url }));
+        setImagePreview(res.data.url);
+        setLocalSuccess('Image uploaded! Click Save Changes to update your profile.');
+      } else {
+        setLocalError('Failed to upload image.');
+      }
+    } catch (err) {
+      console.error(err);
+      setLocalError('Failed to upload image.');
+    }
+    setUploadingImage(false);
+  };
 
   // Initialize form with user data when it loads
   useEffect(() => {
@@ -130,6 +165,14 @@ function MyProfile() {
 
         {!isEditing ? (
           <>
+          <div className="col-span-1 flex flex-col items-center mb-6">
+            <img
+              src={user.profileImage || roomdetailscard}
+              alt="Profile"
+              className="rounded-[10%] w-24 h-24 object-cover mb-2 border border-solid border-gray-400"
+            />
+            <p className="text-xs text-gray-500">Profile Image</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p className="text-sm text-gray-500 mb-1">Matric Number</p>
@@ -235,7 +278,32 @@ function MyProfile() {
           </>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="col-span-1 flex flex-col items-center">
+                <img
+                  src={imagePreview || formData.profileImage || user.profileImage || '/default-profile.png'}
+                  alt="Profile Preview"
+                  className="rounded-full w-24 h-24 object-cover mb-2"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={uploadingImage}
+                />
+                <button
+                  type="button"
+                  className="px-3 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 mb-2"
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                  disabled={uploadingImage}
+                >
+                  {uploadingImage ? 'Uploading...' : 'Change Image'}
+                </button>
+                <p className="text-xs text-gray-500">Profile Image</p>
+              </div>
+
                 <div>
                   <label htmlFor="matricNumber" className="block text-sm font-medium text-gray-700 mb-1">
                     Matric Number
