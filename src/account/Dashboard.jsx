@@ -6,9 +6,10 @@ import DashStats from '@/assets/components/dashboard-components/DashStats'
 import DashWelcome from '@/assets/components/dashboard-components/DashWelcome'
 import { useUser } from '@/assets/context-api/user-context/UseUser';
 import { useNavigate } from 'react-router-dom';
+import StudentsDashStats from '@/assets/components/dashboard-components/StudentsDashStats'
 
 function Dashboard() {
-  const { user, loading } = useUser();
+  const { user, loading, isStudent, isAdmin, isStaff, isSuperAdmin } = useUser();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -38,7 +39,12 @@ function Dashboard() {
         </div>
         <div className='w-full lg:w-[80%]'>
           <DashWelcome />
-          <DashStats />
+          {isStudent && 
+            <StudentsDashStats />
+          }
+          {(isAdmin || isStaff || isSuperAdmin) && 
+            <DashStats />
+          }
         </div>
       </div>
     </>
