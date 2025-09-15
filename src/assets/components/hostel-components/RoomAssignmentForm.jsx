@@ -5,9 +5,8 @@ import { API_BASE_URL } from "@/config/api";
 const RoomAssignmentForm = ({ onAssign }) => {
   const [students, setStudents] = useState([]);
   const [hostels, setHostels] = useState([]);
-  // const [block, setBlock] = useState([]);
-  // const [floor, setFloor] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [selectedCampus, setSelectedCampus] = useState("");
   const [selectedStudent, setSelectedStudent] = useState("");
   const [selectedHostel, setSelectedHostel] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("");
@@ -40,25 +39,39 @@ const RoomAssignmentForm = ({ onAssign }) => {
     fetchData();
   }, []);
 
-  // Get unique blocks for selected hostel
+  // Get unique campus options from hostels
+  const campusOptions = Array.from(new Set(hostels.map(h => h.hostelCampus).filter(Boolean)));
+
+  // Filter hostels by selected campus
+  const filteredHostels = selectedCampus
+    ? hostels.filter(h => h.hostelCampus === selectedCampus)
+    : hostels;
+
+  // Get unique blocks for selected hostel (filtered by campus)
   const blockOptions = Array.from(new Set(
     rooms
-      .filter(r => r.hostelId && r.hostelId._id === selectedHostel)
+      .filter(r => r.hostelId &&
+        (!selectedCampus || r.hostelId.hostelCampus === selectedCampus) &&
+        r.hostelId._id === selectedHostel)
       .map(r => r.roomBlock)
       .filter(Boolean)
   ));
 
-  // Get unique floors for selected hostel and block
+  // Get unique floors for selected hostel and block (filtered by campus)
   const floorOptions = Array.from(new Set(
     rooms
-      .filter(r => r.hostelId && r.hostelId._id === selectedHostel && (!selectedBlock || r.roomBlock === selectedBlock))
+      .filter(r => r.hostelId &&
+        (!selectedCampus || r.hostelId.hostelCampus === selectedCampus) &&
+        r.hostelId._id === selectedHostel &&
+        (!selectedBlock || r.roomBlock === selectedBlock))
       .map(r => r.roomFloor)
       .filter(Boolean)
   ));
 
-  // Filter rooms by selected hostel, block, and floor
+  // Filter rooms by selected campus, hostel, block, and floor
   const filteredRooms = rooms.filter(r =>
     r.hostelId &&
+    (!selectedCampus || r.hostelId.hostelCampus === selectedCampus) &&
     r.hostelId._id === selectedHostel &&
     (!selectedBlock || r.roomBlock === selectedBlock) &&
     (!selectedFloor || r.roomFloor === selectedFloor)
@@ -155,6 +168,30 @@ const RoomAssignmentForm = ({ onAssign }) => {
             </select>
           </div>
 
+          {/* Campus Selection */}
+          <div className="flex flex-col">
+            <label htmlFor="campus" className="mb-2 text-sm font-medium text-gray-700">Campus</label>
+            <select
+              id="campus"
+              value={selectedCampus}
+              onChange={e => {
+                setSelectedCampus(e.target.value);
+                setSelectedHostel("");
+                setSelectedBlock("");
+                setSelectedFloor("");
+                setSelectedRoom("");
+                setSelectedBed("");
+              }}
+              className="w-full border border-gray-300 rounded-lg p-2"
+              required
+            >
+              <option value="">Select Campus</option>
+              {campusOptions.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
           {/* Hostel Selection */}
           <div className="flex flex-col">
             <label htmlFor="hostel" className="mb-2 text-sm font-medium text-gray-700">Hostel</label>
@@ -170,9 +207,10 @@ const RoomAssignmentForm = ({ onAssign }) => {
               }}
               className="w-full border border-gray-300 rounded-lg p-2"
               required
+              disabled={!selectedCampus}
             >
               <option value="">Select Hostel</option>
-              {hostels.map(h => (
+              {filteredHostels.map(h => (
                 <option key={h._id} value={h._id}>{h.name}</option>
               ))}
             </select>

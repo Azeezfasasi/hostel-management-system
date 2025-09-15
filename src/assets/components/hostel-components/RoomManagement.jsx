@@ -313,91 +313,37 @@ const RoomManager = () => {
           </thead>
           <tbody>
             {currentRooms.map((r) => (
-              <tr key={r._id} className="hover:bg-gray-50">
-                <td className="border p-3">{r.hostelId?.hostelCampus || "N/A"}</td>
-                <td className="border p-3">{r.hostelId?.name || "N/A"}</td>
-                <td className="border p-3">Block {r.roomBlock}</td>
-                <td className="border p-3">Floor {r.roomFloor}</td>
-                <td className="border p-3">Room {r.roomNumber}</td>
-                <td className="border p-3">{r.capacity}</td>
-                <td className="border p-3">₦{formatPrice(r.price)}</td>
-                <td className="border p-3 flex gap-2">
-                  <button
-                    onClick={() => openEditRoomModal(r)}
-                    className="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 cursor-pointer"
-                  >
-                    <PencilLine />
-                  </button>
-                  <button
-                    onClick={() => deleteRoom(r._id)}
-                    className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 cursor-pointer"
-                  >
-                    <Trash2 />
-                  </button>
-                  <button
-                    onClick={() => { setViewRoom(r); setIsViewModalOpen(true); }}
-                    className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 cursor-pointer"
-                  >
-                    <Eye />
-                  </button>
-                </td>
-      {/* View Details Modal */}
-      <Modal isOpen={isViewModalOpen} onClose={() => setIsViewModalOpen(false)}>
-        {viewRoom && (
-          <div>
-            <h3 className="text-xl font-bold mb-4">Room {viewRoom.roomNumber} Details</h3>
-            
-            <div className="flex gap-8 mb-4 justify-center">
-              <span className="flex gap-2 font-semibold text-red-600 text-[30px] items-center">
-                <Bed className="w-8 h-8" /> 
-                {Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0}
-              </span>
-              <span className="flex gap-2 font-semibold text-green-600 text-[30px] items-center">
-                <Bed className="w-8 h-8" /> 
-                {viewRoom.capacity - (Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0)}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2 mb-4">
-              <div><span className="font-semibold">Campus:</span> {viewRoom.hostelId?.hostelCampus || "N/A"}</div>
-              <div><span className="font-semibold">Hostel:</span> {viewRoom.hostelId?.name || "N/A"}</div>
-              <div><span className="font-semibold">Block:</span> {viewRoom.roomBlock}</div>
-              <div><span className="font-semibold">Floor:</span> {viewRoom.roomFloor}</div>
-              <div><span className="font-semibold">Room Number:</span> {viewRoom.roomNumber}</div>
-              <div><span className="font-semibold">Capacity:</span> {viewRoom.capacity}</div>
-              <div><span className="font-semibold">Price:</span> ₦{formatPrice(viewRoom.price)}</div>
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-blue-600">Total Capacity:</span> {viewRoom.capacity}
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-red-600">Occupied Beds:</span> {Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0}
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-green-600">Available Beds:</span> {viewRoom.capacity - (Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0)}
-            </div>
-
-            {/* List of assigned students */}
-            <div className="mt-4">
-              <span className="font-semibold">Assigned Students:</span>
-              {Array.isArray(viewRoom.assignedStudents) && viewRoom.assignedStudents.filter(Boolean).length > 0 ? (
-                <ul className="mt-2 list-disc list-inside">
-                  {viewRoom.assignedStudents.map((student, idx) => (
-                    student && typeof student === 'object' ? (
-                      <li key={student._id || idx} className="mb-1">
-                        {student.firstName} {student.lastName} ({student.matricNumber})
-                      </li>
-                    ) : null
-                  ))}
-                </ul>
-              ) : (
-                <div className="mt-2 text-gray-500">No students assigned to this room.</div>
-              )}
-            </div>
-          </div>
-        )}
-      </Modal>
-              </tr>
+              <React.Fragment key={r._id}>
+                <tr className="hover:bg-gray-50">
+                  <td className="border p-3">{r.hostelId?.hostelCampus || "N/A"}</td>
+                  <td className="border p-3">{r.hostelId?.name || "N/A"}</td>
+                  <td className="border p-3">Block {r.roomBlock}</td>
+                  <td className="border p-3">Floor {r.roomFloor}</td>
+                  <td className="border p-3">Room {r.roomNumber}</td>
+                  <td className="border p-3">{r.capacity}</td>
+                  <td className="border p-3">₦{formatPrice(r.price)}</td>
+                  <td className="border p-3 flex gap-2">
+                    <button
+                      onClick={() => openEditRoomModal(r)}
+                      className="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 cursor-pointer"
+                    >
+                      <PencilLine />
+                    </button>
+                    <button
+                      onClick={() => deleteRoom(r._id)}
+                      className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 cursor-pointer"
+                    >
+                      <Trash2 />
+                    </button>
+                    <button
+                      onClick={() => { setViewRoom(r); setIsViewModalOpen(true); }}
+                      className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 cursor-pointer"
+                    >
+                      <Eye />
+                    </button>
+                  </td>
+                </tr>
+              </React.Fragment>
             ))}
             {currentRooms.length === 0 && (
               <tr>
@@ -408,6 +354,62 @@ const RoomManager = () => {
             )}
           </tbody>
         </table>
+        {/* View Details Modal */}
+        <Modal isOpen={isViewModalOpen} onClose={() => setIsViewModalOpen(false)}>
+          {viewRoom && (
+            <div>
+              <h3 className="text-xl font-bold mb-4">Room {viewRoom.roomNumber} Details</h3>
+              
+              <div className="flex gap-8 mb-4 justify-center">
+                <span className="flex gap-2 font-semibold text-red-600 text-[30px] items-center">
+                  <Bed className="w-8 h-8" /> 
+                  {Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0}
+                </span>
+                <span className="flex gap-2 font-semibold text-green-600 text-[30px] items-center">
+                  <Bed className="w-8 h-8" /> 
+                  {viewRoom.capacity - (Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0)}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2 mb-4">
+                <div><span className="font-semibold">Campus:</span> {viewRoom.hostelId?.hostelCampus || "N/A"}</div>
+                <div><span className="font-semibold">Hostel:</span> {viewRoom.hostelId?.name || "N/A"}</div>
+                <div><span className="font-semibold">Block:</span> {viewRoom.roomBlock}</div>
+                <div><span className="font-semibold">Floor:</span> {viewRoom.roomFloor}</div>
+                <div><span className="font-semibold">Room Number:</span> {viewRoom.roomNumber}</div>
+                <div><span className="font-semibold">Capacity:</span> {viewRoom.capacity}</div>
+                <div><span className="font-semibold">Price:</span> ₦{formatPrice(viewRoom.price)}</div>
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold text-blue-600">Total Capacity:</span> {viewRoom.capacity}
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold text-red-600">Occupied Beds:</span> {Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0}
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold text-green-600">Available Beds:</span> {viewRoom.capacity - (Array.isArray(viewRoom.assignedStudents) ? viewRoom.assignedStudents.filter(Boolean).length : 0)}
+              </div>
+
+              {/* List of assigned students */}
+              <div className="mt-4 border-t pt-2">
+                <span className="font-semibold text-[20px]">Assigned Students:</span>
+                {Array.isArray(viewRoom.assignedStudents) && viewRoom.assignedStudents.filter(Boolean).length > 0 ? (
+                  <ul className="mt-2 list-disc list-inside">
+                    {viewRoom.assignedStudents.map((student, idx) => (
+                      student && typeof student === 'object' ? (
+                        <li key={student._id || idx} className="mb-1">
+                          {student.firstName} {student.lastName} ({student.matricNumber})
+                        </li>
+                      ) : null
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="mt-2 text-gray-500">No students assigned to this room.</div>
+                )}
+              </div>
+            </div>
+          )}
+        </Modal>
       </div>
 
       {/* Pagination */}

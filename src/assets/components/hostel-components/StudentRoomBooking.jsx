@@ -5,6 +5,7 @@ import { API_BASE_URL } from "@/config/api";
 const StudentRoomBooking = () => {
   const [hostels, setHostels] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [selectedCampus, setSelectedCampus] = useState("");
   const [selectedHostel, setSelectedHostel] = useState("");
   const [selectedBlock, setSelectedBlock] = useState("");
   const [selectedFloor, setSelectedFloor] = useState("");
@@ -33,25 +34,39 @@ const StudentRoomBooking = () => {
     fetchData();
   }, []);
 
-  // Get unique blocks for selected hostel
+  // Get unique campus options from hostels
+  const campusOptions = Array.from(new Set(hostels.map(h => h.hostelCampus).filter(Boolean)));
+
+  // Filter hostels by selected campus
+  const filteredHostels = selectedCampus
+    ? hostels.filter(h => h.hostelCampus === selectedCampus)
+    : hostels;
+
+  // Get unique blocks for selected hostel (filtered by campus)
   const blockOptions = Array.from(new Set(
     rooms
-      .filter(r => r.hostelId && r.hostelId._id === selectedHostel)
+      .filter(r => r.hostelId &&
+        (!selectedCampus || r.hostelId.hostelCampus === selectedCampus) &&
+        r.hostelId._id === selectedHostel)
       .map(r => r.roomBlock)
       .filter(Boolean)
   ));
 
-  // Get unique floors for selected hostel and block
+  // Get unique floors for selected hostel and block (filtered by campus)
   const floorOptions = Array.from(new Set(
     rooms
-      .filter(r => r.hostelId && r.hostelId._id === selectedHostel && (!selectedBlock || r.roomBlock === selectedBlock))
+      .filter(r => r.hostelId &&
+        (!selectedCampus || r.hostelId.hostelCampus === selectedCampus) &&
+        r.hostelId._id === selectedHostel &&
+        (!selectedBlock || r.roomBlock === selectedBlock))
       .map(r => r.roomFloor)
       .filter(Boolean)
   ));
 
-  // Filter rooms by selected hostel, block, and floor, and only show rooms with available beds
+  // Filter rooms by selected campus, hostel, block, and floor, and only show rooms with available beds
   const filteredRooms = rooms.filter(r =>
     r.hostelId &&
+    (!selectedCampus || r.hostelId.hostelCampus === selectedCampus) &&
     r.hostelId._id === selectedHostel &&
     (!selectedBlock || r.roomBlock === selectedBlock) &&
     (!selectedFloor || r.roomFloor === selectedFloor) &&
@@ -151,6 +166,29 @@ const StudentRoomBooking = () => {
           </div>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Campus Selection */}
+          <div className="flex flex-col">
+            <label htmlFor="campus" className="mb-2 text-sm font-medium text-gray-700">Campus</label>
+            <select
+              id="campus"
+              value={selectedCampus}
+              onChange={e => {
+                setSelectedCampus(e.target.value);
+                setSelectedHostel("");
+                setSelectedBlock("");
+                setSelectedFloor("");
+                setSelectedRoom("");
+                setSelectedBed("");
+              }}
+              className="w-full border border-gray-300 rounded-lg p-2"
+              required
+            >
+              <option value="">Select Campus</option>
+              {campusOptions.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
           {/* Hostel Selection */}
           <div className="flex flex-col">
             <label htmlFor="hostel" className="mb-2 text-sm font-medium text-gray-700">Hostel</label>
@@ -166,9 +204,10 @@ const StudentRoomBooking = () => {
               }}
               className="w-full border border-gray-300 rounded-lg p-2"
               required
+              disabled={!selectedCampus}
             >
               <option value="">Select Hostel</option>
-              {hostels.map(h => (
+              {filteredHostels.map(h => (
                 <option key={h._id} value={h._id}>{h.name}</option>
               ))}
             </select>
@@ -254,6 +293,12 @@ const StudentRoomBooking = () => {
             </select>
           </div>
         </div>
+        {/* Show room price if a room is selected */}
+        {selectedRoomObj && (
+          <div className="mt-6 text-lg font-semibold text-center text-gray-800">
+            Room Price: <span className="text-blue-600">₦{selectedRoomObj.price?.toLocaleString('en-NG')}</span>
+          </div>
+        )}
         <button
           type="submit"
           className="mt-8 w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md md:col-span-2"

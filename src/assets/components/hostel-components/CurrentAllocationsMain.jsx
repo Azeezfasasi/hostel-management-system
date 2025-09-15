@@ -130,6 +130,7 @@ const CurrentAllocationsMain = () => {
             <tr>
               <th className="border p-3">Student</th>
               <th className="border p-3">Matric NO.</th>
+              <th className="border p-3">Campus</th>
               <th className="border p-3">Hostel</th>
               <th className="border p-3">Block</th>
               <th className="border p-3">Floor</th>
@@ -152,6 +153,7 @@ const CurrentAllocationsMain = () => {
                 <tr key={idx} className="hover:bg-gray-50">
                   <td className="border p-3">{a.student?.firstName} {a.student?.lastName}</td>
                   <td className="border p-3">{a.student?.matricNumber}</td>
+                  <td className="border p-3">{a.hostel?.hostelCampus || 'NA'}</td>
                   <td className="border p-3">{a.hostel?.name}</td>
                   <td className="border p-3">{a.block}</td>
                   <td className="border p-3">{a.floor}</td>
@@ -219,6 +221,8 @@ const CurrentAllocationsMain = () => {
                             {selectedStudent.student?.level && <p className="text-blue-600 mb-1">Level: <span className="font-semibold text-gray-600">{selectedStudent.student.level}</span></p>}
 
                             <div className="text-[24px] font-bold mt-4 mb-2">Student Hostel Details</div>
+                            <p className="text-blue-600 mb-1">Campus: <span className="font-semibold text-gray-600">{selectedStudent.hostel?.hostelCampus || ''}</span></p>
+                            
                             <p className="text-blue-600 mb-1">Hostel Name: <span className="font-semibold text-gray-600">{selectedStudent.hostel?.name}</span></p>
 
                             <p className="text-blue-600 mb-1">Block: <span className="font-semibold text-gray-600">{selectedStudent.block}</span></p>
