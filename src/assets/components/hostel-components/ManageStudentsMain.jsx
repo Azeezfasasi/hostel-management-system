@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '@/config/api';
+import { PencilLine, Trash2, Eye, ShieldBan, ShieldCheck, CircleX } from 'lucide-react';
 
 
 function ManageStudentsMain() {
@@ -156,7 +157,7 @@ function ManageStudentsMain() {
           onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
           className="border rounded px-3 py-2 w-full md:w-1/3"
         />
-        <span className="text-gray-500 text-sm mt-1 md:mt-0">{filteredStudents.length} students found</span>
+        <span className="text-gray-700 font-bold text-sm md:text-[16px] mt-1 md:mt-0">{filteredStudents.length} students found</span>
       </div>
       {message && (
         <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg mb-4 text-center">
@@ -206,13 +207,13 @@ function ManageStudentsMain() {
                       <td className="border p-3">{student.phone}</td>
                       <td className="border p-3">{student.isActive ? <span className="text-green-700 font-semibold">Active</span> : <span className="text-red-700 font-semibold">Disabled</span>}</td>
                       <td className="border p-3 flex gap-2 justify-center">
-                        <button onClick={() => handleViewDetails(student)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">View Details</button>
-                        <button onClick={() => handleEdit(student)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Edit</button>
-                        <button onClick={() => handleDelete(student._id)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
+                        <button onClick={() => handleViewDetails(student)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer"><Eye /></button>
+                        <button onClick={() => handleEdit(student)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer"><PencilLine /></button>
+                        <button onClick={() => handleDelete(student._id)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 cursor-pointer"><Trash2 /></button>
                         {student.isActive ? (
-                          <button onClick={() => handleDisable(student._id)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Disable</button>
+                          <button onClick={() => handleDisable(student._id)} className="flex flex-col items-center bg-yellow-500 text-white px-3 text-[11px] py-1 rounded hover:bg-yellow-600 cursor-pointer"><ShieldBan />Disable</button>
                         ) : (
-                          <button onClick={() => handleEnable(student._id)} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Enable</button>
+                          <button onClick={() => handleEnable(student._id)} className="bg-green-600 text-white px-3 text-[11px] py-1 rounded hover:bg-green-700 cursor-pointer"><ShieldCheck />Enable</button>
                         )}
                       </td>
                     </>
@@ -220,13 +221,13 @@ function ManageStudentsMain() {
                   {/* Student Details Modal */}
                   {showModal && selectedStudent && selectedStudent._id === student._id && (
                     <td colSpan={7} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full relative">
+                      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full h-[600px] overflow-y-auto relative">
                         <button
                           onClick={handleCloseModal}
-                          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+                          className="absolute top-2 right-2 text-red-600 hover:text-red-700 text-2xl font-bold cursor-pointer"
                           aria-label="Close"
                         >
-                          &times;
+                          <CircleX className='w-10 h-10' />
                         </button>
                         <div className="flex flex-col items-center gap-4">
                           {/* Profile Image */}

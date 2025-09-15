@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
 import { PencilLine, Trash2, Eye, Bed, CircleX } from 'lucide-react';
 
+
 const Modal = ({ children, isOpen, onClose }) => {
   if (!isOpen) return null;
 
@@ -324,6 +325,12 @@ const RoomManager = () => {
                   <td className="border p-3">₦{formatPrice(r.price)}</td>
                   <td className="border p-3 flex gap-2">
                     <button
+                      onClick={() => { setViewRoom(r); setIsViewModalOpen(true); }}
+                      className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 cursor-pointer"
+                    >
+                      <Eye />
+                    </button>
+                    <button
                       onClick={() => openEditRoomModal(r)}
                       className="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 cursor-pointer"
                     >
@@ -334,12 +341,6 @@ const RoomManager = () => {
                       className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 cursor-pointer"
                     >
                       <Trash2 />
-                    </button>
-                    <button
-                      onClick={() => { setViewRoom(r); setIsViewModalOpen(true); }}
-                      className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 cursor-pointer"
-                    >
-                      <Eye />
                     </button>
                   </td>
                 </tr>

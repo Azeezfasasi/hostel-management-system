@@ -31,6 +31,7 @@ function AllUserMain() {
     firstName: '',
     lastName: '',
     email: '',
+    matricNumber: '',
     role: '',
     isActive: true
   });
@@ -54,11 +55,12 @@ function AllUserMain() {
   // Filter and sort users
   const filteredUsers = users.filter(user => {
     const roleFilter = filterRole === 'all' || user.role === filterRole;
-    // const firstName = (user.firstName || '').toLowerCase();
-    // const lastName = (user.lastName || '').toLowerCase();
+    const firstName = (user.firstName || '').toLowerCase();
+    const lastName = (user.lastName || '').toLowerCase();
     const email = (user.email || '').toLowerCase();
+    const matricNumber = (user.matricNumber || '').toLowerCase();
     const search = searchTerm.toLowerCase();
-    const searchFilter = name.includes(search) || email.includes(search);
+    const searchFilter = firstName.includes(search) || lastName.includes(search) || email.includes(search) || matricNumber.includes(search);
     return roleFilter && searchFilter;
   });
 
@@ -102,6 +104,7 @@ function AllUserMain() {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      matricNumber: user.matricNumber,
       role: user.role,
       isActive: user.isActive
     });
@@ -260,8 +263,22 @@ function AllUserMain() {
                     onClick={() => handleSort('name')}
                   >
                     <div className="flex items-center">
-                      Name
-                      {sortField === 'name' && (
+                      First Name
+                      {sortField === 'firstName' && (
+                        <span className="ml-1">
+                          {sortDirection === 'asc' ? '↑' : '↓'}
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    scope="col" 
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                    onClick={() => handleSort('name')}
+                  >
+                    <div className="flex items-center">
+                      Last Name
+                      {sortField === 'lastName' && (
                         <span className="ml-1">
                           {sortDirection === 'asc' ? '↑' : '↓'}
                         </span>
@@ -331,10 +348,27 @@ function AllUserMain() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
-                            <FaUserAlt className="text-gray-500" />
+                            {user.profileImage ? (
+                              <img 
+                                src={user.profileImage}
+                                alt={user.firstName}
+                                className="h-10 w-10 rounded-full"
+                              />
+                            ) : (
+                              <div className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                <FaUserAlt className="text-gray-500" />
+                              </div>
+                            )}
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{user.firstName}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">{user.lastName}</div>
                           </div>
                         </div>
                       </td>

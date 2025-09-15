@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./assets/context-api/user-context/UserContext";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login, loading, user, token, error: contextError } = useContext(UserContext);
@@ -31,12 +31,12 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    if (!email || !password) {
-      setError("Email and password are required.");
+    if (!identifier || !password) {
+      setError("Email/Matric Number and password are required.");
       return;
     }
     try {
-      await login({ email, password });
+      await login({ identifier, password });
       // Do not navigate here; let useEffect handle redirect only if login is successful
     } catch {
       // error will be set from contextError
@@ -60,19 +60,19 @@ export default function Login() {
 
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-6">
-            {/* Email */}
+            {/* Email or Matric Number */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email
+                Matric Number or Email
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 text-gray-400" />
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   required
-                  placeholder="Enter your email"
+                  placeholder="Enter your email or matric number"
                   className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>

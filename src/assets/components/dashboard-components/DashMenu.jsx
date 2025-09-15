@@ -106,7 +106,7 @@ function DashMenu() {
                     <Nav.Menu eventKey="4" title="Students" icon={<GridIcon />}>
                         <Nav.Item eventKey="4-1" as={Link} to="/account/managestudents">Manage Students</Nav.Item>
                         {(isSuperAdmin || isAdmin) && (
-                        <Nav.Item eventKey="4-2" as={Link} to="">Add Students</Nav.Item>
+                        <Nav.Item eventKey="4-2" as={Link} to="/account/adduser">Add Students</Nav.Item>
                         )}
                     </Nav.Menu>
                     )}

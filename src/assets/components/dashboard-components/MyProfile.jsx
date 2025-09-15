@@ -9,6 +9,7 @@ function MyProfile() {
     lastName: '',
     otherName: '',
     dob: '',
+    gender: '',
     emergencyContact: '',
     nextOfKinName: '',
     nextOfKinRelationship: '',
@@ -38,6 +39,7 @@ function MyProfile() {
         lastName: user.lastName || '',
         otherName: user.otherName || '',
         dob: user.dob || '',
+        gender: user.gender || '',
         emergencyContact: user.emergencyContact || '',
         nextOfKinName: user.nextOfKinName || '',
         nextOfKinRelationship: user.nextOfKinRelationship || '',
@@ -148,6 +150,10 @@ function MyProfile() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Date of Birth</p>
               <p className="font-medium">{user.dob || 'Not provided'}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 mb-1">Gender</p>
+              <p className="font-medium capitalize">{user.gender || 'Not provided'}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500 mb-1">Email</p>
@@ -298,6 +304,16 @@ function MyProfile() {
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
+                </div>
+                <div>
+                  <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+                    Gender
+                  </label>
+                  <select name="gender" id="gender" value={formData.gender} onChange={handleInputChange} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
