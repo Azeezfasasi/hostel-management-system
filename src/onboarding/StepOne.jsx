@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-export default function StepOne({ data, onNext }) {
+export default function StepOne({ data, onNext, loading }) {
   const [form, setForm] = useState({
     firstName: data.firstName || '',
     lastName: data.lastName || '',
@@ -104,9 +104,10 @@ export default function StepOne({ data, onNext }) {
       <div className="mt-8">
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105"
+          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105 disabled:opacity-60 cursor-pointer"
+          disabled={loading}
         >
-          Next
+          {loading ? 'Saving...' : 'Next'}
         </button>
       </div>
     </form>

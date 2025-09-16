@@ -16,7 +16,6 @@ import profile from '../../images/profile.png';
 
 function DashboardHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [linkOpen, setLinkOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useUser();
@@ -77,10 +76,11 @@ function DashboardHeader() {
       <div className="lg:hidden flex flex-row items-center gap-4">
         <div className="flex flex-row items-center gap-2 ml-4 relative profile-dropdown">
           <div className="relative">
+            {/* Mobile profile image */}
             <img
-              src={profile}
+              src={user.profileImage || profile}
               alt="profile"
-              className="w-8 h-8 rounded-full border border-solid border-gray-200 cursor-pointer"
+              className="w-10 h-10 rounded-full border border-solid border-gray-200 cursor-pointer"
               onClick={() => setProfileMenuOpen((open) => !open)}
             />
             {/* Dropdown Menu */}
@@ -122,10 +122,11 @@ function DashboardHeader() {
         <Link to="/">Rooms</Link>
         <div className="flex flex-row items-center gap-2 ml-4 relative profile-dropdown">
           <div className="relative">
+            {/* Laptop profile image */}
             <img
-              src={profile}
+              src={user.profileImage || profile}
               alt="profile"
-              className="w-8 h-8 rounded-full border border-solid border-gray-200 cursor-pointer"
+              className="w-12 h-12 rounded-full border border-solid border-gray-400 cursor-pointer"
               onClick={() => setProfileMenuOpen((open) => !open)}
             />
             {/* Dropdown Menu */}

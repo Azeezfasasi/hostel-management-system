@@ -32,6 +32,7 @@ import SendNewsletter from "./account/SendNewsletter";
 import NewsletterSubscribers from "./account/NewsletterSubscribers";
 import AllNewsletter from "./account/AllNewsletter";
 import Profile from "./account/Profile";
+import PendingPayment from "./account/PendingPayment";
 
 function App() {
 
@@ -70,6 +71,7 @@ function App() {
           <Route path="/account/allnewsletter" element={<AllNewsletter />} />
           <Route path="/account/newslettersubscribers" element={<NewsletterSubscribers />} />
           <Route path="/account/profile" element={<Profile />} />
+          <Route path="/account/pendingpayment" element={<PendingPayment />} />
         </Route>
       </Routes>
      </UserProvider>

@@ -38,6 +38,7 @@ function DashMenu() {
     '/account/sendnewsletter': '8-1',
     '/account/allnewsletter': '8-2',
     '/account/newslettersubscribers': '8-3',
+    '/account/pendingpayment': '10-3',
     '/account/profile': '12',
     // Add more mappings as needed
   };
@@ -155,7 +156,10 @@ function DashMenu() {
                         <Nav.Item eventKey="10-2" as={Link} to="">My Transaction History</Nav.Item>
                         )}
                         {(isStudent) && (
-                        <Nav.Item eventKey="10-3" as={Link} to="">Overdue</Nav.Item>
+                        <Nav.Item eventKey="10-3" as={Link} to="/account/pendingpayment">My Pending Payments</Nav.Item>
+                        )}
+                        {(isStudent) && (
+                        <Nav.Item eventKey="10-4" as={Link} to="">Overdue</Nav.Item>
                         )}
                     </Nav.Menu>
                     {(isSuperAdmin || isAdmin || isStaff) && (

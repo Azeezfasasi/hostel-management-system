@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-export default function StepThree({ data, onNext, onBack }) {
+export default function StepThree({ data, onNext, onBack, loading }) {
   const [form, setForm] = useState({
     email: data.email || '',
     phone: data.phone || '',
@@ -152,8 +152,10 @@ export default function StepThree({ data, onNext, onBack }) {
       </div>
 
       <div className="flex justify-between mt-4">
-        {onBack && <button type="button" onClick={onBack} className="bg-gray-400 text-white px-4 py-2 rounded">Back</button>}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
+        {onBack && <button type="button" onClick={onBack} className="bg-gray-400 text-white px-4 py-2 rounded cursor-pointer">Back</button>}
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-60 cursor-pointer" disabled={loading}>
+          {loading ? 'Saving...' : 'Next'}
+        </button>
       </div>
     </form>
   );

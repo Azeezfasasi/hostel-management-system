@@ -33,12 +33,24 @@ const AdminRoomRequestMain = () => {
     setLoading(false);
   };
 
-  const handleAction = async (requestId, action) => {
+  const handleAction = async (requestId, action, reqObj) => {
     setMessage("");
     try {
       const token = localStorage.getItem("token");
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      // Adjust endpoint as needed for your backend
+      if (action === "unassign") {
+        // Call backend to unassign student from room
+        await axios.post(`${API_BASE_URL}/room/unassign`, {
+          roomId: reqObj.room?._id,
+          studentId: reqObj.student?._id
+        }, config);
+        // Optionally, update request status to declined
+        await axios.post(`${API_BASE_URL}/room/requests/${requestId}/decline`, {}, config);
+        setMessage("Student unassigned and request declined.");
+        fetchRequests();
+        return;
+      }
+      // Approve/decline logic
       const res = await axios.post(`${API_BASE_URL}/room/requests/${requestId}/${action}`, {}, config);
       if (res.data && res.data.success) {
         setMessage(`Request ${action}ed successfully`);
@@ -130,18 +142,26 @@ const AdminRoomRequestMain = () => {
                     {req.status === 'pending' && (
                       <>
                         <button
-                          onClick={() => handleAction(req._id, 'approve')}
+                          onClick={() => handleAction(req._id, 'approve', req)}
                           className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
                         >
                           Approve
                         </button>
                         <button
-                          onClick={() => handleAction(req._id, 'decline')}
+                          onClick={() => handleAction(req._id, 'decline', req)}
                           className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                         >
                           Decline
                         </button>
                       </>
+                    )}
+                    {req.status === 'approved' && (
+                      <button
+                        onClick={() => handleAction(req._id, 'unassign', req)}
+                        className="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-700"
+                      >
+                        Unassign
+                      </button>
                     )}
                   </td>
                 </tr>

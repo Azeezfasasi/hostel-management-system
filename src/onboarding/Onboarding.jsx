@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '@/config/api';
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
@@ -47,13 +46,25 @@ export default function Onboarding({ onComplete }) {
   }, []);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const StepComponent = steps[currentStep];
 
-  const handleNext = (data) => {
-    setFormData(prev => ({ ...prev, ...data }));
-    setCurrentStep(s => s + 1);
+  const handleNext = async (data) => {
+    setError("");
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+      // Submit only current step's data
+      await axios.put(`${API_BASE_URL}/users/me`, data, config);
+      setFormData(prev => ({ ...prev, ...data }));
+      setCurrentStep(s => s + 1);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      setError("Failed to save step. Please try again.");
+    }
   };
 
   const handleBack = () => {
@@ -67,13 +78,13 @@ export default function Onboarding({ onComplete }) {
     try {
       const token = localStorage.getItem("token");
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      // Send all onboarding data to backend (update profile)
-      await axios.put(`${API_BASE_URL}/users/me`, { ...formData, ...data, onboardingCompleted: true }, config);
+      // Submit only last step's data plus onboardingCompleted
+      await axios.put(`${API_BASE_URL}/users/me`, { ...data, onboardingCompleted: true }, config);
       setLoading(false);
       if (onComplete) onComplete({ ...formData, ...data });
-      navigate("/account/dashboard");
+      window.location.replace("/account/dashboard");
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setLoading(false);
       setError("Failed to complete onboarding. Please try again.");
     }
