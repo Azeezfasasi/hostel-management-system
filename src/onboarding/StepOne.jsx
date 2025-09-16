@@ -29,6 +29,7 @@ export default function StepOne({ data, onNext }) {
           id="firstName"
           value={form.firstName}
           onChange={handleChange}
+          disabled
           placeholder="e.g., Jane"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
@@ -44,6 +45,7 @@ export default function StepOne({ data, onNext }) {
           id="lastName"
           value={form.lastName}
           onChange={handleChange}
+          disabled
           placeholder="e.g., Doe"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
@@ -58,6 +60,7 @@ export default function StepOne({ data, onNext }) {
           name="otherName"
           id="otherName"
           value={form.otherName}
+          disabled
           onChange={handleChange}
           placeholder="e.g., Olivia"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -66,7 +69,7 @@ export default function StepOne({ data, onNext }) {
 
       <div>
         <label htmlFor="dob" className="block text-sm font-medium text-gray-600 mb-1">
-          Date of Birth
+          Date of Birth <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="dob"
@@ -81,7 +84,7 @@ export default function StepOne({ data, onNext }) {
 
       <div>
         <label htmlFor="gender" className="block text-sm font-medium text-gray-600 mb-1">
-          Gender
+          Gender <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <select
           name="gender"

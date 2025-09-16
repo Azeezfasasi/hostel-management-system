@@ -86,7 +86,7 @@ export default function StepFour({ data, onNext, onBack, isLast }) {
       {/* NIN */}
       <div>
         <label htmlFor="nin" className="block text-sm font-medium text-gray-600 mb-1">
-          NIN
+          NIN <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="nin"
@@ -102,7 +102,7 @@ export default function StepFour({ data, onNext, onBack, isLast }) {
       {/* Campus */}
       <div>
         <label htmlFor="campusName" className="block text-sm font-medium text-gray-600 mb-1">
-          Campus Name
+          Campus Name <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="campusName"
@@ -117,7 +117,7 @@ export default function StepFour({ data, onNext, onBack, isLast }) {
 
       {/* Profile Image Upload with Preview and Drag & Drop */}
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">Your Photo</label>
+        <label className="block text-sm font-medium text-gray-600 mb-1">Your Photo <span className='text-red-700 text-[16px]'>*</span></label>
         <div
           className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-4 cursor-pointer transition ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'}`}
           onDragOver={handleDragOver}

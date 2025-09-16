@@ -4,9 +4,8 @@ export default function StepThree({ data, onNext, onBack }) {
     email: data.email || '',
     phone: data.phone || '',
     address: data.address || '',
-    city: data.city || '',
     state: data.state || '',
-    zipCode: data.zipCode || '',
+    localGovernment: data.localGovernment || '',
     nextOfKinName: data.nextOfKinName || '',
     nextOfKinPhone: data.nextOfKinPhone || '',
     nextOfKinRelationship: data.nextOfKinRelationship || '',
@@ -44,7 +43,7 @@ export default function StepThree({ data, onNext, onBack }) {
       {/* Phone Number */}
       <div>
         <label htmlFor="phone" className="block text-sm font-medium text-gray-600 mb-1">
-          Phone Number
+          Phone Number <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="phone"
@@ -60,7 +59,7 @@ export default function StepThree({ data, onNext, onBack }) {
       {/* Personal address */}
       <div>
         <label htmlFor="address" className="block text-sm font-medium text-gray-600 mb-1">
-          Personal Home Address
+          Personal Home Address <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="address"
@@ -76,7 +75,7 @@ export default function StepThree({ data, onNext, onBack }) {
       {/* State */}
       <div>
         <label htmlFor="state" className="block text-sm font-medium text-gray-600 mb-1">
-          State
+          State <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="state"
@@ -89,41 +88,26 @@ export default function StepThree({ data, onNext, onBack }) {
         />
       </div>
 
-      {/* City */}
+      {/* Loca Government */}
       <div>
         <label htmlFor="city" className="block text-sm font-medium text-gray-600 mb-1">
-          City
+          Local Government <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
-          name="city"
-          id="city"
-          value={form.city}
+          name="localGovernment"
+          id="localGovernment"
+          value={form.localGovernment}
           onChange={handleChange}
-          placeholder="Enter City"
+          placeholder="Enter your Local Government"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
-        />
-      </div>
-
-      {/* Zip Code */}
-      <div>
-        <label htmlFor="zipCode" className="block text-sm font-medium text-gray-600 mb-1">
-          Zip Code
-        </label>
-        <input
-          name="zipCode"
-          id="zipCode"
-          value={form.zipCode}
-          onChange={handleChange}
-          placeholder="Optional"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
         />
       </div>
 
       {/* Name of Next of Kin */}
       <div>
         <label htmlFor="nextOfKinName" className="block text-sm font-medium text-gray-600 mb-1">
-          Name of Next of Kin
+          Name of Next of Kin <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="nextOfKinName"
@@ -139,7 +123,7 @@ export default function StepThree({ data, onNext, onBack }) {
       {/* Phone number of Next of Kin */}
       <div>
         <label htmlFor="nextOfKinPhone" className="block text-sm font-medium text-gray-600 mb-1">
-          Phone number of Next of Kin
+          Phone number of Next of Kin <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="nextOfKinPhone"
@@ -155,7 +139,7 @@ export default function StepThree({ data, onNext, onBack }) {
       {/* Next of kin relationship */}
       <div>
         <label htmlFor="nextOfKinRelationship" className="block text-sm font-medium text-gray-600 mb-1">
-          Relationship with Next of Kin
+          Relationship with Next of Kin <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <select name="nextOfKinRelationship" id="nextOfKinRelationship" value={form.nextOfKinRelationship} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" required>
           <option value="">Choose Relationship</option>

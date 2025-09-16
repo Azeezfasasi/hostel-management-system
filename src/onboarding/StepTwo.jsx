@@ -29,6 +29,7 @@ export default function StepTwo({ data, onNext, onBack }) {
           id="matricNumber"
           value={form.matricNumber}
           onChange={handleChange}
+          disabled
           placeholder="e.g. A40990000"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
@@ -38,7 +39,7 @@ export default function StepTwo({ data, onNext, onBack }) {
       {/* Faculty */}
       <div>
         <label htmlFor="firstName" className="block text-sm font-medium text-gray-600 mb-1">
-          Faculty
+          Faculty <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="faculty"
@@ -54,7 +55,7 @@ export default function StepTwo({ data, onNext, onBack }) {
       {/* Course */}
       <div>
         <label htmlFor="firstName" className="block text-sm font-medium text-gray-600 mb-1">
-          Course
+          Course <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <input
           name="course"
@@ -70,7 +71,7 @@ export default function StepTwo({ data, onNext, onBack }) {
       {/* Level */}
       <div>
         <label htmlFor="firstName" className="block text-sm font-medium text-gray-600 mb-1">
-          Level
+          Level <span className='text-red-700 text-[16px]'>*</span>
         </label>
         <select name="level" id="level" value={form.level} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" required>
           <option value="">Choose Level</option>
@@ -79,6 +80,7 @@ export default function StepTwo({ data, onNext, onBack }) {
           <option value="Level 3">Level 3</option>
           <option value="Level 4">Level 4</option>
           <option value="Level 5">Level 5</option>
+          <option value="Level 6">Level 6</option>
         </select>
       </div>
 
