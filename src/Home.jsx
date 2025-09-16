@@ -4,15 +4,15 @@ import HeroSection from './assets/components/home-components/HeroSection'
 import FeatureSection from './assets/components/home-components/FeatureSection'
 import CallToAction from './assets/components/home-components/CallToAction'
 import FooterSection from './assets/components/home-components/FooterSection'
-import DashStats from './assets/components/dashboard-components/DashStats'
 import Faq from './assets/components/home-components/Faq'
+import StudentsDashStats from './assets/components/dashboard-components/StudentsDashStats'
 
 function Home() {
   return (
     <>
     <HeroSection />
     <HeaderSection />
-    <DashStats />
+    <StudentsDashStats />
     <FeatureSection />
     <Faq />
     <CallToAction />

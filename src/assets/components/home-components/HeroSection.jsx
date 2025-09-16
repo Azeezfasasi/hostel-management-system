@@ -23,9 +23,9 @@ export default function HeroSection() {
             Manage your accommodation, connect with fellow students, and stay updated on all hostel activities in one place.
           </p>
           <div className="flex flex-col md:flex-row gap-6 md:gap-0 space-x-4">
-            <button className="bg-white text-blue-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold">
+            <Link to="/room-availability" className="bg-white text-blue-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold">
                 Check Availability
-            </button>
+            </Link>
             <Link to="/login" className="bg-transparent border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-blue-700 font-semibold text-center">
                 Go to Dashboard
             </Link>

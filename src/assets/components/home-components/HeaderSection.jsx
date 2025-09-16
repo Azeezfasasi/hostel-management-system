@@ -17,10 +17,10 @@ export default function HeaderSection() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#home" className="text-gray-700 hover:text-blue-600">Home</a>
-          <a href="#rooms" className="text-gray-700 hover:text-blue-600">Book a Room</a>
-          <a href="#students" className="text-gray-700 hover:text-blue-600">Facilities</a>
-          <a href="#contact" className="text-gray-700 hover:text-blue-600">Complaints</a>
+          <Link to="/" className="text-gray-700 hover:text-blue-600">Home</Link>
+          <Link to="/account/roomrequest" className="text-gray-700 hover:text-blue-600">Book a Room</Link>
+          <Link to="/login" className="text-gray-700 hover:text-blue-600">Facilities</Link>
+          <Link to="/login" className="text-gray-700 hover:text-blue-600">Complaints</Link>
           <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
             Login
           </Link>
@@ -40,9 +40,9 @@ export default function HeaderSection() {
         <div className="md:hidden bg-white shadow-lg">
           <nav className="flex flex-col space-y-4 p-6">
             <Link to="/" className="text-gray-700 hover:text-blue-600">Home</Link>
-            <Link to=""  href="#rooms" className="text-gray-700 hover:text-blue-600">Book a Room</Link>
-            <Link to="" href="#students" className="text-gray-700 hover:text-blue-600">Facilities</Link>
-            <Link to="" href="#contact" className="text-gray-700 hover:text-blue-600">Complaints</Link>
+            <Link to="/account/roomrequest" className="text-gray-700 hover:text-blue-600">Book a Room</Link>
+            <Link to="/login" className="text-gray-700 hover:text-blue-600">Facilities</Link>
+            <Link to="/login" className="text-gray-700 hover:text-blue-600">Complaints</Link>
             <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition z-50 text-center">
               Login
             </Link>

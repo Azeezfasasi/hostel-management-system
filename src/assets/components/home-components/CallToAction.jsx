@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function CallToAction() {
   return (
@@ -22,18 +23,12 @@ export default function CallToAction() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="#login"
-            className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
-          >
+          <Link to="/login" className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
             Login Now
-          </a>
-          <a
-            href="#contact"
-            className="bg-transparent border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition"
-          >
+          </Link>
+          <Link to="/room-availability" className="bg-transparent border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition">
             Check Availability
-          </a>
+          </Link>
         </div>
       </div>
     </section>

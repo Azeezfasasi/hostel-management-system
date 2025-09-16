@@ -34,6 +34,7 @@ import AllNewsletter from "./account/AllNewsletter";
 import Profile from "./account/Profile";
 import PendingPayment from "./account/PendingPayment";
 import RoomHistory from "./account/RoomHistory";
+import RoomAvailability from "./RoomAvailability";
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/room-availability" element={<RoomAvailability />} />
 
         {/* Protected Routes */}
         <Route element={<PrivateRoutes />}>
