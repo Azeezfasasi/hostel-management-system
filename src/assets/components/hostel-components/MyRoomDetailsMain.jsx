@@ -9,23 +9,18 @@ function MyRoomDetailsMain() {
   const [requestStatus, setRequestStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  const [fullRequest, setFullRequest] = useState(null);
+  const cardRef = useRef(null);
 
   const fetchRoomDetails = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
-      const token = localStorage.getItem('token');
-      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      // Fetch all room requests for the user (student endpoint)
-      const res = await axios.get(`${API_BASE_URL}/room/my-requests`, config);
-      // Get the latest request for the logged-in student
-      const requests = res.data.data || [];
-      // Sort by createdAt descending
+  const res = await axios.get(`${API_BASE_URL}/room/my-requests`);
+      const requests = res.data.requests || [];
       requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       const latestRequest = requests[0];
       if (latestRequest) {
-        // Merge student and room details for the card
         const student = latestRequest.student || {};
         const room = latestRequest.room || {};
         setRoomDetails({
@@ -47,15 +42,9 @@ function MyRoomDetailsMain() {
     setLoading(false);
   }, []);
 
-  // Store the full request for more details
-  const [fullRequest, setFullRequest] = useState(null);
-
   useEffect(() => {
     fetchRoomDetails();
   }, [fetchRoomDetails]);
-
-  // Ref for the card to print/download
-  const cardRef = useRef(null);
 
   const handlePrint = () => {
     if (cardRef.current) {
@@ -80,6 +69,16 @@ function MyRoomDetailsMain() {
       link.click();
     }
   };
+
+  // Only show details if not rejected and room exists
+  if (requestStatus === "rejected" || !roomDetails) {
+    return (
+      <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
+        <h2 className="text-2xl font-bold mb-4 text-center">My Room Details</h2>
+        <div className="text-center text-gray-500">Room request has been rejected or no room assigned.</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">

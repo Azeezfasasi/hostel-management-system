@@ -33,6 +33,7 @@ import NewsletterSubscribers from "./account/NewsletterSubscribers";
 import AllNewsletter from "./account/AllNewsletter";
 import Profile from "./account/Profile";
 import PendingPayment from "./account/PendingPayment";
+import RoomHistory from "./account/RoomHistory";
 
 function App() {
 
@@ -72,6 +73,7 @@ function App() {
           <Route path="/account/newslettersubscribers" element={<NewsletterSubscribers />} />
           <Route path="/account/profile" element={<Profile />} />
           <Route path="/account/pendingpayment" element={<PendingPayment />} />
+          <Route path="/account/roomhistory" element={<RoomHistory />} />
         </Route>
       </Routes>
      </UserProvider>

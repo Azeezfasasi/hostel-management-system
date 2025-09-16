@@ -27,6 +27,7 @@ function DashMenu() {
     '/account/roomallocation': '2-6',
     '/account/assignrooms': '2-7',
     '/account/currentroomallocation': '2-8',
+    '/account/roomhistory': '2-9',
     '/account/allfurnitures': '3-2',
     '/account/addfurnitures': '3-3',
     '/account/addfurniturecategory': '3-4',
@@ -80,6 +81,9 @@ function DashMenu() {
                         )}
                         {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="2-8" as={Link} to="/account/currentroomallocation">Occupancy</Nav.Item>
+                        )}
+                        {(isSuperAdmin || isAdmin) && (
+                        <Nav.Item eventKey="2-9" as={Link} to="/account/roomhistory">Room History</Nav.Item>
                         )}
                     </Nav.Menu>
                     )}

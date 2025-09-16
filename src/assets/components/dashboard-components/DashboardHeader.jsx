@@ -33,6 +33,7 @@ function DashboardHeader() {
     '/account/roomallocation': '2-6',
     '/account/assignrooms': '2-7',
     '/account/currentroomallocation': '2-8',
+    '/account/roomhistory': '2-9',
     '/account/allfurnitures': '3-2',
     '/account/addfurnitures': '3-3',
     '/account/addfurniturecategory': '3-4',
@@ -44,6 +45,7 @@ function DashboardHeader() {
     '/account/sendnewsletter': '8-1',
     '/account/allnewsletter': '8-2',
     '/account/newslettersubscribers': '8-3',
+    '/account/pendingpayment': '10-3',
     '/account/profile': '12',
   };
   const activeKey = menuKeyByPath[location.pathname];
@@ -195,6 +197,9 @@ function DashboardHeader() {
                     {(isSuperAdmin || isAdmin) && (
                     <Nav.Item eventKey="2-8" as={Link} to="/account/currentroomallocation">Occupancy</Nav.Item>
                     )}
+                    {(isSuperAdmin || isAdmin) && (
+                    <Nav.Item eventKey="2-9" as={Link} to="/account/roomhistory">Room History</Nav.Item>
+                    )}
                 </Nav.Menu>
                 )}
                 <Nav.Menu eventKey="3" title="Furniture" icon={<GridIcon />}>
@@ -217,12 +222,10 @@ function DashboardHeader() {
                     <Nav.Item eventKey="3-6" as={Link} to="">All Damage Reports</Nav.Item>
                     )}
                 </Nav.Menu>
-                {(isSuperAdmin || isAdmin || isStaff) && (
+                {(isSuperAdmin || isAdmin) && (
                 <Nav.Menu eventKey="4" title="Students" icon={<GridIcon />}>
                     <Nav.Item eventKey="4-1" as={Link} to="/account/managestudents">Manage Students</Nav.Item>
-                    {(isSuperAdmin || isAdmin) && (
                     <Nav.Item eventKey="4-2" as={Link} to="/account/adduser">Add Students</Nav.Item>
-                    )}
                 </Nav.Menu>
                 )}
                 {(isSuperAdmin || isAdmin || isStaff) && (
@@ -272,7 +275,10 @@ function DashboardHeader() {
                     <Nav.Item eventKey="10-2" as={Link} to="">My Transaction History</Nav.Item>
                     )}
                     {(isStudent) && (
-                    <Nav.Item eventKey="10-3" as={Link} to="">Overdue</Nav.Item>
+                    <Nav.Item eventKey="10-3" as={Link} to="/account/pendingpayment">My Pending Payments</Nav.Item>
+                    )}
+                    {(isStudent) && (
+                    <Nav.Item eventKey="10-4" as={Link} to="">Overdue</Nav.Item>
                     )}
                 </Nav.Menu>
                 {(isSuperAdmin || isAdmin || isStaff) && (
