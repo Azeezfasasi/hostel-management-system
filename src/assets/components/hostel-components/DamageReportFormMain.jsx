@@ -1,44 +1,57 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-const API_BASE = "http://localhost:5000/api"; // backend URL
+import { API_BASE_URL } from "@/config/api";
 
 const DamageReportFormMain = ({ studentId }) => {
   const [categories] = useState(["Furniture", "Facility"]);
   const [furniture, setFurniture] = useState([]);
-  const [rooms, setRooms] = useState([]);
-  const [reports, setReports] = useState([]);
+  const [facilities, setFacilities] = useState([]);
+  const [facilityCategories, setFacilityCategories] = useState([]);
+  const [myDamageReports, setMyDamageReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     category: "",
     itemId: "",
     description: "",
+    facilityCategory: ""
   });
 
   // ✅ Fetch data
   const fetchFurniture = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/furniture`);
-      setFurniture(res.data);
+      const res = await axios.get(`${API_BASE_URL}/furniture/furniture`);
+      setFurniture(res.data.items || res.data);
     } catch (error) {
       console.error("Error fetching furniture:", error.message);
     }
   };
 
-  const fetchRooms = async () => {
+  // Fetch facilities
+  const fetchFacilities = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/rooms`);
-      setRooms(res.data);
+      const res = await axios.get(`${API_BASE_URL}/facility/facility`);
+      setFacilities(res.data || []);
     } catch (error) {
-      console.error("Error fetching rooms:", error.message);
+      console.error("Error fetching facilities:", error.message);
+    }
+  };
+
+  // Fetch facility categories
+  const fetchFacilityCategories = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/facility/facility-categories`);
+      setFacilityCategories(res.data || []);
+    } catch (error) {
+      console.error("Error fetching facility categories:", error.message);
     }
   };
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/reports/student/${studentId}`);
-      setReports(res.data);
+      // Fetch only this student's damage reports
+      const res = await axios.get(`${API_BASE_URL}/furniture/furniture/damage-reports/student/${studentId}`);
+      setMyDamageReports(res.data || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching reports:", error.message);
@@ -48,25 +61,45 @@ const DamageReportFormMain = ({ studentId }) => {
 
   useEffect(() => {
     fetchFurniture();
-    fetchRooms();
-    fetchReports();
-  }, []);
+    fetchFacilities();
+    fetchFacilityCategories();
+    if (studentId) {
+      fetchReports();
+    }
+  }, [studentId]);
 
   // ✅ Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_BASE}/reports`, {
-        ...formData,
-        student: studentId,
-      });
+      if (formData.category === "Furniture") {
+        await axios.post(`${API_BASE_URL}/furniture/furniture/${formData.itemId}/report-damage`, {
+          student: studentId,
+          description: formData.description,
+        });
+      } else if (formData.category === "Facility") {
+        await axios.post(`${API_BASE_URL}/facility/facility/${formData.itemId}/report-damage`, {
+          student: studentId,
+          description: formData.description,
+          facilityCategory: formData.facilityCategory
+        });
+      }
       alert("Damage reported successfully ✅");
-      setFormData({ category: "", itemId: "", description: "" });
+      setFormData({ category: "", itemId: "", description: "", facilityCategory: "" });
       fetchReports();
     } catch (error) {
       console.error("Error reporting damage:", error.message);
     }
   };
+
+  if (!studentId) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6">📝 Report Damage</h2>
+        <p className="text-red-600">Error: No student ID provided. Please log in.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -81,7 +114,7 @@ const DamageReportFormMain = ({ studentId }) => {
         <select
           value={formData.category}
           onChange={(e) =>
-            setFormData({ ...formData, category: e.target.value, itemId: "" })
+            setFormData({ ...formData, category: e.target.value, itemId: "", facilityCategory: "" })
           }
           className="border rounded p-2"
           required
@@ -93,6 +126,21 @@ const DamageReportFormMain = ({ studentId }) => {
             </option>
           ))}
         </select>
+
+        {/* Facility Category (only for Facility) */}
+        {formData.category === "Facility" && (
+          <select
+            value={formData.facilityCategory}
+            onChange={e => setFormData({ ...formData, facilityCategory: e.target.value })}
+            className="border rounded p-2"
+            required
+          >
+            <option value="">Select Facility Category</option>
+            {facilityCategories.map(cat => (
+              <option key={cat._id} value={cat._id}>{cat.name}</option>
+            ))}
+          </select>
+        )}
 
         {/* Item */}
         {formData.category === "Furniture" && (
@@ -110,7 +158,6 @@ const DamageReportFormMain = ({ studentId }) => {
             ))}
           </select>
         )}
-
         {formData.category === "Facility" && (
           <select
             value={formData.itemId}
@@ -118,10 +165,10 @@ const DamageReportFormMain = ({ studentId }) => {
             className="border rounded p-2"
             required
           >
-            <option value="">Select Room</option>
-            {rooms.map((r) => (
-              <option key={r._id} value={r._id}>
-                {r.name} - {r.hostel?.name}
+            <option value="">Select Facility</option>
+            {facilities.map((fac) => (
+              <option key={fac._id} value={fac._id}>
+                {fac.name} ({fac.location})
               </option>
             ))}
           </select>
@@ -145,8 +192,8 @@ const DamageReportFormMain = ({ studentId }) => {
         </button>
       </form>
 
-      {/* Reports */}
-      <h3 className="text-xl font-semibold mb-4">📋 My Reports</h3>
+      {/* My Damage Reports */}
+      <h3 className="text-xl font-semibold mb-4">📋 My Damage Reports</h3>
       {loading ? (
         <p className="text-gray-600">Loading reports...</p>
       ) : (
@@ -156,43 +203,33 @@ const DamageReportFormMain = ({ studentId }) => {
               <tr>
                 <th className="border p-3">Category</th>
                 <th className="border p-3">Item</th>
+                <th className="border p-3">Location</th>
                 <th className="border p-3">Description</th>
                 <th className="border p-3">Status</th>
                 <th className="border p-3">Date</th>
+                <th className="border p-3">Repair Status</th>
+                <th className="border p-3">Repair Update</th>
               </tr>
             </thead>
             <tbody>
-              {reports.map((r) => (
-                <tr key={r._id} className="hover:bg-gray-50">
-                  <td className="border p-3">{r.category}</td>
-                  <td className="border p-3">
-                    {r.category === "Furniture"
-                      ? r.furniture?.name
-                      : r.room?.name}
-                  </td>
+              {myDamageReports.map((r, idx) => (
+                <tr key={idx} className="hover:bg-gray-50">
+                  <td className="border p-3">{r.category?.name || r.facilityCategory?.name || "N/A"}</td>
+                  <td className="border p-3">{r.furnitureName || r.facilityName || r.name}</td>
+                  <td className="border p-3">{r.location}</td>
                   <td className="border p-3">{r.description}</td>
                   <td className="border p-3">
-                    <span
-                      className={`px-3 py-1 rounded text-sm font-medium ${
-                        r.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : r.status === "In Progress"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
-                      }`}
-                    >
-                      {r.status}
-                    </span>
+                    <span className={`px-3 py-1 rounded text-sm font-medium ${r.status === "active" ? "bg-yellow-100 text-yellow-800" : r.status === "under-repair" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"}`}>{r.status}</span>
                   </td>
-                  <td className="border p-3">
-                    {new Date(r.createdAt).toLocaleDateString()}
-                  </td>
+                  <td className="border p-3">{r.reportedAt ? new Date(r.reportedAt).toLocaleDateString() : ""}</td>
+                  <td className="border p-3">{r.repairStatus || "Pending"}</td>
+                  <td className="border p-3">{r.repairUpdate || "No Update"}</td>
                 </tr>
               ))}
-              {reports.length === 0 && (
+              {myDamageReports.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="text-center p-4 text-gray-500">
-                    No reports submitted yet
+                  <td colSpan="8" className="text-center p-4 text-gray-500">
+                    No damage reports submitted yet
                   </td>
                 </tr>
               )}

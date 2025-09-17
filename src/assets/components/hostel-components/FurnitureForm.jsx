@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE_URL } from "@/config/api";
 
 const FurnitureForm = () => {
   const [categories, setCategories] = useState([]);
+  const [facilityCategories, setFacilityCategories] = useState([]);
   const [furniture, setFurniture] = useState([]);
+  const [facilities, setFacilities] = useState([]);
 
   const [formData, setFormData] = useState({
+    type: "Furniture", // Furniture or Facility
     category: "",
     name: "",
     quantity: "",
@@ -15,103 +17,170 @@ const FurnitureForm = () => {
     location: "",
   });
 
-  // Fetch categories
+  // Fetch furniture categories
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/furniture-categories`);
+      const res = await axios.get(`${API_BASE_URL}/furniture/furniture-categories`);
       setCategories(res.data);
     } catch (error) {
       console.error("Error fetching categories:", error.message);
     }
   };
 
+  // Fetch facility categories
+  const fetchFacilityCategories = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/facility/facility-categories`);
+      setFacilityCategories(res.data);
+    } catch (error) {
+      console.error("Error fetching facility categories:", error.message);
+    }
+  };
+
   // Fetch furniture
   const fetchFurniture = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/furniture`);
+      const res = await axios.get(`${API_BASE_URL}/furniture/furniture`);
       setFurniture(res.data);
     } catch (error) {
       console.error("Error fetching furniture:", error.message);
     }
   };
 
+  // Fetch facilities
+  const fetchFacilities = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/facility/facility`);
+      setFacilities(res.data);
+    } catch (error) {
+      console.error("Error fetching facilities:", error.message);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
+    fetchFacilityCategories();
     fetchFurniture();
+    fetchFacilities();
   }, []);
 
   // Handle Add
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_BASE}/furniture`, formData);
+      if (formData.type === "Furniture") {
+        await axios.post(`${API_BASE_URL}/furniture/furniture`, formData);
+        fetchFurniture();
+        alert("Furniture added ✅");
+      } else if (formData.type === "Facility") {
+        // Only send relevant fields for facility
+        const facilityData = {
+          name: formData.name,
+          location: formData.location,
+          category: formData.category,
+        };
+        await axios.post(`${API_BASE_URL}/facility/facility`, facilityData);
+        fetchFacilities();
+        alert("Facility added ✅");
+      }
       setFormData({
+        type: "Furniture",
         category: "",
         name: "",
         quantity: "",
         condition: "Good",
         location: "",
       });
-      fetchFurniture();
-      alert("Furniture added ✅");
     } catch (error) {
-      console.error("Error adding furniture:", error.message);
+      console.error("Error adding item:", error.message);
     }
   };
 
   return (
     <div className="p-6 bg-white shadow rounded-lg">
-      <h2 className="text-xl font-bold mb-4">➕ Add Furniture</h2>
+      <h2 className="text-xl font-bold mb-4">➕ Add Furniture/Facilities</h2>
 
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
       >
-        {/* Category */}
+        {/* Type selector */}
         <select
-          value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          value={formData.type}
+          onChange={(e) => setFormData({ ...formData, type: e.target.value })}
           className="border rounded p-2"
           required
         >
-          <option value="">Select Category</option>
-          {categories.map((c) => (
-            <option key={c._id} value={c._id}>
-              {c.name}
-            </option>
-          ))}
+          <option value="Furniture">Furniture</option>
+          <option value="Facility">Facility</option>
         </select>
+
+        {/* Category (for furniture or facility) */}
+        {formData.type === "Furniture" && (
+          <select
+            value={formData.category}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+            className="border rounded p-2"
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        )}
+        {formData.type === "Facility" && (
+          <select
+            value={formData.category}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+            className="border rounded p-2"
+            required
+          >
+            <option value="">Select Category</option>
+            {facilityCategories.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        )}
 
         {/* Name */}
         <input
           type="text"
-          placeholder="Furniture name"
+          placeholder={formData.type === "Furniture" ? "Furniture name" : "Facility name"}
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           className="border rounded p-2"
           required
         />
 
-        {/* Quantity */}
-        <input
-          type="number"
-          placeholder="Quantity"
-          value={formData.quantity}
-          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-          className="border rounded p-2"
-          required
-        />
+        {/* Quantity (only for furniture) */}
+        {formData.type === "Furniture" && (
+          <input
+            type="number"
+            placeholder="Quantity"
+            value={formData.quantity}
+            onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+            className="border rounded p-2"
+            required
+          />
+        )}
 
-        {/* Condition */}
-        <select
-          value={formData.condition}
-          onChange={(e) => setFormData({ ...formData, condition: e.target.value })}
-          className="border rounded p-2"
-        >
-          <option value="Good">Good</option>
-          <option value="Needs Repair">Needs Repair</option>
-          <option value="Damaged">Damaged</option>
-        </select>
+        {/* Condition (only for furniture) */}
+        {formData.type === "Furniture" && (
+          <select
+            value={formData.condition}
+            onChange={(e) => setFormData({ ...formData, condition: e.target.value })}
+            className="border rounded p-2"
+          >
+            <option value="Good">Good</option>
+            <option value="Needs Repair">Needs Repair</option>
+            <option value="Damaged">Damaged</option>
+          </select>
+        )}
 
         {/* Location */}
         <input
@@ -126,7 +195,7 @@ const FurnitureForm = () => {
           type="submit"
           className="col-span-1 md:col-span-2 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
         >
-          Add Furniture
+          {formData.type === "Furniture" ? "Add Furniture" : "Add Facility"}
         </button>
       </form>
 

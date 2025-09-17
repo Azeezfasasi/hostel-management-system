@@ -12,7 +12,7 @@ export default function HeaderSection() {
         
         {/* Logo / Title */}
         <Link to="/" className="text-2xl font-bold text-blue-600">
-          Hostel<span className="text-gray-800">Portal</span>
+          Unizik Hostel <span className="text-gray-800">Portal</span>
         </Link>
 
         {/* Desktop Navigation */}

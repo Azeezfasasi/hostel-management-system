@@ -32,6 +32,7 @@ function DashMenu() {
     '/account/addfurnitures': '3-3',
     '/account/addfurniturecategory': '3-4',
     '/account/damagereportform': '3-5',
+    '/account/alldamagedreports': '3-6',
     '/account/managestudents': '4-1',
     '/account/manageusers': '7-1',
     '/account/adduser': '7-2',
@@ -87,15 +88,15 @@ function DashMenu() {
                         )}
                     </Nav.Menu>
                     )}
-                    <Nav.Menu eventKey="3" title="Furniture" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="3" title="Facilities" icon={<GridIcon />}>
                         {(isStudent) && (
-                        <Nav.Item eventKey="3-1" as={Link} to="">My Furnitures</Nav.Item>
+                        <Nav.Item eventKey="3-1" as={Link} to="">My Facilities</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                        <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Furnitures</Nav.Item>
+                        <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Facilities</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin) && (
-                        <Nav.Item eventKey="3-3" as={Link} to="/account/addfurnitures">Add Furniture</Nav.Item>
+                        <Nav.Item eventKey="3-3" as={Link} to="/account/addfurnitures">Add Facilities</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="3-4" as={Link} to="/account/addfurniturecategory">Add Category</Nav.Item>
@@ -103,8 +104,8 @@ function DashMenu() {
                         {(isStudent || isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="3-5" as={Link} to="/account/damagereportform">Report Damage</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="3-6" as={Link} to="">All Damage Reports</Nav.Item>
+                        {(isSuperAdmin || isAdmin) && (
+                        <Nav.Item eventKey="3-6" as={Link} to="/account/alldamagedreports">All Damage Reports</Nav.Item>
                         )}
                     </Nav.Menu>
                     {(isSuperAdmin || isAdmin) && (
@@ -121,14 +122,6 @@ function DashMenu() {
                         <Nav.Item eventKey="5-4" as={Link} to="">Leave</Nav.Item>
                     </Nav.Menu>
                     )}
-                    <Nav.Menu eventKey="6" title="Facilities" icon={<GridIcon />}>
-                        {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                        <Nav.Item eventKey="6-1" as={Link} to="">All Facilities</Nav.Item>
-                        )}
-                        {(isSuperAdmin || isAdmin) && (
-                        <Nav.Item eventKey="6-2" as={Link} to="">Create Facilities</Nav.Item>
-                        )}
-                    </Nav.Menu>
                     {(isSuperAdmin || isAdmin) && (
                     <Nav.Menu eventKey="7" title="Users" icon={<GridIcon />}>
                         <Nav.Item eventKey="7-1" as={Link} to="/account/manageusers">Manage Users</Nav.Item>

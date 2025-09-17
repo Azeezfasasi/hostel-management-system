@@ -17,7 +17,7 @@ export default function HeroSection() {
       <div className="container mx-auto relative z-10 px-6 md:px-12">
         <div className="max-w-2xl">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-            Welcome to Your <br /> <span className="text-red-600">Hostel Portal</span>
+            Welcome to <br /> <span className="text-red-600">Unizik Hostel Portal</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-200 mb-8">
             Manage your accommodation, connect with fellow students, and stay updated on all hostel activities in one place.

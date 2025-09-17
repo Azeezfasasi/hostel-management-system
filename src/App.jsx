@@ -35,6 +35,7 @@ import Profile from "./account/Profile";
 import PendingPayment from "./account/PendingPayment";
 import RoomHistory from "./account/RoomHistory";
 import RoomAvailability from "./RoomAvailability";
+import AllDamagedReports from "./account/AllDamagedReport";
 
 function App() {
 
@@ -76,6 +77,7 @@ function App() {
           <Route path="/account/profile" element={<Profile />} />
           <Route path="/account/pendingpayment" element={<PendingPayment />} />
           <Route path="/account/roomhistory" element={<RoomHistory />} />
+          <Route path="/account/alldamagedreports" element={<AllDamagedReports />} />
         </Route>
       </Routes>
      </UserProvider>

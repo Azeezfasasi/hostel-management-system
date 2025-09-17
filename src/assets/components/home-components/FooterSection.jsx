@@ -9,7 +9,7 @@ export default function FooterSection() {
         {/* Logo / About */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-4">
-            Hostel<span className="text-blue-500">Portal</span>
+            Unizik Hostel <span className="text-blue-500">Portal</span>
           </h2>
           <p className="text-gray-400">
             A modern hostel management system for students and admins. Manage
@@ -50,7 +50,7 @@ export default function FooterSection() {
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
               <Mail className="w-5 h-5 text-blue-500" />
-              <span>support@hostelmanager.com</span>
+              <span>support@unizikhostel.edu.ng</span>
             </li>
             <li className="flex items-center gap-2">
               <Phone className="w-5 h-5 text-blue-500" />
@@ -66,7 +66,7 @@ export default function FooterSection() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} HostelManager. All rights reserved.
+        © {new Date().getFullYear()} UnizikHostel. All rights reserved.
       </div>
     </footer>
   );

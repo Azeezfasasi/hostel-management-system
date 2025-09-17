@@ -3,8 +3,11 @@ import { Helmet } from 'react-helmet'
 import DashboardHeader from '@/assets/components/dashboard-components/DashboardHeader'
 import DashMenu from '@/assets/components/dashboard-components/DashMenu'
 import DamageReportFormMain from '@/assets/components/hostel-components/DamageReportFormMain'
+import { useUser } from '@/assets/context-api/user-context/UseUser'
 
 function DamageReportForm() {
+  const { user } = useUser()
+
   return (
     <>
       <Helmet>
@@ -16,7 +19,7 @@ function DamageReportForm() {
           <DashMenu />
         </div>
         <div className='w-full lg:w-[80%]'>
-          <DamageReportFormMain />
+          <DamageReportFormMain studentId={user._id} />
         </div>
       </div>
     </>
