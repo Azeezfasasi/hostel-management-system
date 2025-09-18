@@ -195,7 +195,7 @@ export default function HostelManager() {
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6 font-sans">
       <div className="md:p-6 max-w-6xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
-        <div className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between items-center mb-6">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between items-center mb-6 pt-2 md:pt-0">
           <h2 className="text-[22px] md:text-[30px] font-bold text-gray-800">🏨 Hostel Management</h2>
           {isSuperAdmin && (
             <button
@@ -208,11 +208,11 @@ export default function HostelManager() {
         </div>
 
         {/* Filters and Search */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-4 mb-6 px-4 md:px-0">
           <select
             value={filterCampus}
             onChange={e => setFilterCampus(e.target.value)}
-            className="border rounded p-2 min-w-[180px]"
+            className="border border-solid border-gray-400 rounded p-2 min-w-[180px]"
           >
             <option value="">All Campuses</option>
             {[...new Set(hostels.map(h => h.hostelCampus))].map((campus, i) => (
@@ -222,7 +222,7 @@ export default function HostelManager() {
           <select
             value={filterHostel}
             onChange={e => setFilterHostel(e.target.value)}
-            className="border rounded p-2 min-w-[180px]"
+            className="border border-solid border-gray-400 rounded p-2 min-w-[180px]"
           >
             <option value="">All Hostels</option>
             {[...new Set(hostels.map(h => h.name))].map((name, i) => (
@@ -233,7 +233,7 @@ export default function HostelManager() {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="border rounded p-2 min-w-[220px]"
+            className="border border-solid border-gray-400 rounded p-2 min-w-[220px]"
             placeholder="Search by location, description, block, floor..."
           />
         </div>
@@ -462,20 +462,42 @@ export default function HostelManager() {
                   </td>
                 </tr>
               )}
+            </tbody>
+          </table>
+        </div>
+
         {/* Pagination Controls */}
-        <div className="flex justify-between items-center mt-6">
-          <div>
-            <button
-              className="px-4 py-2 mr-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-            >
-              Previous
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-              onClick={() => setPage(page + 1)}
-              disabled={((hostels.filter(h =>
+          <div className="w-full flex flex-col md:flex-row justify-between items-center mt-6 gap-4 md:gap-0 pb-4 md:pb-0">
+            <div>
+              <button
+                className="px-4 py-2 mr-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+              >
+                Previous
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                onClick={() => setPage(page + 1)}
+                disabled={((hostels.filter(h =>
+                  (!filterCampus || h.hostelCampus === filterCampus) &&
+                  (!filterHostel || h.name === filterHostel) &&
+                  (
+                    !search ||
+                    h.name.toLowerCase().includes(search.toLowerCase()) ||
+                    h.hostelCampus.toLowerCase().includes(search.toLowerCase()) ||
+                    h.location.toLowerCase().includes(search.toLowerCase()) ||
+                    h.description.toLowerCase().includes(search.toLowerCase()) ||
+                    h.block.toLowerCase().includes(search.toLowerCase()) ||
+                    h.floor.toString().toLowerCase().includes(search.toLowerCase())
+                  )
+                )).length <= page * limit)}
+              >
+                Next
+              </button>
+            </div>
+            <div>
+              Page {page} of {Math.max(1, Math.ceil(hostels.filter(h =>
                 (!filterCampus || h.hostelCampus === filterCampus) &&
                 (!filterHostel || h.name === filterHostel) &&
                 (
@@ -487,39 +509,18 @@ export default function HostelManager() {
                   h.block.toLowerCase().includes(search.toLowerCase()) ||
                   h.floor.toString().toLowerCase().includes(search.toLowerCase())
                 )
-              )).length <= page * limit)}
-            >
-              Next
-            </button>
+              ).length / limit))}
+              <select
+                className="ml-4 border border-solid border-gray-300 rounded p-1"
+                value={limit}
+                onChange={e => { setLimit(Number(e.target.value)); setPage(1); }}
+              >
+                {[10, 20, 50, 100].map(n => (
+                  <option key={n} value={n}>{n} per page</option>
+                ))}
+              </select>
+            </div>
           </div>
-          <div>
-            Page {page} of {Math.max(1, Math.ceil(hostels.filter(h =>
-              (!filterCampus || h.hostelCampus === filterCampus) &&
-              (!filterHostel || h.name === filterHostel) &&
-              (
-                !search ||
-                h.name.toLowerCase().includes(search.toLowerCase()) ||
-                h.hostelCampus.toLowerCase().includes(search.toLowerCase()) ||
-                h.location.toLowerCase().includes(search.toLowerCase()) ||
-                h.description.toLowerCase().includes(search.toLowerCase()) ||
-                h.block.toLowerCase().includes(search.toLowerCase()) ||
-                h.floor.toString().toLowerCase().includes(search.toLowerCase())
-              )
-            ).length / limit))}
-            <select
-              className="ml-4 border rounded p-1"
-              value={limit}
-              onChange={e => { setLimit(Number(e.target.value)); setPage(1); }}
-            >
-              {[10, 20, 50, 100].map(n => (
-                <option key={n} value={n}>{n} per page</option>
-              ))}
-            </select>
-          </div>
-        </div>
-            </tbody>
-          </table>
-        </div>
       </div>
       {/* View Details Modal */}
       <Modal isOpen={isViewModalOpen} onClose={() => setIsViewModalOpen(false)}>
