@@ -52,6 +52,8 @@ const ConfirmationModal = ({ isOpen, message, onConfirm, onCancel }) => {
 };
 
 export default function HostelManager() {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [hostels, setHostels] = useState([]);
   const [filterCampus, setFilterCampus] = useState("");
   const [filterHostel, setFilterHostel] = useState("");
@@ -402,21 +404,23 @@ export default function HostelManager() {
               </tr>
             </thead>
             <tbody>
-              {hostels
-                .filter(h =>
-                  (!filterCampus || h.hostelCampus === filterCampus) &&
-                  (!filterHostel || h.name === filterHostel) &&
-                  (
-                    !search ||
-                    h.name.toLowerCase().includes(search.toLowerCase()) ||
-                    h.hostelCampus.toLowerCase().includes(search.toLowerCase()) ||
-                    h.location.toLowerCase().includes(search.toLowerCase()) ||
-                    h.description.toLowerCase().includes(search.toLowerCase()) ||
-                    h.block.toLowerCase().includes(search.toLowerCase()) ||
-                    h.floor.toString().toLowerCase().includes(search.toLowerCase())
-                  )
-                )
-                .map((h) => (
+              {(() => {
+                const filtered = hostels
+                  .filter(h =>
+                    (!filterCampus || h.hostelCampus === filterCampus) &&
+                    (!filterHostel || h.name === filterHostel) &&
+                    (
+                      !search ||
+                      h.name.toLowerCase().includes(search.toLowerCase()) ||
+                      h.hostelCampus.toLowerCase().includes(search.toLowerCase()) ||
+                      h.location.toLowerCase().includes(search.toLowerCase()) ||
+                      h.description.toLowerCase().includes(search.toLowerCase()) ||
+                      h.block.toLowerCase().includes(search.toLowerCase()) ||
+                      h.floor.toString().toLowerCase().includes(search.toLowerCase())
+                    )
+                  );
+                const paginated = filtered.slice((page - 1) * limit, page * limit);
+                return paginated.map((h) => (
                   <tr key={h._id} className="bg-white hover:bg-gray-50 border-t border-gray-200">
                     <td className="p-4">{h.hostelCampus}</td>
                     <td className="p-4">{h.name}</td>
@@ -449,7 +453,8 @@ export default function HostelManager() {
                       )}
                     </td>
                   </tr>
-                ))}
+                ))
+              })()}
               {hostels.length === 0 && !loading && (
                 <tr>
                   <td colSpan="8" className="text-center p-4 text-gray-500 italic">
@@ -457,6 +462,61 @@ export default function HostelManager() {
                   </td>
                 </tr>
               )}
+        {/* Pagination Controls */}
+        <div className="flex justify-between items-center mt-6">
+          <div>
+            <button
+              className="px-4 py-2 mr-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+            >
+              Previous
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              onClick={() => setPage(page + 1)}
+              disabled={((hostels.filter(h =>
+                (!filterCampus || h.hostelCampus === filterCampus) &&
+                (!filterHostel || h.name === filterHostel) &&
+                (
+                  !search ||
+                  h.name.toLowerCase().includes(search.toLowerCase()) ||
+                  h.hostelCampus.toLowerCase().includes(search.toLowerCase()) ||
+                  h.location.toLowerCase().includes(search.toLowerCase()) ||
+                  h.description.toLowerCase().includes(search.toLowerCase()) ||
+                  h.block.toLowerCase().includes(search.toLowerCase()) ||
+                  h.floor.toString().toLowerCase().includes(search.toLowerCase())
+                )
+              )).length <= page * limit)}
+            >
+              Next
+            </button>
+          </div>
+          <div>
+            Page {page} of {Math.max(1, Math.ceil(hostels.filter(h =>
+              (!filterCampus || h.hostelCampus === filterCampus) &&
+              (!filterHostel || h.name === filterHostel) &&
+              (
+                !search ||
+                h.name.toLowerCase().includes(search.toLowerCase()) ||
+                h.hostelCampus.toLowerCase().includes(search.toLowerCase()) ||
+                h.location.toLowerCase().includes(search.toLowerCase()) ||
+                h.description.toLowerCase().includes(search.toLowerCase()) ||
+                h.block.toLowerCase().includes(search.toLowerCase()) ||
+                h.floor.toString().toLowerCase().includes(search.toLowerCase())
+              )
+            ).length / limit))}
+            <select
+              className="ml-4 border rounded p-1"
+              value={limit}
+              onChange={e => { setLimit(Number(e.target.value)); setPage(1); }}
+            >
+              {[10, 20, 50, 100].map(n => (
+                <option key={n} value={n}>{n} per page</option>
+              ))}
+            </select>
+          </div>
+        </div>
             </tbody>
           </table>
         </div>
