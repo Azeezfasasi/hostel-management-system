@@ -53,6 +53,9 @@ const ConfirmationModal = ({ isOpen, message, onConfirm, onCancel }) => {
 
 export default function HostelManager() {
   const [hostels, setHostels] = useState([]);
+  const [filterCampus, setFilterCampus] = useState("");
+  const [filterHostel, setFilterHostel] = useState("");
+  const [search, setSearch] = useState("");
   const [formData, setFormData] = useState({ hostelCampus: "", name: "", block: "", floor: "", location: "", description: "", genderRestriction: "", rulesAndPolicies: "", facilities: "" });
   const [editingHostel, setEditingHostel] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -200,6 +203,37 @@ export default function HostelManager() {
               Add Hostel
             </button>
           )}
+        </div>
+
+        {/* Filters and Search */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <select
+            value={filterCampus}
+            onChange={e => setFilterCampus(e.target.value)}
+            className="border rounded p-2 min-w-[180px]"
+          >
+            <option value="">All Campuses</option>
+            {[...new Set(hostels.map(h => h.hostelCampus))].map((campus, i) => (
+              <option key={i} value={campus}>{campus}</option>
+            ))}
+          </select>
+          <select
+            value={filterHostel}
+            onChange={e => setFilterHostel(e.target.value)}
+            className="border rounded p-2 min-w-[180px]"
+          >
+            <option value="">All Hostels</option>
+            {[...new Set(hostels.map(h => h.name))].map((name, i) => (
+              <option key={i} value={name}>{name}</option>
+            ))}
+          </select>
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="border rounded p-2 min-w-[220px]"
+            placeholder="Search by location, description, block, floor..."
+          />
         </div>
 
         {error && (
@@ -368,40 +402,54 @@ export default function HostelManager() {
               </tr>
             </thead>
             <tbody>
-              {hostels.map((h) => (
-                <tr key={h._id} className="bg-white hover:bg-gray-50 border-t border-gray-200">
-                  <td className="p-4">{h.hostelCampus}</td>
-                  <td className="p-4">{h.name}</td>
-                  <td className="p-4">{h.block}</td>
-                  <td className="p-4">{h.floor}</td>
-                  <td className="p-4">{h.genderRestriction }</td>
-                  <td className="p-4">{h.location}</td>
-                  <td className="p-4 flex gap-2">
-                    <button
-                      onClick={() => { setViewHostel(h); setIsViewModalOpen(true); }}
-                      className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
-                    >
-                      <Eye className="w-4 4- 4md:w-6 md:h-6" />
-                    </button>
-                    {isSuperAdmin && (
-                    <>
+              {hostels
+                .filter(h =>
+                  (!filterCampus || h.hostelCampus === filterCampus) &&
+                  (!filterHostel || h.name === filterHostel) &&
+                  (
+                    !search ||
+                    h.name.toLowerCase().includes(search.toLowerCase()) ||
+                    h.hostelCampus.toLowerCase().includes(search.toLowerCase()) ||
+                    h.location.toLowerCase().includes(search.toLowerCase()) ||
+                    h.description.toLowerCase().includes(search.toLowerCase()) ||
+                    h.block.toLowerCase().includes(search.toLowerCase()) ||
+                    h.floor.toString().toLowerCase().includes(search.toLowerCase())
+                  )
+                )
+                .map((h) => (
+                  <tr key={h._id} className="bg-white hover:bg-gray-50 border-t border-gray-200">
+                    <td className="p-4">{h.hostelCampus}</td>
+                    <td className="p-4">{h.name}</td>
+                    <td className="p-4">{h.block}</td>
+                    <td className="p-4">{h.floor}</td>
+                    <td className="p-4">{h.genderRestriction }</td>
+                    <td className="p-4">{h.location}</td>
+                    <td className="p-4 flex gap-2">
                       <button
-                        onClick={() => openEditHostelModal(h)}
-                        className="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition cursor-pointer"
+                        onClick={() => { setViewHostel(h); setIsViewModalOpen(true); }}
+                        className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
                       >
-                        <PencilLine className="w-4 4- 4md:w-6 md:h-6" />
+                        <Eye className="w-4 4- 4md:w-6 md:h-6" />
                       </button>
-                      <button
-                        onClick={() => handleDeleteClick(h._id)}
-                        className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition cursor-pointer"
-                      >
-                        <Trash2 className="w-4 4- 4md:w-6 md:h-6"/>
-                      </button>
-                    </>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                      {isSuperAdmin && (
+                      <>
+                        <button
+                          onClick={() => openEditHostelModal(h)}
+                          className="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition cursor-pointer"
+                        >
+                          <PencilLine className="w-4 4- 4md:w-6 md:h-6" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(h._id)}
+                          className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition cursor-pointer"
+                        >
+                          <Trash2 className="w-4 4- 4md:w-6 md:h-6"/>
+                        </button>
+                      </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               {hostels.length === 0 && !loading && (
                 <tr>
                   <td colSpan="8" className="text-center p-4 text-gray-500 italic">
