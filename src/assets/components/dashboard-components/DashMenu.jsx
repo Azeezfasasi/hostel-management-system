@@ -45,6 +45,9 @@ function DashMenu() {
         '/account/sendnewsletter': { key: '8-1', parent: '8' },
         '/account/allnewsletter': { key: '8-2', parent: '8' },
         '/account/newslettersubscribers': { key: '8-3', parent: '8' },
+        '/account/mycomplaints': { key: '9-1', parent: '9' },
+        '/account/managecomplaints': { key: '9-2', parent: '9' },
+        '/account/sendcomplaints': { key: '9-3', parent: '9' },
         '/account/pendingpayment': { key: '10-3', parent: '10' },
         '/account/profile': { key: '12', parent: null },
         // Add more mappings as needed
@@ -156,11 +159,14 @@ function DashMenu() {
                     </Nav.Menu>
                     )}
                     <Nav.Menu eventKey="9" title="Complaints" icon={<DetailIcon />}>
+                        {(isStudent) && (
+                        <Nav.Item eventKey="9-1" as={Link} to="/account/mycomplaints">My Complaints</Nav.Item>
+                        )}
                         {(isSuperAdmin || isAdmin || isStaff) && (
-                        <Nav.Item eventKey="9-1" as={Link} to="">Manage Complaints</Nav.Item>
+                        <Nav.Item eventKey="9-2" as={Link} to="/account/managecomplaints">Manage Complaints</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                        <Nav.Item eventKey="9-2" as={Link} to="">Send a Complaint</Nav.Item>
+                        <Nav.Item eventKey="9-3" as={Link} to="/account/sendcomplaints">Send a Complaint</Nav.Item>
                         )}
                     </Nav.Menu>
                     

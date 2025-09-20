@@ -39,6 +39,9 @@ import RoomAvailability from "./RoomAvailability";
 import AllDamagedReports from "./account/AllDamagedReport";
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import './App.css';
+import ManageComplaints from "./account/ManageComplaints";
+import MyComplaints from "./account/MyComplaints";
+import SendComplaints from "./account/SendComplaints";
 
 function App() {
 
@@ -81,6 +84,9 @@ function App() {
           <Route path="/account/pendingpayment" element={<PendingPayment />} />
           <Route path="/account/roomhistory" element={<RoomHistory />} />
           <Route path="/account/alldamagedreports" element={<AllDamagedReports />} />
+          <Route path="/account/managecomplaints" element={<ManageComplaints />} />
+          <Route path="/account/mycomplaints" element={<MyComplaints />} />
+          <Route path="/account/sendcomplaints" element={<SendComplaints />} />
         </Route>
       </Routes>
      </UserProvider>
