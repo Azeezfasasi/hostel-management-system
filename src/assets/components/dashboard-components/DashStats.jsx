@@ -131,7 +131,7 @@ export default function DashStats() {
   return (
     <section id="dashboard-preview" className="py-8 bg-white">
       <div className="container mx-auto px-6 md:px-12 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold text-blue-700 mb-12">
           Hostel Overview
         </h2>
 
@@ -142,10 +142,10 @@ export default function DashStats() {
             {statList.map((stat, index) => (
               <div
                 key={index}
-                className="bg-gray-200 rounded-2xl shadow-md hover:shadow-xl transition px-6 py-3"
+                className="bg-orange-300 rounded-2xl shadow-md hover:shadow-xl transition px-6 py-3"
               >
                 <div className="flex justify-center mb-4">{stat.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
                   {stat.title}
                 </h3>
                 <p className="text-3xl font-bold text-gray-900">{stat.value}</p>

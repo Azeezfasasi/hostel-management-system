@@ -2,15 +2,19 @@ import { Sidenav, Nav } from 'rsuite';
 import { Link, useLocation } from 'react-router-dom';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import DetailIcon from '@rsuite/icons/Detail';
-import ListIcon from '@rsuite/icons/List';
-import UserInfoIcon from '@rsuite/icons/UserInfo';
-import PeoplesIcon from '@rsuite/icons/Peoples';
 import GridIcon from '@rsuite/icons/Grid';
-import TagIcon from '@rsuite/icons/Tag';
-import MessageIcon from '@rsuite/icons/Message';
-import GearIcon from '@rsuite/icons/Gear';
 import { useUser } from '../../context-api/user-context/UseUser';
-import ProjectIcon from '@rsuite/icons/Project';
+import AppSelectIcon from '@rsuite/icons/AppSelect';
+import TreeIcon from '@rsuite/icons/Tree';
+import UserInfoIcon from '@rsuite/icons/UserInfo';
+import DocPassIcon from '@rsuite/icons/DocPass';
+import UserChangeIcon from '@rsuite/icons/UserChange';
+import SentToUserIcon from '@rsuite/icons/SentToUser';
+import AdminIcon from '@rsuite/icons/Admin';
+import PeopleSpeakerIcon from '@rsuite/icons/PeopleSpeaker';
+import UserBadgeIcon from '@rsuite/icons/UserBadge';
+import TableIcon from '@rsuite/icons/Table';
+import ModelIcon from '@rsuite/icons/Model';
 
 function DashMenu() {
     const {isSuperAdmin, isAdmin, isStudent, isStaff} = useUser()
@@ -49,7 +53,7 @@ function DashMenu() {
   return (
     <>
     <div style={{ width: 240 }} className='hidden lg:block'>
-        <Sidenav>
+        <Sidenav> 
             <Sidenav.Body>
                 <Nav activeKey={activeKey}>
                     {(isSuperAdmin || isAdmin || isStudent || isStaff) && (
@@ -58,7 +62,7 @@ function DashMenu() {
                     </Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Menu eventKey="2" title="Hostel" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="2" title="Hostel" icon={<AppSelectIcon />}>
                         {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                         <Nav.Item eventKey="2-1" as={Link} to="/account/myroomdetails">My Room Details</Nav.Item>
                         )}
@@ -88,7 +92,7 @@ function DashMenu() {
                         )}
                     </Nav.Menu>
                     )}
-                    <Nav.Menu eventKey="3" title="Facilities" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="3" title="Facilities" icon={<TreeIcon />}>
                         {(isStudent) && (
                         <Nav.Item eventKey="3-1" as={Link} to="">My Facilities</Nav.Item>
                         )}
@@ -109,13 +113,13 @@ function DashMenu() {
                         )}
                     </Nav.Menu>
                     {(isSuperAdmin || isAdmin) && (
-                    <Nav.Menu eventKey="4" title="Students" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="4" title="Students" icon={<AdminIcon />}>
                         <Nav.Item eventKey="4-1" as={Link} to="/account/managestudents">Manage Students</Nav.Item>
                         <Nav.Item eventKey="4-2" as={Link} to="/account/adduser">Add Students</Nav.Item>
                     </Nav.Menu>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Menu eventKey="5" title="Attendance" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="5" title="Attendance" icon={<DocPassIcon />}>
                         <Nav.Item eventKey="5-1" as={Link} to="">All Attendance</Nav.Item>
                         <Nav.Item eventKey="5-2" as={Link} to="">In</Nav.Item>
                         <Nav.Item eventKey="5-3" as={Link} to="">Out</Nav.Item>
@@ -123,20 +127,20 @@ function DashMenu() {
                     </Nav.Menu>
                     )}
                     {(isSuperAdmin || isAdmin) && (
-                    <Nav.Menu eventKey="7" title="Users" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="7" title="Users" icon={<UserChangeIcon />}>
                         <Nav.Item eventKey="7-1" as={Link} to="/account/manageusers">Manage Users</Nav.Item>
                         <Nav.Item eventKey="7-2" as={Link} to="/account/adduser">Create a User</Nav.Item>
                         <Nav.Item eventKey="7-3" as={Link} to="/account/changeuserpassword">Change User Password</Nav.Item>
                     </Nav.Menu>
                     )}
                     {(isSuperAdmin || isAdmin) && (
-                    <Nav.Menu eventKey="8" title="Newsletter" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="8" title="Newsletter" icon={<PeopleSpeakerIcon />}>
                         <Nav.Item eventKey="8-1" as={Link} to="/account/sendnewsletter">Send Newsletters</Nav.Item>
                         <Nav.Item eventKey="8-2" as={Link} to="/account/allnewsletter">All Newsletter</Nav.Item>
                         <Nav.Item eventKey="8-3" as={Link} to="/account/newslettersubscribers">Subscribers</Nav.Item>
                     </Nav.Menu>
                     )}
-                    <Nav.Menu eventKey="9" title="Complaints" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="9" title="Complaints" icon={<DetailIcon />}>
                         {(isSuperAdmin || isAdmin || isStaff) && (
                         <Nav.Item eventKey="9-1" as={Link} to="">Manage Complaints</Nav.Item>
                         )}
@@ -145,7 +149,7 @@ function DashMenu() {
                         )}
                     </Nav.Menu>
                     
-                    <Nav.Menu eventKey="10" title="Accounts" icon={<GridIcon />}>
+                    <Nav.Menu eventKey="10" title="Accounts" icon={<TableIcon />}>
                         {(isAdmin || isSuperAdmin || isStaff) && (
                         <Nav.Item eventKey="10-1" as={Link} to="">All Transaction History</Nav.Item>
                         )}
@@ -160,12 +164,12 @@ function DashMenu() {
                         )}
                     </Nav.Menu>
                     {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Item eventKey="11" icon={<DetailIcon />} as={Link} to="">
+                    <Nav.Item eventKey="11" icon={<ModelIcon />} as={Link} to="">
                         Maintenance
                     </Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Item eventKey="12" icon={<DetailIcon />} as={Link} to="/account/profile">
+                    <Nav.Item eventKey="12" icon={<UserBadgeIcon />} as={Link} to="/account/profile">
                         Profile
                     </Nav.Item>
                     )}
