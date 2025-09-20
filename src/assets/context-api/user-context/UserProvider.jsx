@@ -66,6 +66,12 @@ export const UserProvider = ({ children }) => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       const profileRes = await axios.get(`${API_BASE_URL}/users/me`);
       setUser(profileRes.data);
+      // Store studentId if user is a student
+      if (profileRes.data.role === 'student' && profileRes.data._id) {
+        localStorage.setItem('studentId', profileRes.data._id);
+      } else {
+        localStorage.removeItem('studentId');
+      }
       setSuccess('Login successful!');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed.');

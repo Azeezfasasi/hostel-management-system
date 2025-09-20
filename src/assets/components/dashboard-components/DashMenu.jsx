@@ -48,7 +48,11 @@ function DashMenu() {
         '/account/mycomplaints': { key: '9-1', parent: '9' },
         '/account/managecomplaints': { key: '9-2', parent: '9' },
         '/account/sendcomplaints': { key: '9-3', parent: '9' },
+        '/account/alltransactionhistory': { key: '10-1', parent: '10' },
+        '/account/mytransactionhistory': { key: '10-2', parent: '10' },
         '/account/pendingpayment': { key: '10-3', parent: '10' },
+        '/account/allmaintenancerequests': { key: '11-1', parent: '11' },
+        '/account/createmaintenance': { key: '11-2', parent: '11' },
         '/account/profile': { key: '12', parent: null },
         // Add more mappings as needed
     };
@@ -172,7 +176,7 @@ function DashMenu() {
                     
                     <Nav.Menu eventKey="10" title="Accounts" icon={<TableIcon />}>
                         {(isAdmin || isSuperAdmin || isStaff) && (
-                        <Nav.Item eventKey="10-1" as={Link} to="">All Transaction History</Nav.Item>
+                        <Nav.Item eventKey="10-1" as={Link} to="/account/alltransactionhistory">All Transaction History</Nav.Item>
                         )}
                         {(isStudent) && (
                         <Nav.Item eventKey="10-2" as={Link} to="">My Transaction History</Nav.Item>
@@ -184,11 +188,14 @@ function DashMenu() {
                         <Nav.Item eventKey="10-4" as={Link} to="">Overdue</Nav.Item>
                         )}
                     </Nav.Menu>
-                    {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Item eventKey="11" icon={<ModelIcon />} as={Link} to="">
-                        Maintenance
-                    </Nav.Item>
-                    )}
+                    <Nav.Menu eventKey="11" title="Maintenance" icon={<TableIcon />}>
+                        {(isAdmin || isSuperAdmin || isStaff) && (
+                        <Nav.Item eventKey="11-1" as={Link} to="/account/allmaintenancerequests">All Maintenance Requests</Nav.Item>
+                        )}
+                        {(isStudent || isAdmin || isSuperAdmin || isStaff) && (
+                        <Nav.Item eventKey="11-2" as={Link} to="/account/createmaintenance">Create Maintenance Request</Nav.Item>
+                        )}
+                    </Nav.Menu>
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                     <Nav.Item eventKey="12" icon={<UserBadgeIcon />} as={Link} to="/account/profile">
                         Profile

@@ -13,6 +13,14 @@ import GearIcon from '@rsuite/icons/Gear';
 import { Sidenav, Nav } from 'rsuite';
 import ProjectIcon from '@rsuite/icons/Project';
 import profile from '../../images/profile.png';
+import AppSelectIcon from '@rsuite/icons/AppSelect';
+import TreeIcon from '@rsuite/icons/Tree';
+import DocPassIcon from '@rsuite/icons/DocPass';
+import UserChangeIcon from '@rsuite/icons/UserChange';
+import AdminIcon from '@rsuite/icons/Admin';
+import PeopleSpeakerIcon from '@rsuite/icons/PeopleSpeaker';
+import UserBadgeIcon from '@rsuite/icons/UserBadge';
+import TableIcon from '@rsuite/icons/Table';
 
 function DashboardHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,14 +46,22 @@ function DashboardHeader() {
     '/account/addfurnitures': { key: '3-3', parent: '3' },
     '/account/addfurniturecategory': { key: '3-4', parent: '3' },
     '/account/damagereportform': { key: '3-5', parent: '3' },
+    '/account/alldamagedreports': { key: '3-6', parent: '3' },
     '/account/managestudents': { key: '4-1', parent: '4' },
+    '/account/adduser': { key: '4-2', parent: '4' },
     '/account/manageusers': { key: '7-1', parent: '7' },
-    '/account/adduser': { key: '7-2', parent: '7' },
     '/account/changeuserpassword': { key: '7-3', parent: '7' },
     '/account/sendnewsletter': { key: '8-1', parent: '8' },
     '/account/allnewsletter': { key: '8-2', parent: '8' },
     '/account/newslettersubscribers': { key: '8-3', parent: '8' },
+    '/account/mycomplaints': { key: '9-1', parent: '9' },
+    '/account/managecomplaints': { key: '9-2', parent: '9' },
+    '/account/sendcomplaints': { key: '9-3', parent: '9' },
+    '/account/alltransactionhistory': { key: '10-1', parent: '10' },
+    '/account/mytransactionhistory': { key: '10-2', parent: '10' },
     '/account/pendingpayment': { key: '10-3', parent: '10' },
+    '/account/allmaintenancerequests': { key: '11-1', parent: '11' },
+    '/account/createmaintenance': { key: '11-2', parent: '11' },
     '/account/profile': { key: '12', parent: null },
   };
   const cleanPath = location.pathname.replace(/\/$/, '').split('?')[0];
@@ -182,7 +198,7 @@ function DashboardHeader() {
                 </Nav.Item>
                 )}
                 {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                <Nav.Menu eventKey="2" title="Hostel" icon={<GridIcon />}>
+                <Nav.Menu eventKey="2" title="Hostel" icon={<AppSelectIcon />}>
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
                     <Nav.Item eventKey="2-1" as={Link} to="/account/myroomdetails">My Room Details</Nav.Item>
                     )}
@@ -212,15 +228,15 @@ function DashboardHeader() {
                     )}
                 </Nav.Menu>
                 )}
-                <Nav.Menu eventKey="3" title="Furniture" icon={<GridIcon />}>
+                <Nav.Menu eventKey="3" title="Facilities" icon={<TreeIcon />}>
                     {(isStudent) && (
-                    <Nav.Item eventKey="3-1" as={Link} to="">My Furnitures</Nav.Item>
+                    <Nav.Item eventKey="3-1" as={Link} to="">My Facilities</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Furnitures</Nav.Item>
+                    <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Facilities</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin) && (
-                    <Nav.Item eventKey="3-3" as={Link} to="/account/addfurnitures">Add Furniture</Nav.Item>
+                    <Nav.Item eventKey="3-3" as={Link} to="/account/addfurnitures">Add Facilities</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin) && (
                     <Nav.Item eventKey="3-4" as={Link} to="/account/addfurniturecategory">Add Category</Nav.Item>
@@ -228,58 +244,53 @@ function DashboardHeader() {
                     {(isStudent || isSuperAdmin || isAdmin || isStaff) && (
                     <Nav.Item eventKey="3-5" as={Link} to="/account/damagereportform">Report Damage</Nav.Item>
                     )}
-                    {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Item eventKey="3-6" as={Link} to="">All Damage Reports</Nav.Item>
+                    {(isSuperAdmin || isAdmin) && (
+                    <Nav.Item eventKey="3-6" as={Link} to="/account/alldamagedreports">All Damage Reports</Nav.Item>
                     )}
                 </Nav.Menu>
                 {(isSuperAdmin || isAdmin) && (
-                <Nav.Menu eventKey="4" title="Students" icon={<GridIcon />}>
+                <Nav.Menu eventKey="4" title="Students" icon={<AdminIcon />}>
                     <Nav.Item eventKey="4-1" as={Link} to="/account/managestudents">Manage Students</Nav.Item>
                     <Nav.Item eventKey="4-2" as={Link} to="/account/adduser">Add Students</Nav.Item>
                 </Nav.Menu>
                 )}
                 {(isSuperAdmin || isAdmin || isStaff) && (
-                <Nav.Menu eventKey="5" title="Attendance" icon={<GridIcon />}>
+                <Nav.Menu eventKey="5" title="Attendance" icon={<DocPassIcon />}>
                     <Nav.Item eventKey="5-1" as={Link} to="">All Attendance</Nav.Item>
                     <Nav.Item eventKey="5-2" as={Link} to="">In</Nav.Item>
                     <Nav.Item eventKey="5-3" as={Link} to="">Out</Nav.Item>
                     <Nav.Item eventKey="5-4" as={Link} to="">Leave</Nav.Item>
                 </Nav.Menu>
                 )}
-                <Nav.Menu eventKey="6" title="Facilities" icon={<GridIcon />}>
-                    {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Item eventKey="6-1" as={Link} to="">All Facilities</Nav.Item>
-                    )}
-                    {(isSuperAdmin || isAdmin) && (
-                    <Nav.Item eventKey="6-2" as={Link} to="">Create Facilities</Nav.Item>
-                    )}
-                </Nav.Menu>
                 {(isSuperAdmin || isAdmin) && (
-                <Nav.Menu eventKey="7" title="Users" icon={<GridIcon />}>
+                <Nav.Menu eventKey="7" title="Users" icon={<UserChangeIcon />}>
                     <Nav.Item eventKey="7-1" as={Link} to="/account/manageusers">Manage Users</Nav.Item>
                     <Nav.Item eventKey="7-2" as={Link} to="/account/adduser">Create a User</Nav.Item>
                     <Nav.Item eventKey="7-3" as={Link} to="/account/changeuserpassword">Change User Password</Nav.Item>
                 </Nav.Menu>
                 )}
                 {(isSuperAdmin || isAdmin) && (
-                <Nav.Menu eventKey="8" title="Newsletter" icon={<GridIcon />}>
+                <Nav.Menu eventKey="8" title="Newsletter" icon={<PeopleSpeakerIcon />}>
                     <Nav.Item eventKey="8-1" as={Link} to="/account/sendnewsletter">Send Newsletters</Nav.Item>
                     <Nav.Item eventKey="8-2" as={Link} to="/account/allnewsletter">All Newsletter</Nav.Item>
                     <Nav.Item eventKey="8-3" as={Link} to="/account/newslettersubscribers">Subscribers</Nav.Item>
                 </Nav.Menu>
                 )}
-                <Nav.Menu eventKey="9" title="Complaints" icon={<GridIcon />}>
+                <Nav.Menu eventKey="9" title="Complaints" icon={<DetailIcon />}>
+                    {(isStudent) && (
+                    <Nav.Item eventKey="9-1" as={Link} to="/account/mycomplaints">My Complaints</Nav.Item>
+                    )}
                     {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Item eventKey="9-1" as={Link} to="">Manage Complaints</Nav.Item>
+                    <Nav.Item eventKey="9-2" as={Link} to="/account/managecomplaints">Manage Complaints</Nav.Item>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                    <Nav.Item eventKey="9-2" as={Link} to="">Send a Complaint</Nav.Item>
+                    <Nav.Item eventKey="9-3" as={Link} to="/account/sendcomplaints">Send a Complaint</Nav.Item>
                     )}
                 </Nav.Menu>
                 
-                <Nav.Menu eventKey="10" title="Accounts" icon={<GridIcon />}>
+                <Nav.Menu eventKey="10" title="Accounts" icon={<TableIcon />}>
                     {(isAdmin || isSuperAdmin || isStaff) && (
-                    <Nav.Item eventKey="10-1" as={Link} to="">All Transaction History</Nav.Item>
+                    <Nav.Item eventKey="10-1" as={Link} to="/account/alltransactionhistory">All Transaction History</Nav.Item>
                     )}
                     {(isStudent) && (
                     <Nav.Item eventKey="10-2" as={Link} to="">My Transaction History</Nav.Item>
@@ -291,13 +302,16 @@ function DashboardHeader() {
                     <Nav.Item eventKey="10-4" as={Link} to="">Overdue</Nav.Item>
                     )}
                 </Nav.Menu>
-                {(isSuperAdmin || isAdmin || isStaff) && (
-                <Nav.Item eventKey="11" icon={<DetailIcon />} as={Link} to="">
-                    Maintenance
-                </Nav.Item>
-                )}
+                <Nav.Menu eventKey="11" title="Maintenance" icon={<TableIcon />}>
+                    {(isAdmin || isSuperAdmin || isStaff) && (
+                    <Nav.Item eventKey="11-1" as={Link} to="/account/allmaintenancerequests">All Maintenance Requests</Nav.Item>
+                    )}
+                    {(isStudent || isAdmin || isSuperAdmin || isStaff) && (
+                    <Nav.Item eventKey="11-2" as={Link} to="/account/createmaintenance">Create Maintenance Request</Nav.Item>
+                    )}
+                </Nav.Menu>
                 {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
-                <Nav.Item eventKey="12" icon={<DetailIcon />} as={Link} to="/account/profile">
+                <Nav.Item eventKey="12" icon={<UserBadgeIcon />} as={Link} to="/account/profile">
                     Profile
                 </Nav.Item>
                 )}

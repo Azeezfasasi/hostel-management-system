@@ -14,6 +14,12 @@ export default function Login() {
 
   useEffect(() => {
     if (user && token) {
+      // Store studentId in localStorage if user is a student
+      if (user.role === 'student' && user._id) {
+        localStorage.setItem('studentId', user._id);
+      } else {
+        localStorage.removeItem('studentId');
+      }
       if (user.role === 'student' && !user.onboardingCompleted) {
         navigate("/onboarding/onboarding");
       } else {
