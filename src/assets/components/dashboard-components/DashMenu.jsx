@@ -141,11 +141,9 @@ function DashMenu() {
                     </Nav.Menu>
                     )}
                     {(isSuperAdmin || isAdmin || isStaff) && (
-                    <Nav.Menu eventKey="5" title="Attendance" icon={<DocPassIcon />}>
-                        <Nav.Item eventKey="5-1" as={Link} to="">All Attendance</Nav.Item>
-                        <Nav.Item eventKey="5-2" as={Link} to="">In</Nav.Item>
-                        <Nav.Item eventKey="5-3" as={Link} to="">Out</Nav.Item>
-                        <Nav.Item eventKey="5-4" as={Link} to="">Leave</Nav.Item>
+                    <Nav.Menu eventKey="5" title="Blog Post" icon={<DocPassIcon />}>
+                        <Nav.Item eventKey="5-1" as={Link} to="">All Blog Posts</Nav.Item>
+                        <Nav.Item eventKey="5-2" as={Link} to="">Create Blog Post</Nav.Item>
                     </Nav.Menu>
                     )}
                     {(isSuperAdmin || isAdmin) && (

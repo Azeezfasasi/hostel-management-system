@@ -23,7 +23,7 @@ export default function FeatureSection() {
   ];
 
   return (
-    <section id="features" className="py-0 bg-gray-50 mb-12">
+    <section id="features" className="py-0 bg-gray-50 mb-12 mt-12">
       <div className="container mx-auto px-6 md:px-12 text-center">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12">
           Key Features
