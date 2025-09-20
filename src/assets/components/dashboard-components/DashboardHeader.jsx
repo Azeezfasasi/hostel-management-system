@@ -22,33 +22,43 @@ function DashboardHeader() {
   const {isSuperAdmin, isAdmin, isStudent, isStaff} = useUser()
   const location = useLocation();
 
-  // Map route paths to eventKeys
+  // Map route paths to eventKeys and parent menu keys
   const menuKeyByPath = {
-    '/app/dashboard': '1',
-    '/account/myroomdetails': '2-1',
-    '/account/hostellist': '2-2',
-    '/account/roomlist': '2-3',
-    '/account/roomrequest': '2-4',
-    '/account/adminroomrequests': '2-5',
-    '/account/roomallocation': '2-6',
-    '/account/assignrooms': '2-7',
-    '/account/currentroomallocation': '2-8',
-    '/account/roomhistory': '2-9',
-    '/account/allfurnitures': '3-2',
-    '/account/addfurnitures': '3-3',
-    '/account/addfurniturecategory': '3-4',
-    '/account/damagereportform': '3-5',
-    '/account/managestudents': '4-1',
-    '/account/manageusers': '7-1',
-    '/account/adduser': '7-2',
-    '/account/changeuserpassword': '7-3',
-    '/account/sendnewsletter': '8-1',
-    '/account/allnewsletter': '8-2',
-    '/account/newslettersubscribers': '8-3',
-    '/account/pendingpayment': '10-3',
-    '/account/profile': '12',
+    '/app/dashboard': { key: '1', parent: null },
+    '/account/myroomdetails': { key: '2-1', parent: '2' },
+    '/account/hostellist': { key: '2-2', parent: '2' },
+    '/account/roomlist': { key: '2-3', parent: '2' },
+    '/account/roomrequest': { key: '2-4', parent: '2' },
+    '/account/adminroomrequests': { key: '2-5', parent: '2' },
+    '/account/roomallocation': { key: '2-6', parent: '2' },
+    '/account/assignrooms': { key: '2-7', parent: '2' },
+    '/account/currentroomallocation': { key: '2-8', parent: '2' },
+    '/account/roomhistory': { key: '2-9', parent: '2' },
+    '/account/allfurnitures': { key: '3-2', parent: '3' },
+    '/account/addfurnitures': { key: '3-3', parent: '3' },
+    '/account/addfurniturecategory': { key: '3-4', parent: '3' },
+    '/account/damagereportform': { key: '3-5', parent: '3' },
+    '/account/managestudents': { key: '4-1', parent: '4' },
+    '/account/manageusers': { key: '7-1', parent: '7' },
+    '/account/adduser': { key: '7-2', parent: '7' },
+    '/account/changeuserpassword': { key: '7-3', parent: '7' },
+    '/account/sendnewsletter': { key: '8-1', parent: '8' },
+    '/account/allnewsletter': { key: '8-2', parent: '8' },
+    '/account/newslettersubscribers': { key: '8-3', parent: '8' },
+    '/account/pendingpayment': { key: '10-3', parent: '10' },
+    '/account/profile': { key: '12', parent: null },
   };
-  const activeKey = menuKeyByPath[location.pathname];
+  const cleanPath = location.pathname.replace(/\/$/, '').split('?')[0];
+  const routeInfo = menuKeyByPath[location.pathname] || menuKeyByPath[cleanPath];
+  const activeKey = routeInfo ? routeInfo.key : null;
+  let defaultOpenKeys = [];
+  if (routeInfo) {
+    if (routeInfo.parent) {
+      defaultOpenKeys = [routeInfo.parent];
+    } else if (Object.values(menuKeyByPath).some(info => info.parent === routeInfo.key)) {
+      defaultOpenKeys = [routeInfo.key];
+    }
+  }
 
   const handleLogout = () => {
     logout();
@@ -163,7 +173,7 @@ function DashboardHeader() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="absolute top-full left-0 w-full bg-white shadow-md flex flex-col items-start pl-0 py-0 z-50 lg:hidden animate-fade-in border-b h-[600px] overflow-y-scroll overflow-x-hidden">
-          <Sidenav>
+          <Sidenav defaultOpenKeys={defaultOpenKeys}>
             <Sidenav.Body>
               <Nav activeKey={activeKey}>
                 {(isSuperAdmin || isAdmin || isStudent || isStaff) && (
