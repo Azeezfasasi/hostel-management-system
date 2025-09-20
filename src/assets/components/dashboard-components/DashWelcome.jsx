@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const DashWelcome = () => {
   const [greeting, setGreeting] = useState('');
-  const { user, loading, isStudent, isAdmin, isStaff, isSuperAdmin } = useUser();
+  const { user, loading } = useUser();
 
   useEffect(() => {
     const getGreeting = () => {
@@ -52,7 +52,7 @@ const DashWelcome = () => {
       <h1 className="text-[24px] md:text-3xl font-extrabold text-gray-900 mb-2">
         👋 {greeting} {user.firstName}
       </h1>
-      {isStudent && !user.onboardingCompleted && (
+      {/* {isStudent && !user.onboardingCompleted && (
       <p className="text-lg text-gray-600">
         Welcome to your Hostel Management System Portal! For all students who have not yet finalized their enrollment, please complete your registration details using this <Link to="/account/profile" className='text-blue-600 font-semibold underline'>link</Link>.
       </p>
@@ -66,7 +66,7 @@ const DashWelcome = () => {
       <p className="text-lg text-gray-600">
         Welcome to your Hostel Management System Portal! Here, you can efficiently manage student accommodations, oversee room assignments, handle maintenance requests, and communicate important updates. If you need assistance, please contact the system administrator.
       </p>
-      )}
+      )} */}
     </div>
   );
 };
