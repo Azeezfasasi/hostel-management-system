@@ -142,13 +142,13 @@ export default function DashStats() {
             {statList.map((stat, index) => (
               <div
                 key={index}
-                className="bg-orange-300 rounded-2xl shadow-md hover:shadow-xl transition px-3 py-3"
+                className="bg-[#5e7eb1] rounded-2xl shadow-md hover:shadow-xl transition px-3 py-3"
               >
                 <div className="flex justify-center mb-4">{stat.icon}</div>
-                <h3 className="text-[15px] font-semibold text-gray-800 mb-2">
+                <h3 className="text-[15px] font-semibold text-white mb-2">
                   {stat.title}
                 </h3>
-                <p className="text-[24px] font-bold text-gray-900">{stat.value}</p>
+                <p className="text-[24px] font-bold text-white">{stat.value}</p>
               </div>
             ))}
           </div>
