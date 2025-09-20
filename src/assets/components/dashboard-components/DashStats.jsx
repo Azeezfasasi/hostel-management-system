@@ -138,11 +138,11 @@ export default function DashStats() {
         {loading ? (
           <div className="text-center text-gray-500">Loading stats...</div>
         ) : (
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-5">
             {statList.map((stat, index) => (
               <div
                 key={index}
-                className="bg-gray-200 rounded-2xl shadow-md hover:shadow-xl transition p-8"
+                className="bg-gray-200 rounded-2xl shadow-md hover:shadow-xl transition px-6 py-3"
               >
                 <div className="flex justify-center mb-4">{stat.icon}</div>
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
