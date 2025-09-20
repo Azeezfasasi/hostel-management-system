@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function AnnouncementSlide() {
   return (
-    <div className="py-0 bg-gray-300 border">
+    <div className="py-0 bg-gray-300">
       <div className="container mx-auto px-6 md:px-12">
         <marquee behavior="scroll" direction="left">
           <div className="flex space-x-8">
