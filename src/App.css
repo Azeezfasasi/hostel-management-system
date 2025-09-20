@@ -1,1 +1,17 @@
+/* Custom blue background for rsuite Sidenav */
+.rs-sidenav-default, .rs-sidenav-default .rs-dropdown-toggle, .rs-sidenav-default .rs-sidenav-item, .rs-sidenav-default .rs-sidenav-toggle-button {
+  background-color: #000080 !important;
+  color: white !important;
+}
+
+.rs-sidenav-default.rs-sidenav-collapse-in .rs-dropdown.rs-dropdown-selected-within .rs-sidenav-item-icon {
+  color: white !important;
+}
+
+.rs-sidenav-default .rs-dropdown-item.rs-dropdown-item-active, .rs-sidenav-default .rs-dropdown.rs-dropdown-selected-within .rs-sidenav-item-icon, .rs-sidenav-default .rs-sidenav-item.rs-sidenav-item-active {
+  color: orange !important;
+  font-weight: bold !important;
+}
+
+
   @import "tailwindcss"

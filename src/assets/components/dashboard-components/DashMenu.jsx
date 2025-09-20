@@ -1,3 +1,4 @@
+import React from 'react';
 import { Sidenav, Nav } from 'rsuite';
 import { Link, useLocation } from 'react-router-dom';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
@@ -20,40 +21,54 @@ function DashMenu() {
     const {isSuperAdmin, isAdmin, isStudent, isStaff} = useUser()
     const location = useLocation();
 
-  // Map route paths to eventKeys
-  const menuKeyByPath = {
-    '/app/dashboard': '1',
-    '/account/myroomdetails': '2-1',
-    '/account/hostellist': '2-2',
-    '/account/roomlist': '2-3',
-    '/account/roomrequest': '2-4',
-    '/account/adminroomrequests': '2-5',
-    '/account/roomallocation': '2-6',
-    '/account/assignrooms': '2-7',
-    '/account/currentroomallocation': '2-8',
-    '/account/roomhistory': '2-9',
-    '/account/allfurnitures': '3-2',
-    '/account/addfurnitures': '3-3',
-    '/account/addfurniturecategory': '3-4',
-    '/account/damagereportform': '3-5',
-    '/account/alldamagedreports': '3-6',
-    '/account/managestudents': '4-1',
-    '/account/manageusers': '7-1',
-    '/account/adduser': '7-2',
-    '/account/changeuserpassword': '7-3',
-    '/account/sendnewsletter': '8-1',
-    '/account/allnewsletter': '8-2',
-    '/account/newslettersubscribers': '8-3',
-    '/account/pendingpayment': '10-3',
-    '/account/profile': '12',
-    // Add more mappings as needed
-  };
-  const activeKey = menuKeyByPath[location.pathname];
+    // Map route paths to eventKeys and parent menu keys
+    const menuKeyByPath = {
+        '/app/dashboard': { key: '1', parent: null },
+        '/account/myroomdetails': { key: '2-1', parent: '2' },
+        '/account/hostellist': { key: '2-2', parent: '2' },
+        '/account/roomlist': { key: '2-3', parent: '2' },
+        '/account/roomrequest': { key: '2-4', parent: '2' },
+        '/account/adminroomrequests': { key: '2-5', parent: '2' },
+        '/account/roomallocation': { key: '2-6', parent: '2' },
+        '/account/assignrooms': { key: '2-7', parent: '2' },
+        '/account/currentroomallocation': { key: '2-8', parent: '2' },
+        '/account/roomhistory': { key: '2-9', parent: '2' },
+        '/account/allfurnitures': { key: '3-2', parent: '3' },
+        '/account/addfurnitures': { key: '3-3', parent: '3' },
+        '/account/addfurniturecategory': { key: '3-4', parent: '3' },
+        '/account/damagereportform': { key: '3-5', parent: '3' },
+        '/account/alldamagedreports': { key: '3-6', parent: '3' },
+        '/account/managestudents': { key: '4-1', parent: '4' },
+        '/account/adduser': { key: '4-2', parent: '4' },
+        '/account/manageusers': { key: '7-1', parent: '7' },
+        '/account/changeuserpassword': { key: '7-3', parent: '7' },
+        '/account/sendnewsletter': { key: '8-1', parent: '8' },
+        '/account/allnewsletter': { key: '8-2', parent: '8' },
+        '/account/newslettersubscribers': { key: '8-3', parent: '8' },
+        '/account/pendingpayment': { key: '10-3', parent: '10' },
+        '/account/profile': { key: '12', parent: null },
+        // Add more mappings as needed
+    };
+
+
+    // Normalize pathname to handle trailing slashes and query params
+    const cleanPath = location.pathname.replace(/\/$/, '').split('?')[0];
+    const routeInfo = menuKeyByPath[location.pathname] || menuKeyByPath[cleanPath];
+    const activeKey = routeInfo ? routeInfo.key : null;
+    // Compute defaultOpenKeys for Sidenav
+    let defaultOpenKeys = [];
+    if (routeInfo) {
+        if (routeInfo.parent) {
+            defaultOpenKeys = [routeInfo.parent];
+        } else if (Object.values(menuKeyByPath).some(info => info.parent === routeInfo.key)) {
+            defaultOpenKeys = [routeInfo.key];
+        }
+    }
 
   return (
     <>
     <div style={{ width: 240 }} className='hidden lg:block'>
-        <Sidenav> 
+        <Sidenav defaultOpenKeys={defaultOpenKeys}> 
             <Sidenav.Body>
                 <Nav activeKey={activeKey}>
                     {(isSuperAdmin || isAdmin || isStudent || isStaff) && (
@@ -182,4 +197,6 @@ function DashMenu() {
 }
 
 export default DashMenu
+
+
 

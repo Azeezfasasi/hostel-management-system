@@ -1,4 +1,5 @@
 import React from "react";
+import './App.css';
 import { Route, Routes } from "react-router-dom";
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import Home from "./Home";
@@ -36,6 +37,8 @@ import PendingPayment from "./account/PendingPayment";
 import RoomHistory from "./account/RoomHistory";
 import RoomAvailability from "./RoomAvailability";
 import AllDamagedReports from "./account/AllDamagedReport";
+import 'rsuite/dist/rsuite-no-reset.min.css';
+import './App.css';
 
 function App() {
 
