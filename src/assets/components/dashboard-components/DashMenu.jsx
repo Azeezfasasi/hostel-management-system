@@ -118,7 +118,7 @@ function DashMenu() {
                         {(isStudent) && (
                         <Nav.Item eventKey="3-1" as={Link} to="">My Facilities</Nav.Item>
                         )}
-                        {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
+                        {(isSuperAdmin || isAdmin) && (
                         <Nav.Item eventKey="3-2" as={Link} to="/account/allfurnitures">All Facilities</Nav.Item>
                         )}
                         {(isSuperAdmin || isAdmin) && (
