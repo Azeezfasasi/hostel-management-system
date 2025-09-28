@@ -214,7 +214,7 @@ const DamageReportFormMain = ({ studentId }) => {
             <tbody>
               {myDamageReports.map((r, idx) => (
                 <tr key={idx} className="hover:bg-gray-50">
-                  <td className="border p-3">{r.category?.name || r.facilityCategory?.name || "N/A"}</td>
+                  <td className="border p-3">{r.category?.name || r.facilityCategory?.name || r.furnitureCategory?.name || "N/A"}</td>
                   <td className="border p-3">{r.furnitureName || r.facilityName || r.name}</td>
                   <td className="border p-3">{r.location}</td>
                   <td className="border p-3">{r.description}</td>

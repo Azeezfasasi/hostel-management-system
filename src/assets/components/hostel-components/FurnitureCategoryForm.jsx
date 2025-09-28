@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
 
+// Helper to get endpoints
+const getCategoryEndpoint = (type) =>
+  type === "Furniture"
+    ? `${API_BASE_URL}/furniture/furniture-categories`
+    : `${API_BASE_URL}/facility/facility-categories`;
+
 const FurnitureCategoryForm = () => {
   const [type, setType] = useState("Furniture"); // Furniture or Facility
   const [categories, setCategories] = useState([]);
@@ -10,9 +16,7 @@ const FurnitureCategoryForm = () => {
   // Fetch categories
   const fetchCategories = async () => {
     try {
-      let endpoint = type === "Furniture"
-        ? `${API_BASE_URL}/furniture/furniture-categories`
-        : `${API_BASE_URL}/facility/facility-categories`;
+      const endpoint = getCategoryEndpoint(type);
       const res = await axios.get(endpoint);
       setCategories(res.data);
     } catch (error) {
@@ -22,6 +26,7 @@ const FurnitureCategoryForm = () => {
 
   useEffect(() => {
     fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
   // Handle Add
@@ -29,9 +34,7 @@ const FurnitureCategoryForm = () => {
     e.preventDefault();
     if (!name) return;
     try {
-      let endpoint = type === "Furniture"
-        ? `${API_BASE_URL}/furniture/furniture-categories`
-        : `${API_BASE_URL}/facility/facility-categories`;
+      const endpoint = getCategoryEndpoint(type);
       await axios.post(endpoint, { name });
       setName("");
       fetchCategories();
@@ -60,7 +63,7 @@ const FurnitureCategoryForm = () => {
       <form onSubmit={handleSubmit} className="flex gap-4 mb-6">
         <input
           type="text"
-          placeholder="Enter category name"
+          placeholder={`Enter ${type} category name`}
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="border rounded p-2 flex-1"
@@ -74,29 +77,37 @@ const FurnitureCategoryForm = () => {
         </button>
       </form>
 
-  <h3 className="text-lg font-semibold mb-2">{type} Categories</h3>
-      <ul className="list-disc pl-6">
-        {categories.map((c) => (
-          <CategoryItem key={c._id} category={c} fetchCategories={fetchCategories} />
-        ))}
-        {categories.length === 0 && (
-          <p className="text-gray-500">No categories yet</p>
-        )}
-      </ul>
+      <h3 className="text-lg font-semibold mb-2">{type} Categories</h3>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-200 rounded">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-2 px-4 border-b text-left">Name</th>
+              <th className="py-2 px-4 border-b text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((c) => (
+              <CategoryRow key={c._id} category={c} fetchCategories={fetchCategories} type={type} />
+            ))}
+            {categories.length === 0 && (
+              <tr>
+                <td colSpan={2} className="py-2 px-4 text-gray-500 text-center">No categories yet</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
-function CategoryItem({ category, fetchCategories }) {
+function CategoryRow({ category, fetchCategories, type }) {
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState(category.name);
   const [loading, setLoading] = useState(false);
 
-  // Determine type from fetchCategories closure
-  const isFacility = fetchCategories.toString().includes('/facility/facility-categories');
-  const endpointBase = isFacility
-    ? `${API_BASE_URL}/facility/facility-categories`
-    : `${API_BASE_URL}/furniture/furniture-categories`;
+  const endpointBase = getCategoryEndpoint(type);
 
   const handleEdit = async () => {
     if (!editName.trim() || editName === category.name) {
@@ -128,44 +139,51 @@ function CategoryItem({ category, fetchCategories }) {
   };
 
   return (
-    <li className="py-1 flex items-center gap-2 group">
-      {editing ? (
-        <>
+    <tr>
+      <td className="py-2 px-4 border-b">
+        {editing ? (
           <input
             type="text"
             value={editName}
             onChange={e => setEditName(e.target.value)}
-            className="border rounded px-2 py-1 text-sm mr-2"
+            className="border rounded px-2 py-1 text-sm w-full"
             disabled={loading}
             autoFocus
           />
-          <button
-            className="text-green-600 hover:underline text-xs font-semibold mr-1"
-            onClick={handleEdit}
-            disabled={loading}
-          >Save</button>
-          <button
-            className="text-gray-500 hover:underline text-xs"
-            onClick={() => setEditing(false)}
-            disabled={loading}
-          >Cancel</button>
-        </>
-      ) : (
-        <>
+        ) : (
           <span className="font-medium text-gray-800">{category.name}</span>
-          <button
-            className="ml-2 text-blue-600 hover:underline text-xs font-semibold opacity-0 group-hover:opacity-100 transition"
-            onClick={() => setEditing(true)}
-            disabled={loading}
-          >Edit</button>
-          <button
-            className="ml-1 text-red-500 hover:underline text-xs font-semibold opacity-0 group-hover:opacity-100 transition"
-            onClick={handleDelete}
-            disabled={loading}
-          >Delete</button>
-        </>
-      )}
-    </li>
+        )}
+      </td>
+      <td className="py-2 px-4 border-b">
+        {editing ? (
+          <>
+            <button
+              className="text-green-600 hover:underline text-xs font-semibold mr-2"
+              onClick={handleEdit}
+              disabled={loading}
+            >Save</button>
+            <button
+              className="text-gray-500 hover:underline text-xs"
+              onClick={() => setEditing(false)}
+              disabled={loading}
+            >Cancel</button>
+          </>
+        ) : (
+          <>
+            <button
+              className="text-blue-600 hover:underline text-xs font-semibold mr-2"
+              onClick={() => setEditing(true)}
+              disabled={loading}
+            >Edit</button>
+            <button
+              className="text-red-500 hover:underline text-xs font-semibold"
+              onClick={handleDelete}
+              disabled={loading}
+            >Delete</button>
+          </>
+        )}
+      </td>
+    </tr>
   );
 }
 
