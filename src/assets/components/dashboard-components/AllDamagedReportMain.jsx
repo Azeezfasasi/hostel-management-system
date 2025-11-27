@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '@/config/api';
 
@@ -6,6 +6,13 @@ export default function AllDamagedReportMain() {
   const [damagedReports, setDamagedReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editModal, setEditModal] = useState({ open: false, report: null, itemId: null, reportType: null });
+  
+  // Search and filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('All');
+  const [filterStatus, setFilterStatus] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const fetchReports = async () => {
     setLoading(true);
@@ -38,6 +45,43 @@ export default function AllDamagedReportMain() {
   useEffect(() => {
     fetchReports();
   }, []);
+
+  // Flatten and filter reports
+  const flattenedReports = useMemo(() => {
+    return damagedReports.flatMap(item =>
+      (item.reports || []).map(r => ({
+        ...r,
+        reportType: item.reportType,
+        itemId: item.itemId,
+        itemName: item.furnitureName || item.facilityName || item.name,
+        location: item.location
+      }))
+    );
+  }, [damagedReports]);
+
+  // Apply search and filters
+  const filteredReports = useMemo(() => {
+    return flattenedReports.filter(report => {
+      const matchesSearch = 
+        report.itemName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        report.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        report.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (report.student?.firstName + ' ' + report.student?.lastName)?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesType = filterType === 'All' || report.reportType === filterType;
+      const matchesStatus = filterStatus === 'All' || report.repairStatus === filterStatus;
+
+      return matchesSearch && matchesType && matchesStatus;
+    });
+  }, [flattenedReports, searchTerm, filterType, filterStatus]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
+  const paginatedReports = useMemo(() => {
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    return filteredReports.slice(startIdx, endIdx);
+  }, [filteredReports, currentPage, itemsPerPage]);
 
   // Delete a damage report
   const handleDelete = async (itemId, reportId, reportType) => {
@@ -72,73 +116,174 @@ export default function AllDamagedReportMain() {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto">
       <h2 className="text-2xl font-bold mb-6">All Damaged Reports</h2>
+      
+      {/* Search and Filter Controls */}
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Search Box */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+            <input
+              type="text"
+              placeholder="Search by item, description, location..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Type Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+            <select
+              value={filterType}
+              onChange={(e) => {
+                setFilterType(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="All">All Types</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Facility">Facility</option>
+            </select>
+          </div>
+
+          {/* Status Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Repair Status</label>
+            <select
+              value={filterStatus}
+              onChange={(e) => {
+                setFilterStatus(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="All">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+
+          {/* Results Count */}
+          <div className="flex items-end">
+            <div className="text-sm text-gray-600">
+              Showing <span className="font-semibold">{paginatedReports.length}</span> of <span className="font-semibold">{filteredReports.length}</span> reports
+            </div>
+          </div>
+        </div>
+      </div>
+
       {loading ? (
         <p className="text-gray-600">Loading reports...</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 shadow">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border p-3">Type</th>
-                <th className="border p-3">Item</th>
-                <th className="border p-3">Location</th>
-                <th className="border p-3">Reported By</th>
-                <th className="border p-3">Description</th>
-                <th className="border p-3">Date</th>
-                <th className="border p-3">Repair Status</th>
-                <th className="border p-3">Repair Update</th>
-                <th className="border p-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {damagedReports.map((item) => (
-                item.reports && item.reports.map ? (
-                  item.reports.map((r, idx) => (
-                    <tr key={r._id || idx} className="hover:bg-gray-50">
-                      <td className="border p-3">
-                        <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-purple-100 text-purple-800">
-                          {item.reportType}
-                        </span>
-                      </td>
-                      <td className="border p-3">{item.furnitureName || item.facilityName || item.name}</td>
-                      <td className="border p-3">{item.location}</td>
-                      <td className="border p-3">
-                        {r.student
-                          ? (r.student.firstName
-                            ? `${r.student.firstName} ${r.student.lastName || ''}`
-                            : r.student.email || 'Unknown')
-                          : 'Unknown'}
-                      </td>
-                      <td className="border p-3">{r.description}</td>
-                      <td className="border p-3">{r.reportedAt ? new Date(r.reportedAt).toLocaleDateString() : ''}</td>
-                      <td className="border p-3">{r.repairStatus || 'Pending'}</td>
-                      <td className="border p-3">{r.repairUpdate || 'No Update'}</td>
-                      <td className="border p-3 flex gap-2">
-                        <button
-                          className="text-blue-600 hover:underline text-xs"
-                          onClick={() => setEditModal({ open: true, report: r, itemId: item.itemId, reportType: item.reportType })}
-                        >Edit</button>
-                        <button
-                          className="text-red-600 hover:underline text-xs"
-                          onClick={() => handleDelete(item.itemId, r._id, item.reportType)}
-                        >Delete</button>
-                      </td>
-                    </tr>
-                  ))
-                ) : null
-              ))}
-              {damagedReports.length === 0 && (
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-gray-300 shadow">
+              <thead className="bg-gray-100">
                 <tr>
-                  <td colSpan="9" className="text-center p-4 text-gray-500">
-                    No damage reports found
-                  </td>
+                  <th className="border p-3">Type</th>
+                  <th className="border p-3">Item</th>
+                  <th className="border p-3">Location</th>
+                  <th className="border p-3">Reported By</th>
+                  <th className="border p-3">Description</th>
+                  <th className="border p-3">Date</th>
+                  <th className="border p-3">Repair Status</th>
+                  <th className="border p-3">Repair Update</th>
+                  <th className="border p-3">Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {paginatedReports.map((r, idx) => (
+                  <tr key={r._id || idx} className="hover:bg-gray-50">
+                    <td className="border p-3">
+                      <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-purple-100 text-purple-800">
+                        {r.reportType}
+                      </span>
+                    </td>
+                    <td className="border p-3">{r.itemName}</td>
+                    <td className="border p-3">{r.location}</td>
+                    <td className="border p-3">
+                      {r.student
+                        ? (r.student.firstName
+                          ? `${r.student.firstName} ${r.student.lastName || ''}`
+                          : r.student.email || 'Unknown')
+                        : 'Unknown'}
+                    </td>
+                    <td className="border p-3">{r.description}</td>
+                    <td className="border p-3">{r.reportedAt ? new Date(r.reportedAt).toLocaleDateString() : ''}</td>
+                    <td className="border p-3">{r.repairStatus || 'Pending'}</td>
+                    <td className="border p-3">{r.repairUpdate || 'No Update'}</td>
+                    <td className="border p-3 flex gap-2">
+                      <button
+                        className="text-blue-600 hover:underline text-xs"
+                        onClick={() => setEditModal({ open: true, report: r, itemId: r.itemId, reportType: r.reportType })}
+                      >Edit</button>
+                      <button
+                        className="text-red-600 hover:underline text-xs"
+                        onClick={() => handleDelete(r.itemId, r._id, r.reportType)}
+                      >Delete</button>
+                    </td>
+                  </tr>
+                ))}
+                {paginatedReports.length === 0 && (
+                  <tr>
+                    <td colSpan="9" className="text-center p-4 text-gray-500">
+                      {filteredReports.length === 0 ? 'No damage reports found' : 'No reports on this page'}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-6 flex items-center justify-between">
+              <div className="text-sm text-gray-600">
+                Page <span className="font-semibold">{currentPage}</span> of <span className="font-semibold">{totalPages}</span>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-2 border rounded text-sm hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                  Previous
+                </button>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-2 rounded text-sm transition ${
+                      currentPage === page
+                        ? 'bg-blue-600 text-white'
+                        : 'border hover:bg-gray-100'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-2 border rounded text-sm hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {/* Edit Modal */}
