@@ -54,7 +54,7 @@ export default function FooterSection() {
             </li>
             <li className="flex items-center gap-2">
               <Phone className="w-5 h-5 text-blue-500" />
-              <span>+234 800 123 4567</span>
+              <span>+234  806 735 5116</span>
             </li>
           </ul>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
 
@@ -47,26 +47,38 @@ const DamageReportFormMain = ({ studentId }) => {
     }
   };
 
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     try {
-      // Fetch only this student's damage reports
-      const res = await axios.get(`${API_BASE_URL}/furniture/furniture/damage-reports/student/${studentId}`);
-      setMyDamageReports(res.data || []);
+      // Fetch furniture damage reports
+      const furnitureRes = await axios.get(`${API_BASE_URL}/furniture/furniture/damage-reports/student/${studentId}`);
+      const furnitureReports = (furnitureRes.data || []).map(r => ({ ...r, reportType: 'Furniture' }));
+
+      // Fetch facility damage reports
+      const facilityRes = await axios.get(`${API_BASE_URL}/facility/damage-reports/student/${studentId}`);
+      const facilityReports = (facilityRes.data || []).map(r => ({ ...r, reportType: 'Facility' }));
+
+      // Combine both reports
+      const allReports = [...furnitureReports, ...facilityReports];
+
+      setMyDamageReports(allReports);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching reports:", error.message);
       setLoading(false);
     }
-  };
+  }, [studentId]);
 
   useEffect(() => {
-    fetchFurniture();
-    fetchFacilities();
-    fetchFacilityCategories();
-    if (studentId) {
-      fetchReports();
-    }
-  }, [studentId]);
+    const loadInitialData = async () => {
+      await fetchFurniture();
+      await fetchFacilities();
+      await fetchFacilityCategories();
+      if (studentId) {
+        await fetchReports();
+      }
+    };
+    loadInitialData();
+  }, [studentId, fetchReports]);
 
   // ✅ Handle Submit
   const handleSubmit = async (e) => {
@@ -201,6 +213,7 @@ const DamageReportFormMain = ({ studentId }) => {
           <table className="w-full border-collapse border border-gray-300 shadow">
             <thead className="bg-gray-100">
               <tr>
+                <th className="border p-3">Type</th>
                 <th className="border p-3">Category</th>
                 <th className="border p-3">Item</th>
                 <th className="border p-3">Location</th>
@@ -214,21 +227,28 @@ const DamageReportFormMain = ({ studentId }) => {
             <tbody>
               {myDamageReports.map((r, idx) => (
                 <tr key={idx} className="hover:bg-gray-50">
-                  <td className="border p-3">{r.category?.name || r.facilityCategory?.name || r.furnitureCategory?.name || "N/A"}</td>
-                  <td className="border p-3">{r.furnitureName || r.facilityName || r.name}</td>
-                  <td className="border p-3">{r.location}</td>
+                  <td className="border p-3">
+                    <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-purple-100 text-purple-800">
+                      {r.reportType}
+                    </span>
+                  </td>
+                  <td className="border p-3">{r.category?.name || "N/A"}</td>
+                  <td className="border p-3">{r.furnitureName || r.facilityName || r.name || "N/A"}</td>
+                  <td className="border p-3">{r.location || "N/A"}</td>
                   <td className="border p-3">{r.description}</td>
                   <td className="border p-3">
-                    <span className={`px-3 py-1 rounded text-sm font-medium ${r.status === "active" ? "bg-yellow-100 text-yellow-800" : r.status === "under-repair" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"}`}>{r.status}</span>
+                    <span className={`px-3 py-1 rounded text-sm font-medium ${r.status === "active" ? "bg-yellow-100 text-yellow-800" : r.status === "under-repair" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"}`}>
+                      {r.status}
+                    </span>
                   </td>
-                  <td className="border p-3">{r.reportedAt ? new Date(r.reportedAt).toLocaleDateString() : ""}</td>
+                  <td className="border p-3">{r.reportedAt ? new Date(r.reportedAt).toLocaleDateString() : "N/A"}</td>
                   <td className="border p-3">{r.repairStatus || "Pending"}</td>
                   <td className="border p-3">{r.repairUpdate || "No Update"}</td>
                 </tr>
               ))}
               {myDamageReports.length === 0 && (
                 <tr>
-                  <td colSpan="8" className="text-center p-4 text-gray-500">
+                  <td colSpan="9" className="text-center p-4 text-gray-500">
                     No damage reports submitted yet
                   </td>
                 </tr>

@@ -5,13 +5,30 @@ import { API_BASE_URL } from '@/config/api';
 export default function AllDamagedReportMain() {
   const [damagedReports, setDamagedReports] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editModal, setEditModal] = useState({ open: false, report: null, furnitureId: null });
+  const [editModal, setEditModal] = useState({ open: false, report: null, itemId: null, reportType: null });
 
   const fetchReports = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE_URL}/furniture/furniture/damage-reports`);
-      setDamagedReports(res.data);
+      // Fetch furniture damage reports
+      const furnitureRes = await axios.get(`${API_BASE_URL}/furniture/furniture/damage-reports`);
+      const furnitureReports = (furnitureRes.data || []).map(item => ({
+        ...item,
+        reportType: 'Furniture',
+        itemId: item.furnitureId
+      }));
+
+      // Fetch facility damage reports
+      const facilityRes = await axios.get(`${API_BASE_URL}/facility/damage-reports`);
+      const facilityReports = (facilityRes.data || []).map(item => ({
+        ...item,
+        reportType: 'Facility',
+        itemId: item.facilityId
+      }));
+
+      // Combine both reports
+      const allReports = [...furnitureReports, ...facilityReports];
+      setDamagedReports(allReports);
     } catch (error) {
       console.error('Error fetching reports:', error.message);
     }
@@ -23,10 +40,14 @@ export default function AllDamagedReportMain() {
   }, []);
 
   // Delete a damage report
-  const handleDelete = async (furnitureId, reportId) => {
+  const handleDelete = async (itemId, reportId, reportType) => {
     if (!window.confirm('Delete this damage report?')) return;
     try {
-      await axios.delete(`${API_BASE_URL}/furniture/furniture/${furnitureId}/report/${reportId}`);
+      if (reportType === 'Furniture') {
+        await axios.delete(`${API_BASE_URL}/furniture/furniture/${itemId}/report/${reportId}`);
+      } else if (reportType === 'Facility') {
+        await axios.delete(`${API_BASE_URL}/facility/facility/${itemId}/report/${reportId}`);
+      }
       fetchReports();
     } catch (error) {
       console.error('Error deleting report:', error.message);
@@ -35,10 +56,14 @@ export default function AllDamagedReportMain() {
   };
 
   // Save repair info
-  const handleSaveRepair = async (furnitureId, reportId, repairStatus, repairUpdate) => {
+  const handleSaveRepair = async (itemId, reportId, repairStatus, repairUpdate, reportType) => {
     try {
-      await axios.patch(`${API_BASE_URL}/furniture/furniture/${furnitureId}/report/${reportId}/repair`, { repairStatus, repairUpdate });
-      setEditModal({ open: false, report: null, furnitureId: null });
+      if (reportType === 'Furniture') {
+        await axios.patch(`${API_BASE_URL}/furniture/furniture/${itemId}/report/${reportId}/repair`, { repairStatus, repairUpdate });
+      } else if (reportType === 'Facility') {
+        await axios.patch(`${API_BASE_URL}/facility/facility/${itemId}/report/${reportId}/repair`, { repairStatus, repairUpdate });
+      }
+      setEditModal({ open: false, report: null, itemId: null, reportType: null });
       fetchReports();
     } catch (error) {
       console.error('Error updating repair info:', error.message);
@@ -56,7 +81,8 @@ export default function AllDamagedReportMain() {
           <table className="w-full border-collapse border border-gray-300 shadow">
             <thead className="bg-gray-100">
               <tr>
-                <th className="border p-3">Furniture</th>
+                <th className="border p-3">Type</th>
+                <th className="border p-3">Item</th>
                 <th className="border p-3">Location</th>
                 <th className="border p-3">Reported By</th>
                 <th className="border p-3">Description</th>
@@ -67,39 +93,45 @@ export default function AllDamagedReportMain() {
               </tr>
             </thead>
             <tbody>
-              {damagedReports.map((f) => (
-                f.reports.map((r, idx) => (
-                  <tr key={r._id || idx} className="hover:bg-gray-50">
-                    <td className="border p-3">{f.furnitureName}</td>
-                    <td className="border p-3">{f.location}</td>
-                    {/* <td className="border p-3">{r.student?.name || r.student || 'Unknown'}</td> */}
-                    <td className="border p-3">
-                    {r.student
-                        ? (r.student.firstName
+              {damagedReports.map((item) => (
+                item.reports && item.reports.map ? (
+                  item.reports.map((r, idx) => (
+                    <tr key={r._id || idx} className="hover:bg-gray-50">
+                      <td className="border p-3">
+                        <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-purple-100 text-purple-800">
+                          {item.reportType}
+                        </span>
+                      </td>
+                      <td className="border p-3">{item.furnitureName || item.facilityName || item.name}</td>
+                      <td className="border p-3">{item.location}</td>
+                      <td className="border p-3">
+                        {r.student
+                          ? (r.student.firstName
                             ? `${r.student.firstName} ${r.student.lastName || ''}`
                             : r.student.email || 'Unknown')
-                        : 'Unknown'}
-                    </td>
-                    <td className="border p-3">{r.description}</td>
-                    <td className="border p-3">{r.reportedAt ? new Date(r.reportedAt).toLocaleDateString() : ''}</td>
-                    <td className="border p-3">{r.repairStatus || 'Pending'}</td>
-                    <td className="border p-3">{r.repairUpdate || 'No Update'}</td>
-                    <td className="border p-3 flex gap-2">
-                      <button
-                        className="text-blue-600 hover:underline text-xs"
-                        onClick={() => setEditModal({ open: true, report: r, furnitureId: f.furnitureId })}
-                      >Edit</button>
-                      <button
-                        className="text-red-600 hover:underline text-xs"
-                        onClick={() => handleDelete(f.furnitureId, r._id)}
-                      >Delete</button>
-                    </td>
-                  </tr>
-                ))
+                          : 'Unknown'}
+                      </td>
+                      <td className="border p-3">{r.description}</td>
+                      <td className="border p-3">{r.reportedAt ? new Date(r.reportedAt).toLocaleDateString() : ''}</td>
+                      <td className="border p-3">{r.repairStatus || 'Pending'}</td>
+                      <td className="border p-3">{r.repairUpdate || 'No Update'}</td>
+                      <td className="border p-3 flex gap-2">
+                        <button
+                          className="text-blue-600 hover:underline text-xs"
+                          onClick={() => setEditModal({ open: true, report: r, itemId: item.itemId, reportType: item.reportType })}
+                        >Edit</button>
+                        <button
+                          className="text-red-600 hover:underline text-xs"
+                          onClick={() => handleDelete(item.itemId, r._id, item.reportType)}
+                        >Delete</button>
+                      </td>
+                    </tr>
+                  ))
+                ) : null
               ))}
               {damagedReports.length === 0 && (
                 <tr>
-                  <td colSpan="8" className="text-center p-4 text-gray-500">
+                  <td colSpan="9" className="text-center p-4 text-gray-500">
                     No damage reports found
                   </td>
                 </tr>
@@ -113,8 +145,9 @@ export default function AllDamagedReportMain() {
       {editModal.open && (
         <EditRepairModal
           report={editModal.report}
-          furnitureId={editModal.furnitureId}
-          onClose={() => setEditModal({ open: false, report: null, furnitureId: null })}
+          itemId={editModal.itemId}
+          reportType={editModal.reportType}
+          onClose={() => setEditModal({ open: false, report: null, itemId: null, reportType: null })}
           onSave={handleSaveRepair}
         />
       )}
@@ -123,7 +156,7 @@ export default function AllDamagedReportMain() {
 }
 
 // Modal for editing repair info
-function EditRepairModal({ report, furnitureId, onClose, onSave }) {
+function EditRepairModal({ report, itemId, reportType, onClose, onSave }) {
   const [repairStatus, setRepairStatus] = useState(report.repairStatus || 'Pending');
   const [repairUpdate, setRepairUpdate] = useState(report.repairUpdate || '');
   const [saving, setSaving] = useState(false);
@@ -131,7 +164,7 @@ function EditRepairModal({ report, furnitureId, onClose, onSave }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    await onSave(furnitureId, report._id, repairStatus, repairUpdate);
+    await onSave(itemId, report._id, repairStatus, repairUpdate, reportType);
     setSaving(false);
   };
 
