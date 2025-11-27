@@ -51,6 +51,8 @@ function DashMenu() {
         '/account/alltransactionhistory': { key: '10-1', parent: '10' },
         '/account/mytransactionhistory': { key: '10-2', parent: '10' },
         '/account/pendingpayment': { key: '10-3', parent: '10' },
+        '/account/create-announcement': { key: '11-1', parent: '11' },
+        '/account/manage-announcement': { key: '11-2', parent: '11' },
         '/account/profile': { key: '12', parent: null },
         // Add more mappings as needed
     };
@@ -184,7 +186,17 @@ function DashMenu() {
                         <Nav.Item eventKey="10-4" as={Link} to="">Overdue</Nav.Item>
                         )}
                     </Nav.Menu>
-                    {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
+
+                    <Nav.Menu eventKey="11" title="Announcements" icon={<TableIcon />}>
+                        {(isAdmin || isSuperAdmin || isStaff) && (
+                        <Nav.Item eventKey="11-1" as={Link} to="/account/create-announcement">Create Announcement</Nav.Item>
+                        )}
+                        {(isAdmin || isSuperAdmin || isStaff) && (
+                        <Nav.Item eventKey="11-2" as={Link} to="/account/manage-announcement">Manage Announcements</Nav.Item>
+                        )}
+                    </Nav.Menu>
+
+                    {(isSuperAdmin || isAdmin || isStaff) && (
                     <Nav.Item eventKey="12" icon={<UserBadgeIcon />} as={Link} to="/account/profile">
                         Profile
                     </Nav.Item>

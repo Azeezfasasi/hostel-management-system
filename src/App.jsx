@@ -45,6 +45,8 @@ import SendComplaints from "./account/SendComplaints";
 import AllTransactionHistory from "./account/AllTransactionHistory";
 import CreateMaintenance from "./account/CreateMaintenance";
 import AllMaintenanceRequests from "./account/AllMaintenceRequests";
+import CreateAnnouncement from "./account/CreateAnnouncement";
+import ManageAnnoucement from "./account/ManageAnnoucement";
 
 function App() {
 
@@ -93,6 +95,8 @@ function App() {
           <Route path="/account/alltransactionhistory" element={<AllTransactionHistory />} />
           <Route path="/account/createmaintenance" element={<CreateMaintenance />} />
           <Route path="/account/allmaintenancerequests" element={<AllMaintenanceRequests />} />
+          <Route path="/account/create-announcement" element={<CreateAnnouncement />} />
+          <Route path="/account/manage-announcement" element={<ManageAnnoucement />} />
         </Route>
       </Routes>
      </UserProvider>
