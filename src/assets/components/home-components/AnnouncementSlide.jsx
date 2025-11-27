@@ -104,9 +104,10 @@ export default function AnnouncementSlide() {
           >
             ❯
           </button>
+        </div>
 
-          {/* Indicator Dots */}
-          <div className="flex gap-1 ml-4 flex-shrink-0">
+        {/* Indicator Dots */}
+          <div className="flex justify-center gap-1 mt-4 flex-shrink-0">
             {announcements.map((_, idx) => (
               <button
                 key={idx}
@@ -118,7 +119,6 @@ export default function AnnouncementSlide() {
               />
             ))}
           </div>
-        </div>
       </div>
     </div>
   );
