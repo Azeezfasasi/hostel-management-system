@@ -40,13 +40,27 @@ export default function AnnouncementForm({ onAnnouncementCreated, editingAnnounc
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const userId = user._id || user.id;
+
+      if (!userId) {
+        setError('User ID not found. Please log in again.');
+        setLoading(false);
+        return;
+      }
+
+      const payload = {
+        title: title.trim(),
+        content: content.trim(),
+        audience,
+        createdBy: userId
+      };
 
       if (editingAnnouncement) {
         // Update existing announcement
         await axios.put(
           `${API_BASE_URL}/announcement/${editingAnnouncement._id}`,
-          { title, content, audience },
+          { title: title.trim(), content: content.trim(), audience },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSuccess('Announcement updated successfully!');
@@ -55,7 +69,7 @@ export default function AnnouncementForm({ onAnnouncementCreated, editingAnnounc
         // Create new announcement
         await axios.post(
           `${API_BASE_URL}/announcement`,
-          { title, content, audience, createdBy: userId },
+          payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSuccess('Announcement created successfully!');
@@ -66,7 +80,8 @@ export default function AnnouncementForm({ onAnnouncementCreated, editingAnnounc
 
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Error saving announcement');
+      console.error('Error details:', err.response?.data);
+      setError(err.response?.data?.message || err.response?.data?.error || 'Error saving announcement');
     } finally {
       setLoading(false);
     }
@@ -126,12 +141,12 @@ export default function AnnouncementForm({ onAnnouncementCreated, editingAnnounc
         {/* Messages */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-            {error}
+            <strong>Error:</strong> {error}
           </div>
         )}
         {success && (
           <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
-            {success}
+            <strong>Success:</strong> {success}
           </div>
         )}
 
