@@ -60,8 +60,6 @@ function DashboardHeader() {
     '/account/alltransactionhistory': { key: '10-1', parent: '10' },
     '/account/mytransactionhistory': { key: '10-2', parent: '10' },
     '/account/pendingpayment': { key: '10-3', parent: '10' },
-    '/account/allmaintenancerequests': { key: '11-1', parent: '11' },
-    '/account/createmaintenance': { key: '11-2', parent: '11' },
     '/account/profile': { key: '12', parent: null },
   };
   const cleanPath = location.pathname.replace(/\/$/, '').split('?')[0];
@@ -300,14 +298,6 @@ function DashboardHeader() {
                     )}
                     {(isStudent) && (
                     <Nav.Item eventKey="10-4" as={Link} to="">Overdue</Nav.Item>
-                    )}
-                </Nav.Menu>
-                <Nav.Menu eventKey="11" title="Maintenance" icon={<TableIcon />}>
-                    {(isAdmin || isSuperAdmin || isStaff) && (
-                    <Nav.Item eventKey="11-1" as={Link} to="/account/allmaintenancerequests">All Maintenance Requests</Nav.Item>
-                    )}
-                    {(isStudent || isAdmin || isSuperAdmin || isStaff) && (
-                    <Nav.Item eventKey="11-2" as={Link} to="/account/createmaintenance">Create Maintenance Request</Nav.Item>
                     )}
                 </Nav.Menu>
                 {(isSuperAdmin || isAdmin || isStaff || isStudent) && (
