@@ -89,7 +89,7 @@ export default function AnnouncementSlide() {
               key={currentIndex}
               className="announcement-slide w-full"
             >
-              <div className="text-white font-bold text-sm md:text-base px-4 py-2 bg-red-900 rounded-lg">
+              <div className="text-white font-bold text-sm md:text-base px-4 py-2 bg-blue-700 rounded-lg">
                 <div className="font-semibold mb-1">{currentAnnouncement.content}</div>
                 {/* <div className="line-clamp-2 text-xs md:text-sm">{currentAnnouncement.content}</div> */}
               </div>
