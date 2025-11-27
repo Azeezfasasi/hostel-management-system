@@ -50,16 +50,6 @@ export default function AllAnnouncements() {
 
   return (
     <div className="space-y-8">
-      {/* Form Section */}
-      <AnnouncementForm 
-        onAnnouncementCreated={fetchAnnouncements}
-        editingAnnouncement={editingAnnouncement}
-        onEditComplete={() => {
-          setEditingAnnouncement(null);
-          fetchAnnouncements();
-        }}
-      />
-
       {/* Announcements List Section */}
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-2xl font-bold mb-6">All Announcements</h2>
@@ -114,13 +104,13 @@ export default function AllAnnouncements() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setEditingAnnouncement(announcement)}
-                      className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                      className="text-blue-600 hover:text-blue-800 font-medium text-sm hover:underline"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(announcement._id)}
-                      className="text-red-600 hover:text-red-800 font-medium text-sm"
+                      className="text-red-600 hover:text-red-800 font-medium text-sm hover:underline"
                     >
                       Delete
                     </button>
@@ -139,6 +129,41 @@ export default function AllAnnouncements() {
           </div>
         )}
       </div>
+
+      {/* Edit Modal Popup */}
+      {editingAnnouncement && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 flex justify-between items-center p-6 border-b bg-white">
+              <h2 className="text-2xl font-bold">Edit Announcement</h2>
+              <button
+                onClick={() => {
+                  setEditingAnnouncement(null);
+                }}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold transition"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              <AnnouncementForm 
+                onAnnouncementCreated={() => {
+                  setEditingAnnouncement(null);
+                  fetchAnnouncements();
+                }}
+                editingAnnouncement={editingAnnouncement}
+                onEditComplete={() => {
+                  setEditingAnnouncement(null);
+                  fetchAnnouncements();
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -47,26 +47,51 @@ export default function AnnouncementSlide() {
   };
 
   return (
-    <div className="py-3 bg-gradient-to-r from-blue-600 to-blue-800">
+    <div className="py-3 bg-gradient-to-r from-red-400 to-red-600">
+      <style>{`
+        @keyframes slideLeft {
+          0% { transform: translateX(100%); opacity: 0; }
+          10% { transform: translateX(0); opacity: 1; }
+          90% { transform: translateX(0); opacity: 1; }
+          100% { transform: translateX(-100%); opacity: 0; }
+        }
+
+        @keyframes slideRight {
+          0% { transform: translateX(-100%); opacity: 0; }
+          10% { transform: translateX(0); opacity: 1; }
+          90% { transform: translateX(0); opacity: 1; }
+          100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        .announcement-slide {
+          animation: slideLeft 5s ease-in-out forwards;
+        }
+
+        .announcement-slide.reverse {
+          animation: slideRight 5s ease-in-out forwards;
+        }
+      `}</style>
+
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex items-center gap-4">
           {/* Previous Button */}
           <button
             onClick={goToPrevious}
-            className="text-white hover:bg-blue-700 p-2 rounded-full transition flex-shrink-0"
+            className="text-white hover:bg-blue-700 p-2 rounded-full transition flex-shrink-0 hover:scale-110"
             aria-label="Previous announcement"
           >
             ❮
           </button>
 
-          {/* Announcement Content */}
-          <div className="flex-1 min-h-12 flex items-center overflow-hidden">
-            <div className="w-full">
-              <div className="text-white font-bold text-sm md:text-base px-4 py-2 bg-blue-700 rounded-lg line-clamp-2">
-                {currentAnnouncement.title}
-              </div>
-              <div className="text-white text-xs md:text-sm px-4 py-2 line-clamp-1">
-                {currentAnnouncement.content}
+          {/* Announcement Content with Marquee Animation */}
+          <div className="flex-1 min-h-12 flex items-center overflow-hidden relative">
+            <div 
+              key={currentIndex}
+              className="announcement-slide w-full"
+            >
+              <div className="text-white font-bold text-sm md:text-base px-4 py-2 bg-red-900 rounded-lg">
+                <div className="font-semibold mb-1">{currentAnnouncement.content}</div>
+                {/* <div className="line-clamp-2 text-xs md:text-sm">{currentAnnouncement.content}</div> */}
               </div>
             </div>
           </div>
@@ -74,7 +99,7 @@ export default function AnnouncementSlide() {
           {/* Next Button */}
           <button
             onClick={goToNext}
-            className="text-white hover:bg-blue-700 p-2 rounded-full transition flex-shrink-0"
+            className="text-white hover:bg-blue-700 p-2 rounded-full transition flex-shrink-0 hover:scale-110"
             aria-label="Next announcement"
           >
             ❯
@@ -87,7 +112,7 @@ export default function AnnouncementSlide() {
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`w-2 h-2 rounded-full transition ${
-                  idx === currentIndex ? 'bg-white' : 'bg-blue-300'
+                  idx === currentIndex ? 'bg-white scale-125' : 'bg-blue-300'
                 }`}
                 aria-label={`Go to announcement ${idx + 1}`}
               />
