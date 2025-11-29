@@ -47,7 +47,7 @@ export default function AnnouncementSlide() {
   };
 
   return (
-    <div className="py-3 bg-gradient-to-r from-snow-400 to-snow-600">
+    <div className="py-3 bg-gradient-to-r from-milk-400 to-milk-600">
       <style>{`
         @keyframes slideLeft {
           0% { transform: translateX(100%); opacity: 0; }
