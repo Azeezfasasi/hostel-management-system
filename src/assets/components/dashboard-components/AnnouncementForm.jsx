@@ -40,8 +40,12 @@ export default function AnnouncementForm({ onAnnouncementCreated, editingAnnounc
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const userId = user._id || user.id;
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : {};
+      const userId = user._id || user.id || user.userId;
+
+      console.log('User data:', user); // Debug log
+      console.log('Token:', token ? 'exists' : 'missing'); // Debug log
 
       if (!userId) {
         setError('User ID not found. Please log in again.');
@@ -80,8 +84,11 @@ export default function AnnouncementForm({ onAnnouncementCreated, editingAnnounc
 
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      console.error('Error details:', err.response?.data);
-      setError(err.response?.data?.message || err.response?.data?.error || 'Error saving announcement');
+      console.error('Full error:', err); // Full error log
+      console.error('Response data:', err.response?.data); // Backend response
+      console.error('Response status:', err.response?.status); // HTTP status
+      const errorMsg = err.response?.data?.message || err.response?.data?.error || err.message || 'Error saving announcement';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
